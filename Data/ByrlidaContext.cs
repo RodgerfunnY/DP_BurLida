@@ -1,0 +1,99 @@
+﻿using DP_BurLida.Data.ModelsData;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+
+namespace DP_BurLida.Data
+{
+    //Необхид данный класс для работы с баззой данных через прил
+    public class ByrlidaContext : DbContext
+    {
+        // определние таблиц с моделью
+        public DbSet<OrderModelData> OrderModelData { get; set; }
+        public DbSet<UserModelData> UserModelsData { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderModelData>(entity =>
+            {
+                entity.ToTable("Заказы");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.NameClient) //работа со столбцом
+                .HasColumnName("Имя") //название столбца
+                .IsRequired() //значение должно быть обязательно
+                .HasMaxLength(30); //Макс длинна 
+                entity.Property(e => e.SurnameClient)
+                .HasColumnName("Фамилия")
+                .IsRequired() 
+                .HasMaxLength(30);
+                entity.Property(e => e.Phone)
+                .HasColumnName("Номер телефона")
+                .IsRequired()
+                .HasMaxLength(14);
+                entity.Property(e => e.Area)
+                .HasColumnName("Область")
+                .IsRequired()
+                .HasMaxLength(50);
+                entity.Property(e => e.District)
+                .HasColumnName("Район")
+                .IsRequired()
+                .HasMaxLength(50);
+                entity.Property(e => e.City)
+                .HasColumnName("Населеный пункт")
+                .IsRequired()
+                .HasMaxLength(50);
+                entity.Property(e => e.Diameter)
+                .HasColumnName("Диаметр скважины")
+                .IsRequired()
+                .HasMaxLength(4);
+                entity.Property(e => e.PricePerMeter)
+                .HasColumnName("Цена за метр")
+                .IsRequired()
+                .HasMaxLength(4);
+                entity.Property(e => e.Pump)
+                .HasColumnName("Насос с монтажом")
+                .IsRequired()
+                .HasMaxLength(5);
+                entity.Property(e => e.Arrangement)
+                .HasColumnName("Обустройство")
+                .IsRequired()
+                .HasMaxLength(50);
+                entity.Property(e => e.Info)
+                .HasColumnName("Дополнительная информация")
+                .IsRequired()
+                .HasMaxLength(200);
+                entity.Property(e => e.CreationTimeData)
+                .HasColumnName("Дата создания")
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+            });
+            modelBuilder.Entity<UserModelData>(entity =>
+            {
+                entity.ToTable("Пользователи");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name) //работа со столбцом
+                .HasColumnName("Имя") //название столбца
+                .IsRequired() //значение должно быть обязательно
+                .HasMaxLength(30); //Макс длинна 
+                entity.Property(e => e.Surname)
+                .HasColumnName("Фамилия")
+                .IsRequired()
+                .HasMaxLength(30);
+                entity.Property(e => e.Email)
+                .HasColumnName("Email")
+                .IsRequired()
+                .HasMaxLength(100);
+                entity.Property(e => e.Password)
+                .HasColumnName("Пароль")
+                .IsRequired()
+                .HasMaxLength(100);
+                entity.Property(e => e.Phone)
+               .HasColumnName("Номер телефона")
+               .IsRequired()
+               .HasMaxLength(14);
+            });
+        }
+        public ByrlidaContext(DbContextOptions options) : base(options)
+        {
+        }
+
+    }
+}

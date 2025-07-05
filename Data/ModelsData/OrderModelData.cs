@@ -1,0 +1,41 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DP_BurLida.Data.ModelsData
+{
+    //Модель заявки
+    public class OrderModelData
+    {
+        public int Id { get; set; }
+        public string NameClient { get; set; }
+        public string SurnameClient { get; set; }
+        public string Phone { get; set; }
+        public string Area { get; set; }
+        public string District { get; set; }
+        public string City { get; set; }
+        public int Diameter { get; set; }
+        public int PricePerMeter { get; set; }
+        public int Pump { get; set; }
+        public string Arrangement { get; set; }
+        public string Info { get; set; }
+        public DateTime CreationTimeData { get; set; } = DateTime.Now;
+        public OrderModelData() { }
+        public OrderModelData(int id, string nameClient, string surnameClient, string phone, string area, string district,
+            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, DateTime creationTimeData)
+        {
+            Id = id;
+            NameClient = nameClient;
+            SurnameClient = surnameClient;
+            Phone = phone;
+            Area = area;
+            District = district;
+            City = city;
+            Diameter = diameter;
+            PricePerMeter = pricePerMeter;
+            Pump = pump;
+            Arrangement = arrangement;
+            Info = info;
+            CreationTimeData = creationTimeData;
+        }
+    }
+}
+

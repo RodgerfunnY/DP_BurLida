@@ -1,0 +1,96 @@
+﻿@model IEnumerable<DP_BurLida.Data.ModelsData.OrderModelData>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Заявки</h1>
+
+<p>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Create">Создать заявку</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Номер заказа
+            </th>
+            <th>
+                Имя
+            </th>
+            <th>
+                Фамилия
+            </th>
+            <th>
+                Номер телефона
+            </th>
+            <th>
+                Населеный пункт
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr data-toggle="collapse" data-target="#details-@item.Id" class="accordion-toggle">
+                <td>@item.Id</td>
+                <td>@item.NameClient</td>
+                <td>@item.SurnameClient</td>
+                <td>@item.Phone</td>
+                <td>@item.City</td>
+                <td>@item.CreationTimeData.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="hiddenRow">
+                    <div class="accordian-body collapse" id="details-@item.Id">
+                        <div class="card card-body">
+                            <h5>Детали заказа #@item.Id</h5>
+                            <dl class="row">
+                                <dt class="col-sm-3">Область:</dt>
+                                <dd class="col-sm-9">@item.Area</dd>
+
+                                <dt class="col-sm-3">Район:</dt>
+                                <dd class="col-sm-9">@item.District</dd>
+
+                                <dt class="col-sm-3">Диаметр:</dt>
+                                <dd class="col-sm-9">@item.Diameter мм</dd>
+
+                                <dt class="col-sm-3">Цена за метр:</dt>
+                                <dd class="col-sm-9">@item.PricePerMeter руб.</dd>
+
+                                <dt class="col-sm-3">Насос:</dt>
+                                <dd class="col-sm-9">@(item.Pump == 1 ? "Да" : "Нет")</dd>
+
+                                <dt class="col-sm-3">Компоновка:</dt>
+                                <dd class="col-sm-9">@item.Arrangement</dd>
+
+                                <dt class="col-sm-3">Доп. информация:</dt>
+                                <dd class="col-sm-9">@item.Info</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.accordion-toggle').click(function() {
+                $(this).next('tr').find('.collapse').toggle();
+            });
+        });
+    </script>
+}

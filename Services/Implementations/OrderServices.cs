@@ -14,32 +14,5 @@ namespace DP_BurLida.Services.Implementations
         {
             _context = context;
         }
-        public async Task<IEnumerable<OrderModelData>> GetAllOrder()
-        {
-            return await _context.OrderModelData.ToListAsync();
-        }
-        public async Task AddOrder(OrderModelData order)
-        {
-            _context.OrderModelData.Add(order);
-            await _context.SaveChangesAsync();
-        }
-        public async Task UpdateOrder(OrderModelData order)
-        {
-            _context.Entry(order).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteOrder(int id)
-        {
-            var order = await _context.OrderModelData.FindAsync(id);
-            if (order != null)
-            {
-                _context.OrderModelData.Remove(order);
-                await _context.SaveChangesAsync();
-            }
-        }
-        public async Task<OrderModelData> GetOrderById(int id)
-        {
-            return await _context.OrderModelData.FindAsync(id);
-        }
     }
 }

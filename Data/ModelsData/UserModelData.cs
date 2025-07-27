@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace DP_BurLida.Data.ModelsData
 {
-    public class UserModelData
+    public class UserModelData : IdentityUser
     //создание модели юзера от которой будет потом унаследование каждой модели
     {
         public int Id { get; set; }

@@ -46,31 +46,28 @@ namespace DP_BurLida.Controllers
                 return View();
             }
         }
+        // GET: OrderController/Edit/5
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit(int id)
         {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Edit(OrderModelData order)
-        {
-            var orders = _orderService.Update(order);
-            return View(orders);
+            var order = _orderService.GetById(id).Value;
+            if (order == null)
+                return NotFound();
+            return View(order);
         }
 
         // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(OrderModelData order)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                return View(order);
             }
-            catch
-            {
-                return View();
-            }
+
+            _orderService.Update(order);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: OrderController/Delete/5

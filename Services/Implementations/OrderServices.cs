@@ -50,7 +50,20 @@ namespace DP_BurLida.Services.Implementations
             var orderUpdate = _context.OrderModelData.FirstOrDefault(o => o.Id == order.Id);
             if (orderUpdate != null)
             {
-                _context.OrderModelData.Update(orderUpdate);
+                // Копируем значения из order в orderUpdate
+                orderUpdate.NameClient = order.NameClient;
+                orderUpdate.SurnameClient = order.SurnameClient;
+                orderUpdate.Phone = order.Phone;
+                orderUpdate.Area = order.Area;
+                orderUpdate.District = order.District;
+                orderUpdate.City = order.City;
+                orderUpdate.Diameter = order.Diameter;
+                orderUpdate.PricePerMeter = order.PricePerMeter;
+                orderUpdate.Pump = order.Pump;
+                orderUpdate.Arrangement = order.Arrangement;
+                orderUpdate.Info = order.Info;
+                orderUpdate.CreationTimeData = order.CreationTimeData;
+
                 _context.SaveChanges();
                 return orderUpdate;
             }

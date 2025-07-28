@@ -9,7 +9,6 @@ namespace DP_BurLida.Data
     {
         // определние таблиц с моделью
         public DbSet<OrderModelData> OrderModelData { get; set; }
-        public DbSet<UserModelData> UserModelsData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -22,7 +21,7 @@ namespace DP_BurLida.Data
                 .HasMaxLength(30); //Макс длинна 
                 entity.Property(e => e.SurnameClient)
                 .HasColumnName("Фамилия")
-                .IsRequired() 
+                .IsRequired()
                 .HasMaxLength(30);
                 entity.Property(e => e.Phone)
                 .HasColumnName("Номер телефона")
@@ -65,35 +64,10 @@ namespace DP_BurLida.Data
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
             });
-            modelBuilder.Entity<UserModelData>(entity =>
-            {
-                entity.ToTable("Пользователи");
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name) //работа со столбцом
-                .HasColumnName("Имя") //название столбца
-                .IsRequired() //значение должно быть обязательно
-                .HasMaxLength(30); //Макс длинна 
-                entity.Property(e => e.Surname)
-                .HasColumnName("Фамилия")
-                .IsRequired()
-                .HasMaxLength(30);
-                entity.Property(e => e.Email)
-                .HasColumnName("Email")
-                .IsRequired()
-                .HasMaxLength(100);
-                entity.Property(e => e.Password)
-                .HasColumnName("Пароль")
-                .IsRequired()
-                .HasMaxLength(100);
-                entity.Property(e => e.Phone)
-               .HasColumnName("Номер телефона")
-               .IsRequired()
-               .HasMaxLength(14);
-            });
         }
-        public ByrlidaContext(DbContextOptions options) : base(options)
-        {
-        }
+
+        public ByrlidaContext(DbContextOptions<ByrlidaContext> options) 
+        : base(options) { }
 
     }
 }

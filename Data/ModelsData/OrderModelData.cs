@@ -18,7 +18,6 @@ namespace DP_BurLida.Data.ModelsData
         public string Arrangement { get; set; }
         public string Info { get; set; }
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
-        public OrderModelData() { }
         public OrderModelData(int id, string nameClient, string surnameClient, string phone, string area, string district,
             string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, DateTime creationTimeData)
         {

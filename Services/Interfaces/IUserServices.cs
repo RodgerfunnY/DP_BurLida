@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DP_BurLida.Services.Interfaces
 {
-    public interface IOrderServices : ICrudServices<OrderModelData>
+    public interface IUserServices : ICrudServices <UserModelData>
     {
 
     }

@@ -20,6 +20,7 @@ namespace DP_BurLida
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -10,6 +10,7 @@ namespace DP_BurLida.Data
         // определние таблиц с моделью
         public DbSet<OrderModelData> OrderModelData { get; set; }
         public DbSet<BrigadeModelData> BrigadeModelData { get; set; }
+        public DbSet<UserModelData> UserModelData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>

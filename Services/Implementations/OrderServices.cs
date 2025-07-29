@@ -17,37 +17,40 @@ namespace DP_BurLida.Services.Implementations
         {
             _context = context;
         }
-        public IEnumerable<OrderModelData> GetAll() => _context.OrderModelData.ToList();
+        public async Task<List<OrderModelData>> GetAllAsync() => await _context.OrderModelData.ToListAsync();
 
-        public ActionResult<OrderModelData> GetById(int id)
+        public async Task<OrderModelData> GetByIdAsync(int id)
         {
-            var orderPoisk = _context.OrderModelData.FirstOrDefault(o => o.Id == id);
-            return orderPoisk;
+            if (id <= 0)
+            {
+                throw new ArgumentException($"Некорекктный ID - {id}");
+            }
+            return await _context.OrderModelData.FirstOrDefaultAsync(o => o.Id == id); 
         }
 
-        public ActionResult<OrderModelData> Create([FromBody] OrderModelData order)
+        public async Task<OrderModelData> CreateAsync([FromBody] OrderModelData order)
         {
-            _context.OrderModelData.Add(order);
-            _context.SaveChanges();
+            await _context.OrderModelData.AddAsync(order);
+            await _context.SaveChangesAsync();
             return order;
         }
 
-        public ActionResult<OrderModelData> Delete(int id)
+        public async Task<OrderModelData> DeleteAsync(int id)
         {
-            var orderDelete = _context.OrderModelData.FirstOrDefault(o => o.Id == id);
+            var orderDelete = await _context.OrderModelData.FirstOrDefaultAsync(o => o.Id == id);
             if (orderDelete != null)
             {
                 _context.OrderModelData.Remove(orderDelete);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return orderDelete;
             }
             return orderDelete;
 
 
         }
-        public ActionResult<OrderModelData> Update(OrderModelData order)
+        public async Task<OrderModelData> UpdateAsync(OrderModelData order)
         {
-            var orderUpdate = _context.OrderModelData.FirstOrDefault(o => o.Id == order.Id);
+            var orderUpdate = await _context.OrderModelData.FirstOrDefaultAsync(o => o.Id == order.Id);
             if (orderUpdate != null)
             {
                 // Копируем значения из order в orderUpdate
@@ -64,7 +67,7 @@ namespace DP_BurLida.Services.Implementations
                 orderUpdate.Info = order.Info;
                 orderUpdate.CreationTimeData = order.CreationTimeData;
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return orderUpdate;
             }
             return orderUpdate;

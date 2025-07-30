@@ -1,6 +1,8 @@
 using DP_BurLida.Data;
+using DP_BurLida.Services.CRUDServics;
 using DP_BurLida.Services.Implementations;
 using DP_BurLida.Services.Interfaces;
+using DP_BurLida.Services.InterfacesServics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +23,7 @@ namespace DP_BurLida
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped(typeof(ICrudServices<>), typeof(CrudServices<>));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

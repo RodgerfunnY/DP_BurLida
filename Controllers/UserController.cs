@@ -5,19 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DP_BurLida.Controllers
 {
-    public class OrderController : Controller
+    public class UserController : Controller
     {
-        private readonly IOrderServices _orderService;
+        private readonly IUserServices _userService;
 
-        public OrderController(IOrderServices orderService)
+        public UserController(IUserServices userService)
         {
-            _orderService = orderService;
+            _userService = userService;
         }
 
         public async Task<ActionResult> IndexAsync()
         {
-            var orders = await _orderService.GetAllAsync();
-            return View(orders);
+            var user = await _userService.GetAllAsync();
+            return View(user);
         }
 
         // GET: OrderController/Details/5
@@ -50,23 +50,23 @@ namespace DP_BurLida.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
-            var order = await _orderService.GetByIdAsync(id);
-            if (order == null)
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
                 return NotFound();
-            return View(order);
+            return View("Edit", user);
         }
 
         // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(OrderModelData order)
+        public async Task<ActionResult> Edit(UserModelData user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            _orderService.UpdateAsync(order);
+            _userService.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 

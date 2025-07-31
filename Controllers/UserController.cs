@@ -20,19 +20,19 @@ namespace DP_BurLida.Controllers
             return View(user);
         }
 
-        // GET: OrderController/Details/5
+        // GET: UserController/Details/5
         public async Task<ActionResult> Details(int id)
         {
             return View();
         }
 
-        // GET: OrderController/Create
+        // GET: UserController/Create
         public async Task<ActionResult> Create()
         {
             return View();
         }
 
-        // POST: OrderController/Create
+        // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
@@ -46,7 +46,7 @@ namespace DP_BurLida.Controllers
                 return View();
             }
         }
-        // GET: OrderController/Edit/5
+        // GET: UserController/Edit/5
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
@@ -56,7 +56,7 @@ namespace DP_BurLida.Controllers
             return View("Edit", user);
         }
 
-        // POST: OrderController/Edit/5
+        // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserModelData user)
@@ -66,17 +66,17 @@ namespace DP_BurLida.Controllers
                 return BadRequest();
             }
 
-            _userService.UpdateAsync(user);
+            await _userService.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: OrderController/Delete/5
+        // GET: UserController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
             return View();
         }
 
-        // POST: OrderController/Delete/5
+        // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, IFormCollection collection)

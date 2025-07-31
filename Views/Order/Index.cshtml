@@ -1,101 +1,102 @@
 ﻿@model IEnumerable<DP_BurLida.Data.ModelsData.OrderModelData>
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Заказы";
 }
 
-<h1>View</h1>
+<h1>Заказы</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать новый</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NameClient)
+                Имя клиента
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SurnameClient)
+                Фамилия клиента
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phone)
+                Телефон
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Area)
+                Область
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.District)
+                Район
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                Город
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Diameter)
+                Диаметр
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PricePerMeter)
+                Цена за метр
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Pump)
+                Насос
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Arrangement)
+                Обустройство
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Info)
+                Информация
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreationTimeData)
+                Дата создания
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NameClient)
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameClient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SurnameClient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Area)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diameter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PricePerMeter)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pump)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Arrangement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Info)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationTimeData)
+                </td>
+                            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SurnameClient)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Area)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.District)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diameter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PricePerMeter)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pump)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Arrangement)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Info)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTimeData)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>

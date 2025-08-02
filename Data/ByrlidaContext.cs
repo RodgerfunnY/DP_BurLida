@@ -66,9 +66,11 @@ namespace DP_BurLida.Data
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
             });
+
+
         }
 
-        public ByrlidaContext(DbContextOptions<ByrlidaContext> options) 
+        public ByrlidaContext(DbContextOptions<ByrlidaContext> options)
         : base(options) { }
 
     }

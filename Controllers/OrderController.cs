@@ -14,7 +14,7 @@ namespace DP_BurLida.Controllers
             _orderService = orderService;
         }
 
-        public async Task<ActionResult> IndexAsync()
+        public async Task<ActionResult> Index()
         {
             var orders = await _orderService.GetAllAsync();
             return View(orders);
@@ -23,28 +23,27 @@ namespace DP_BurLida.Controllers
         // GET: OrderController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var order = await _orderService.GetByIdAsync(id);
+            return View(order);
         }
 
         // GET: OrderController/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         // POST: OrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(OrderModelData model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(IndexAsync));
+                return View(model);
             }
-            catch
-            {
-                return View();
-            }
+            await _orderService.CreateAsync(model);
+            return RedirectToAction(nameof(Index));
         }
         // GET: OrderController/Edit/5
         [HttpGet]
@@ -63,32 +62,31 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return View(order);
             }
 
-            _orderService.UpdateAsync(order);
+            await _orderService.UpdateAsync(order);
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: OrderController/Delete/5
+        [HttpGet]
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var order = await _orderService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+            return View(order);
         }
 
         // POST: OrderController/Delete/5
         [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(IndexAsync));
-            }
-            catch
-            {
-                return View();
-            }
+            await _orderService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

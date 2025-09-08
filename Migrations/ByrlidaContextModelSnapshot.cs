@@ -32,17 +32,25 @@ namespace DP_BurLida.Migrations
 
                     b.Property<string>("Info")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("NameBrigade")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("ResponsibleUserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Technic")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ResponsibleUserId");
 
                     b.ToTable("BrigadeModelData");
                 });
@@ -156,6 +164,16 @@ namespace DP_BurLida.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserModelData");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeModelData", b =>
+                {
+                    b.HasOne("DP_BurLida.Data.ModelsData.UserModelData", "ResponsibleUser")
+                        .WithMany()
+                        .HasForeignKey("ResponsibleUserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("ResponsibleUser");
                 });
 #pragma warning restore 612, 618
         }

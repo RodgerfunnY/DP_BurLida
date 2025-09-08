@@ -1,0 +1,35 @@
+@model IEnumerable<DP_BurLida.Data.ModelsData.BrigadeModelData>
+
+@{
+    ViewData["Title"] = "Бригады";
+}
+
+<h1>Бригады</h1>
+
+<p>
+    <a asp-action="Create">Добавить бригаду</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название бригады</th>
+            <th>Техника бригады</th>
+            <th>Доп. информация</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.NameBrigade)</td>
+            <td>@Html.DisplayFor(modelItem => item.Technic)</td>
+            <td>@Html.DisplayFor(modelItem => item.Info)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

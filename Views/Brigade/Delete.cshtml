@@ -1,0 +1,27 @@
+@model DP_BurLida.Data.ModelsData.BrigadeModelData
+
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+<h1>Вы уверены, что хотите удалить бригаду?</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Название</dt>
+        <dd class="col-sm-10">@Model.NameBrigade</dd>
+        <dt class="col-sm-2">Техника</dt>
+        <dd class="col-sm-10">@Model.Technic</dd>
+        <dt class="col-sm-2">Информация</dt>
+        <dd class="col-sm-10">@Model.Info</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+

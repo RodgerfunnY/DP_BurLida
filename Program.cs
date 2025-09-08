@@ -16,13 +16,14 @@ namespace DP_BurLida
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            //Регистрация подключения к БД, регистрируем контекст тут, и сюда передается строка подключения которая лежит в джейсон
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Services.AddDbContext<ByrlidaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<IBrigadeServices, BrigadeServices>();
             builder.Services.AddScoped(typeof(ICrudServices<>), typeof(CrudServices<>));
             var app = builder.Build();
 
@@ -37,6 +38,7 @@ namespace DP_BurLida
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

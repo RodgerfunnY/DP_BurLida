@@ -1,0 +1,45 @@
+@model DP_BurLida.Data.ModelsData.BrigadeModelData
+
+@{
+    ViewData["Title"] = "Создание бригады";
+}
+
+<h1>Создание бригады</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NameBrigade" class="control-label">Название бригады</label>
+                <input asp-for="NameBrigade" class="form-control" />
+                <span asp-validation-for="NameBrigade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Technic" class="control-label">Техника</label>
+                <input asp-for="Technic" class="form-control" />
+                <span asp-validation-for="Technic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Info" class="control-label">Информация</label>
+                <input asp-for="Info" class="form-control" />
+                <span asp-validation-for="Info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResponsibleUserId" class="control-label">Ответственный сотрудник</label>
+                <select asp-for="ResponsibleUserId" class="form-control" asp-items="ViewBag.Users">
+                    <option value="">-- выберите сотрудника --</option>
+                </select>
+                <span asp-validation-for="ResponsibleUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться к списку</a>
+</div>

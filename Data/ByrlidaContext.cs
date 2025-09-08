@@ -67,6 +67,21 @@ namespace DP_BurLida.Data
                 .HasDefaultValueSql("GETDATE()");
             });
 
+            modelBuilder.Entity<BrigadeModelData>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.NameBrigade)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.Property(e => e.Technic)
+                      .HasMaxLength(200);
+                entity.Property(e => e.Info)
+                      .HasMaxLength(500);
+                entity.HasOne(e => e.ResponsibleUser)
+                      .WithMany()
+                      .HasForeignKey(e => e.ResponsibleUserId)
+                      .OnDelete(DeleteBehavior.SetNull);
+            });
 
         }
 

@@ -14,7 +14,7 @@ namespace DP_BurLida.Controllers
             _userService = userService;
         }
 
-        public async Task<ActionResult> IndexAsync()
+        public async Task<ActionResult> Index()
         {
             var user = await _userService.GetAllAsync();
             return View(user);
@@ -23,11 +23,12 @@ namespace DP_BurLida.Controllers
         // GET: UserController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var user = await _userService.GetByIdAsync(id);
+            return View("Details", user);
         }
 
         // GET: UserController/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             return View();
         }
@@ -35,17 +36,15 @@ namespace DP_BurLida.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(UserModelData model)
         {
-            try
-            {
-                return RedirectToAction(nameof(IndexAsync));
-            }
-            catch
-            {
-                return View();
-            }
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _userService.CreateAsync(model);
+            return RedirectToAction(nameof(Index));
         }
+
         // GET: UserController/Edit/5
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
@@ -63,7 +62,7 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return View(user);
             }
 
             await _userService.UpdateAsync(user);
@@ -73,22 +72,20 @@ namespace DP_BurLida.Controllers
         // GET: UserController/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var user = await _userService.GetByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            return View(user);
         }
 
         // POST: UserController/Delete/5
         [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(int id, IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(IndexAsync));
-            }
-            catch
-            {
-                return View();
-            }
+            await _userService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

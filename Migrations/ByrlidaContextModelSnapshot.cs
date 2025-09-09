@@ -40,7 +40,7 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("ResponsibleUserId")
+                    b.Property<int>("ResponsibleUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Technic")
@@ -171,7 +171,8 @@ namespace DP_BurLida.Migrations
                     b.HasOne("DP_BurLida.Data.ModelsData.UserModelData", "ResponsibleUser")
                         .WithMany()
                         .HasForeignKey("ResponsibleUserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ResponsibleUser");
                 });

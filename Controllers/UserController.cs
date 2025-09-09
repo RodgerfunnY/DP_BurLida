@@ -39,10 +39,20 @@ namespace DP_BurLida.Controllers
         public async Task<ActionResult> Create(UserModelData model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                    // Отладочная информация о ошибках валидации
+                    foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Ошибка валидации: {error.ErrorMessage}");
+                    }
+                    return View(model);
+                }
 
-            await _userService.CreateAsync(model);
-            return RedirectToAction(nameof(Index));
+                // Отладочная информация о создаваемом пользователе
+                System.Diagnostics.Debug.WriteLine($"Создание пользователя: {model.Name} {model.Surname}, Email: {model.Email}");
+
+                await _userService.CreateAsync(model);
+                return RedirectToAction(nameof(Index));
         }
 
         // GET: UserController/Edit/5

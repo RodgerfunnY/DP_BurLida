@@ -1,0 +1,87 @@
+@model DP_BurLida.Models.CalendarViewModel
+
+@{
+    ViewData["Title"] = "Календарь заказов";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Календарь заказов - @Model.MonthName @Model.Year</h2>
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })" 
+                       class="btn btn-outline-primary @(Model.Month == 1 ? "disabled" : "")">
+                        <i class="fas fa-chevron-left"></i> Предыдущий месяц
+                    </a>
+                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month })" 
+                       class="btn btn-outline-secondary">
+                        Текущий месяц
+                    </a>
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1 })" 
+                       class="btn btn-outline-primary @(Model.Month == 12 ? "disabled" : "")">
+                        Следующий месяц <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="calendar-day-header">Пн</div>
+                    <div class="calendar-day-header">Вт</div>
+                    <div class="calendar-day-header">Ср</div>
+                    <div class="calendar-day-header">Чт</div>
+                    <div class="calendar-day-header">Пт</div>
+                    <div class="calendar-day-header">Сб</div>
+                    <div class="calendar-day-header">Вс</div>
+                </div>
+
+                <div class="calendar-grid">
+                    @for (int i = 0; i < Model.Days.Count; i += 7)
+                    {
+                        <div class="calendar-week">
+                            @for (int j = 0; j < 7 && (i + j) < Model.Days.Count; j++)
+                            {
+                                var day = Model.Days[i + j];
+                                <div class="calendar-day @(day.IsCurrentMonth ? "current-month" : "other-month") @(day.IsToday ? "today" : "") @(day.HasOrders ? "has-orders" : "")"
+                                     data-date="@day.Date.ToString("yyyy-MM-dd")">
+                                    <div class="day-number">@day.Day</div>
+                                    @if (day.HasOrders)
+                                    {
+                                        <div class="orders-container">
+                                            @foreach (var order in day.Orders.Take(3))
+                                            {
+                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info">
+                                                    <small>@order.NameClient @order.SurnameClient</small>
+                                                </div>
+                                            }
+                                            @if (day.Orders.Count > 3)
+                                            {
+                                                <div class="more-orders">
+                                                    <small>+@(day.Orders.Count - 3) еще</small>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.calendar-day').click(function() {
+                var date = $(this).data('date');
+                if (date) {
+                    window.location.href = '@Url.Action("DayDetails")' + '?date=' + date;
+                }
+            });
+        });
+    </script>
+}

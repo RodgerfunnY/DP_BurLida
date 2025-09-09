@@ -45,3 +45,145 @@ body {
 .card-body {
   padding: 1.25rem;
 }
+
+/* Стили для календаря */
+.calendar-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.calendar-day-header {
+  padding: 15px 10px;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  border-right: 1px solid #dee2e6;
+}
+
+.calendar-day-header:last-child {
+  border-right: none;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-height: 120px;
+}
+
+.calendar-day {
+  border-right: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-day:last-child {
+  border-right: none;
+}
+
+.calendar-day:hover {
+  background-color: #f8f9fa;
+  transform: scale(1.02);
+}
+
+.calendar-day.other-month {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.calendar-day.current-month {
+  background-color: white;
+}
+
+.calendar-day.today {
+  background-color: #e3f2fd;
+  border: 2px solid #2196f3;
+}
+
+.calendar-day.has-orders {
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+}
+
+.calendar-day.has-orders:hover {
+  background-color: #ffe0b2;
+}
+
+.day-number {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.orders-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-item {
+  background-color: #ff9800;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more-orders {
+  background-color: #6c757d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .calendar-week {
+    min-height: 80px;
+  }
+
+  .calendar-day {
+    min-height: 80px;
+    padding: 4px;
+  }
+
+  .day-number {
+    font-size: 12px;
+  }
+
+  .order-item {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+
+  .calendar-day-header {
+    padding: 10px 5px;
+    font-size: 12px;
+  }
+}

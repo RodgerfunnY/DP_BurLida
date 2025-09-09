@@ -1,0 +1,82 @@
+@model List<DP_BurLida.Data.ModelsData.OrderModelData>
+
+@{
+    ViewData["Title"] = "Заказы на день";
+    var selectedDate = ViewBag.SelectedDate as DateTime?;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Заказы на @selectedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))</h2>
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Назад к календарю
+                </a>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="row">
+                    @foreach (var order in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">@order.NameClient @order.SurnameClient</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <strong>Телефон:</strong> @order.Phone
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Область:</strong> @order.Area
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Район:</strong> @order.District
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Город:</strong> @order.City
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Диаметр:</strong> @order.Diameter мм
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Цена за метр:</strong> @order.PricePerMeter руб.
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Насос:</strong> @order.Pump
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Расположение:</strong> @order.Arrangement
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Информация:</strong> @order.Info
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Дата создания:</strong> @order.CreationTimeData.ToString("dd.MM.yyyy HH:mm")
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-primary btn-sm">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <h4>На этот день заказов нет</h4>
+                    <p>На выбранную дату не запланировано ни одного заказа.</p>
+                    <a href="@Url.Action("Create", "Order")" class="btn btn-primary">
+                        Создать новый заказ
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

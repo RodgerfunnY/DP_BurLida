@@ -1,35 +1,35 @@
 ﻿@model DP_BurLida.Data.ModelsData.UserModelData
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Детали сотрудника";
 }
 
-<h1>View</h1>
+<h1>Детали сотрудника</h1>
 
 <div>
-    <h4>UserModelData</h4>
+    <h4>Информация о сотруднике</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Имя
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
+            Фамилия
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Surname)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            Email
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
+            Телефон
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Phone)
@@ -37,6 +37,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать</a> |
+    <a asp-action="Index">Вернуться к списку</a>
 </div>

@@ -13,8 +13,8 @@
                     <h2>Работы на @selectedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))</h2>
                     <p class="text-muted">Заказы с назначенной датой выполнения работ</p>
                 </div>
-                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left"></i> Назад к календарю
+                <a href="@Url.Action("Index")" class="btn btn-secondary">
+                    Назад к календарю
                 </a>
             </div>
 
@@ -78,7 +78,7 @@
                                     </p>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-primary btn-sm">
+                                    <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-info btn-sm">
                                         Подробнее
                                     </a>
                                 </div>
@@ -92,7 +92,7 @@
                 <div class="alert alert-info">
                     <h4>На этот день работ не запланировано</h4>
                     <p>На выбранную дату не назначено ни одной работы. Заказы без назначенной даты работы не отображаются в календаре.</p>
-                    <a href="@Url.Action("Create", "Order")" class="btn btn-primary">
+                    <a href="@Url.Action("Create", "Order")" class="btn btn-success">
                         Создать новый заказ
                     </a>
                 </div>

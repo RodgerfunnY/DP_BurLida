@@ -21,11 +21,15 @@ namespace DP_BurLida.Controllers
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 orders = await _orderService.SearchAsync(searchTerm);
+                // Исключаем завершенные заказы из результатов поиска
+                orders = orders.Where(o => o.Status != "Завершен").ToList();
                 ViewBag.SearchTerm = searchTerm;
             }
             else
             {
-                orders = await _orderService.GetAllAsync();
+                var allOrders = await _orderService.GetAllAsync();
+                // Исключаем завершенные заказы
+                orders = allOrders.Where(o => o.Status != "Завершен").ToList();
             }
             
             return View(orders);

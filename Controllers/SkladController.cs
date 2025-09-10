@@ -13,9 +13,25 @@ namespace DP_BurLida.Controllers
             _skladService = skladService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string category)
         {
-            var items = await _skladService.GetAllAsync();
+            var allItems = await _skladService.GetAllAsync();
+            
+            List<SkladModelData> items;
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                items = allItems.Where(i => i.Category == category).ToList();
+                ViewBag.SelectedCategory = category;
+            }
+            else
+            {
+                items = allItems;
+            }
+            
+            // Создаем список категорий для фильтра
+            var categories = new List<string> { "Насосное оборудование", "Техника", "Расходные материалы", "Автоматика" };
+            ViewBag.Categories = categories;
+            
             return View(items);
         }
 

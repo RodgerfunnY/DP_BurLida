@@ -1,13 +1,13 @@
-﻿@model DP_BurLida.Data.ModelsData.OrderModelData
+@model DP_BurLida.Data.ModelsData.OrderModelData
 
 @{
-    ViewData["Title"] = "Детали заказа";
+    ViewData["Title"] = "Детали заказа из архива";
 }
 
-<h1>Детали заказа</h1>
+<h1>Детали заказа из архива</h1>
 
 <div>
-    <h4>Информация о заказе</h4>
+    <h4>Информация о завершенном заказе</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -117,6 +117,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Редактировать</a>
-    <a asp-action="Index" class="btn btn-primary">Вернуться к списку</a>
+    <a asp-action="Index" class="btn btn-primary">Вернуться к архиву</a>
+    <a asp-controller="Order" asp-action="Index" class="btn btn-secondary">К текущим заказам</a>
 </div>

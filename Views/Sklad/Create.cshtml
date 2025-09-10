@@ -21,7 +21,13 @@
             
             <div class="form-group">
                 <label asp-for="Category" class="control-label">Категория</label>
-                <input asp-for="Category" class="form-control" />
+                <select asp-for="Category" class="form-control">
+                    <option value="">Выберите категорию</option>
+                    <option value="Насосное оборудование">Насосное оборудование</option>
+                    <option value="Техника">Техника</option>
+                    <option value="Расходные материалы">Расходные материалы</option>
+                    <option value="Автоматика">Автоматика</option>
+                </select>
                 <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             

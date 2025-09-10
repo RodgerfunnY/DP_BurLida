@@ -12,16 +12,16 @@
                 <p class="text-muted">Заказы отображаются по дате выполнения работ</p>
                 <div class="btn-group" role="group">
                     <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })" 
-                       class="btn btn-outline-primary @(Model.Month == 1 ? "disabled" : "")">
-                        <i class="fas fa-chevron-left"></i> Предыдущий месяц
+                       class="btn btn-primary @(Model.Month == 1 ? "disabled" : "")">
+                        Предыдущий месяц
                     </a>
                     <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month })" 
-                       class="btn btn-outline-secondary">
+                       class="btn btn-secondary">
                         Текущий месяц
                     </a>
                     <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1 })" 
-                       class="btn btn-outline-primary @(Model.Month == 12 ? "disabled" : "")">
-                        Следующий месяц <i class="fas fa-chevron-right"></i>
+                       class="btn btn-primary @(Model.Month == 12 ? "disabled" : "")">
+                        Следующий месяц
                     </a>
                 </div>
             </div>

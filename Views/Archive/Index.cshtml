@@ -1,17 +1,15 @@
-﻿@model IEnumerable<DP_BurLida.Data.ModelsData.OrderModelData>
+@model IEnumerable<DP_BurLida.Data.ModelsData.OrderModelData>
 
 @{
-    ViewData["Title"] = "Заказы";
+    ViewData["Title"] = "Архив заказов";
 }
 
-<h1>Заказы</h1>
-<p>Отображены основные поля: имя, телефон, статус, дата выполнения, город и район</p>
-<p class="text-muted">Завершенные заказы перенесены в архив</p>
+<h1>Архив заказов</h1>
+<p>Отображаются только завершенные заказы</p>
 
 <div class="row mb-3">
     <div class="col-md-6">
-        <a asp-action="Create" class="btn btn-success">Создать новый заказ</a>
-        <a asp-controller="Archive" asp-action="Index" class="btn btn-secondary">Архив завершенных</a>
+        <a asp-controller="Order" asp-action="Index" class="btn btn-primary">Вернуться к заказам</a>
     </div>
     <div class="col-md-6">
         <form asp-action="Index" method="get" class="d-flex">
@@ -21,12 +19,12 @@
                        value="@ViewBag.SearchTerm"
                        title="Поиск по всем полям заказа" />
                 <button type="submit" class="btn btn-outline-secondary">
-                    <i class="fas fa-search"></i> Поиск
+                    Поиск
                 </button>
                 @if (!string.IsNullOrEmpty(ViewBag.SearchTerm as string))
                 {
                     <a asp-action="Index" class="btn btn-outline-danger">
-                        <i class="fas fa-times"></i> Очистить
+                        Очистить
                     </a>
                 }
             </div>
@@ -37,7 +35,6 @@
 @if (!string.IsNullOrEmpty(ViewBag.SearchTerm as string))
 {
     <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i>
         Результаты поиска по запросу: "<strong>@ViewBag.SearchTerm</strong>"
         @if (Model != null && Model.Any())
         {
@@ -49,6 +46,7 @@
         }
     </div>
 }
+
 <div class="table-responsive">
 <table class="table table-striped">
     <thead>
@@ -59,6 +57,7 @@
             <th>Дата выполнения</th>
             <th>Город</th>
             <th>Район</th>
+            <th>Дата завершения</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -105,9 +104,10 @@
                     @Html.DisplayFor(modelItem => item.District)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Редактировать</a>
+                    @Html.DisplayFor(modelItem => item.CreationTimeData)
+                </td>
+                <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробности</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Удалить</a>
                 </td>
             </tr>
         }
@@ -117,9 +117,8 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        <h4>Нет активных заказов</h4>
-        <p>Все заказы завершены или еще не созданы.</p>
-        <a asp-action="Create" class="btn btn-success">Создать первый заказ</a>
+    <div class="alert alert-warning">
+        <h4>Архив пуст</h4>
+        <p>В архиве нет завершенных заказов.</p>
     </div>
 }

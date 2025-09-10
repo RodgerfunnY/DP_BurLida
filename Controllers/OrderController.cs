@@ -21,14 +21,12 @@ namespace DP_BurLida.Controllers
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 orders = await _orderService.SearchAsync(searchTerm);
-                // Исключаем завершенные заказы из результатов поиска
                 orders = orders.Where(o => o.Status != "Завершен").ToList();
                 ViewBag.SearchTerm = searchTerm;
             }
             else
             {
                 var allOrders = await _orderService.GetAllAsync();
-                // Исключаем завершенные заказы
                 orders = allOrders.Where(o => o.Status != "Завершен").ToList();
             }
             
@@ -87,7 +85,6 @@ namespace DP_BurLida.Controllers
             }
             catch (Exception ex)
             {
-                // Логируем ошибку для отладки
                 ModelState.AddModelError("", "Ошибка при сохранении: " + ex.Message);
                 return View(order);
             }

@@ -28,7 +28,6 @@ namespace DP_BurLida.Controllers
                 items = allItems;
             }
             
-            // Создаем список категорий для фильтра
             var categories = new List<string> { "Насосное оборудование", "Техника", "Расходные материалы", "Автоматика" };
             ViewBag.Categories = categories;
             

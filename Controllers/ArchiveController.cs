@@ -15,18 +15,14 @@ namespace DP_BurLida.Controllers
 
         public async Task<ActionResult> Index(string searchTerm)
         {
-            // Получаем все заказы
             var allOrders = await _orderService.GetAllAsync();
             
-            // Фильтруем только завершенные заказы
             var completedOrders = allOrders.Where(o => o.Status == "Завершен").ToList();
             
             List<OrderModelData> orders;
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                // Поиск среди завершенных заказов
                 orders = await _orderService.SearchAsync(searchTerm);
-                // Дополнительно фильтруем только завершенные
                 orders = orders.Where(o => o.Status == "Завершен").ToList();
                 ViewBag.SearchTerm = searchTerm;
             }

@@ -45,7 +45,6 @@ namespace DP_BurLida.Controllers
             var lastDayOfWeek = GetLastDayOfWeek(lastDayOfMonth);
 
             var orders = await _orderService.GetAllAsync();
-            // Фильтруем только заказы с назначенной датой работы
             var ordersWithWorkDate = orders.Where(o => o.WorkDate.HasValue).ToList();
             var ordersInPeriod = ordersWithWorkDate.Where(o => o.WorkDate.Value >= firstDayOfWeek && o.WorkDate.Value <= lastDayOfWeek).ToList();
 
@@ -91,7 +90,6 @@ namespace DP_BurLida.Controllers
             var targetDate = date.Value.Date;
             var orders = await _orderService.GetAllAsync();
             
-            // Получаем заказы с назначенной датой работы на выбранный день
             var dayOrders = orders.Where(o => o.WorkDate.HasValue && o.WorkDate.Value.Date == targetDate).ToList();
 
             ViewBag.SelectedDate = targetDate;

@@ -1,9 +1,94 @@
 ﻿@{
     ViewData["Title"] = "Главная страница";
+    var stats = ViewBag.Statistics as dynamic;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Здравствуйте</h1>
-    <p>Наш <a href="https://burlida.by/">официальный сайт</a>.</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Система управления заказами</h1>
+            <p class="text-center">Добро пожаловать в систему управления заказами компании BurLida</p>
+        </div>
+    </div>
 
+    <!-- Статистика заказов -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Ожидание</h5>
+                    <h2 class="text-warning">@stats.WaitingOrders</h2>
+                    <p class="card-text">заказов в ожидании</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">В работе</h5>
+                    <h2 class="text-primary">@stats.InWorkOrders</h2>
+                    <p class="card-text">заказов выполняется</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Ремонт</h5>
+                    <h2 class="text-danger">@stats.RepairOrders</h2>
+                    <p class="card-text">заказов на ремонте</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Завершено</h5>
+                    <h2 class="text-success">@stats.CompletedOrders</h2>
+                    <p class="card-text">заказов завершено</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Общая статистика -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h4 class="card-title">Общее количество заказов</h4>
+                    <h1 class="display-4 text-info">@stats.TotalOrders</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карта -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Карта обслуживания</h5>
+                </div>
+                <div class="card-body p-0">
+                    <iframe 
+                        src="https://www.google.com/maps/d/embed?mid=1n5SqxLEAfDC1Aca5b1YlvdFzvak&femb=1&ll=53.88947644837849%2C25.20702347153498&z=11" 
+                        width="100%" 
+                        height="500" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ссылки -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <p>Посетите наш <a href="https://burlida.by/" target="_blank" class="btn btn-outline-primary">официальный сайт</a></p>
+        </div>
+    </div>
 </div>

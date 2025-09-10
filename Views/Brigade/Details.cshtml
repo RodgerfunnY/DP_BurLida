@@ -1,0 +1,49 @@
+@model DP_BurLida.Data.ModelsData.BrigadeModelData
+
+@{
+    ViewData["Title"] = "Детали бригады";
+}
+
+<h1>Детали бригады</h1>
+
+<div>
+    <h4>Информация о бригаде</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Название бригады
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NameBrigade)
+        </dd>
+        <dt class="col-sm-2">
+            Техника
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Technic)
+        </dd>
+        <dt class="col-sm-2">
+            Информация
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Info)
+        </dd>
+        <dt class="col-sm-2">
+            Ответственный сотрудник
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.ResponsibleUser != null)
+            {
+                @($"{Model.ResponsibleUser.Name} {Model.ResponsibleUser.Surname}")
+            }
+            else
+            {
+                <span class="text-muted">Не назначен</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редактировать</a> |
+    <a asp-action="Index">Вернуться к списку</a>
+</div>

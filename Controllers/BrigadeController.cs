@@ -59,6 +59,12 @@ namespace DP_BurLida.Controllers
             var brigade = await _brigadeService.GetByIdAsync(id);
             if (brigade == null)
                 return NotFound();
+            
+            var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
+            var users = await userService.GetAllAsync();
+            var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
+            ViewBag.Users = new SelectList(userItems, "Id", "FullName", brigade.ResponsibleUserId);
+            
             return View(brigade);
         }
 
@@ -69,6 +75,10 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
+                var users = await userService.GetAllAsync();
+                var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
+                ViewBag.Users = new SelectList(userItems, "Id", "FullName", brigade.ResponsibleUserId);
                 return View(brigade);
             }
 

@@ -13,21 +13,25 @@
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            
             <div class="form-group">
                 <label asp-for="NameBrigade" class="control-label">Название бригады</label>
                 <input asp-for="NameBrigade" class="form-control" />
                 <span asp-validation-for="NameBrigade" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Technic" class="control-label">Техника</label>
                 <input asp-for="Technic" class="form-control" />
                 <span asp-validation-for="Technic" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Info" class="control-label">Информация</label>
-                <input asp-for="Info" class="form-control" />
+                <textarea asp-for="Info" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Info" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="ResponsibleUserId" class="control-label">Ответственный сотрудник</label>
                 <select asp-for="ResponsibleUserId" class="form-control" asp-items="ViewBag.Users">
@@ -35,15 +39,18 @@
                 </select>
                 <span asp-validation-for="ResponsibleUserId" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Отмена</a>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Вернуться к списку</a>
+    <a asp-action="Details" asp-route-id="@Model?.Id" class="btn btn-outline-info">Подробности</a> |
+    <a asp-action="Index" class="btn btn-outline-secondary">Вернуться к списку</a>
 </div>
 
 @section Scripts {

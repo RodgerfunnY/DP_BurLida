@@ -60,6 +60,7 @@ namespace DP_BurLida.Controllers
             if (brigade == null)
                 return NotFound();
             
+            // Загружаем список пользователей для выпадающего списка
             var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
             var users = await userService.GetAllAsync();
             var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
@@ -75,10 +76,12 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Загружаем список пользователей для выпадающего списка при ошибке валидации
                 var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
                 var users = await userService.GetAllAsync();
                 var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
                 ViewBag.Users = new SelectList(userItems, "Id", "FullName", brigade.ResponsibleUserId);
+                
                 return View(brigade);
             }
 

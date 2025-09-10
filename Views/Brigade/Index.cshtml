@@ -14,6 +14,7 @@
         <tr>
             <th>Название бригады</th>
             <th>Техника бригады</th>
+            <th>Ответственный</th>
             <th>Доп. информация</th>
             <th></th>
         </tr>
@@ -23,11 +24,21 @@
         <tr>
             <td>@Html.DisplayFor(modelItem => item.NameBrigade)</td>
             <td>@Html.DisplayFor(modelItem => item.Technic)</td>
+            <td>
+                @if (item.ResponsibleUser != null)
+                {
+                    @($"{item.ResponsibleUser.Name} {item.ResponsibleUser.Surname}")
+                }
+                else
+                {
+                    <span class="text-muted">Не назначен</span>
+                }
+            </td>
             <td>@Html.DisplayFor(modelItem => item.Info)</td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Редактировать</a> |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Подробности</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Удалить</a>
             </td>
         </tr>
 }

@@ -56,7 +56,13 @@
                                                     <small>@order.NameClient @order.SurnameClient</small>
                                                     @if (!string.IsNullOrEmpty(order.Status))
                                                     {
-                                                        <br><small class="text-muted">@order.Status</small>
+                                                        <br><small class="badge @(order.Status switch {
+                                                            "Ожидание" => "bg-warning",
+                                                            "В работе" => "bg-primary", 
+                                                            "Ремонт" => "bg-danger",
+                                                            "Завершен" => "bg-success",
+                                                            _ => "bg-secondary"
+                                                        }) badge-sm">@order.Status</small>
                                                     }
                                                 </div>
                                             }

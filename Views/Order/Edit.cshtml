@@ -70,7 +70,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label">Статус</label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control">
+                    <option value="">Выберите статус</option>
+                    <option value="Ожидание">Ожидание</option>
+                    <option value="В работе">В работе</option>
+                    <option value="Ремонт">Ремонт</option>
+                    <option value="Завершен">Завершен</option>
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

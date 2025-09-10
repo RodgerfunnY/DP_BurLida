@@ -60,7 +60,13 @@
                                     {
                                         <p class="card-text">
                                             <strong>Статус:</strong> 
-                                            <span class="badge bg-primary">@order.Status</span>
+                                            <span class="badge @(order.Status switch {
+                                                "Ожидание" => "bg-warning",
+                                                "В работе" => "bg-primary", 
+                                                "Ремонт" => "bg-danger",
+                                                "Завершен" => "bg-success",
+                                                _ => "bg-secondary"
+                                            })">@order.Status</span>
                                         </p>
                                     }
                                     <p class="card-text">

@@ -133,7 +133,20 @@
                     @Html.DisplayFor(modelItem => item.Info)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @if (!string.IsNullOrEmpty(item.Status))
+                    {
+                        <span class="badge @(item.Status switch {
+                            "Ожидание" => "bg-warning",
+                            "В работе" => "bg-primary", 
+                            "Ремонт" => "bg-danger",
+                            "Завершен" => "bg-success",
+                            _ => "bg-secondary"
+                        })">@item.Status</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указан</span>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationTimeData)

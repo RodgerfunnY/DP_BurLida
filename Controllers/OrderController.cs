@@ -76,8 +76,17 @@ namespace DP_BurLida.Controllers
                 return View(order);
             }
 
-            await _orderService.UpdateAsync(order);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _orderService.UpdateAsync(order);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Логируем ошибку для отладки
+                ModelState.AddModelError("", "Ошибка при сохранении: " + ex.Message);
+                return View(order);
+            }
         }
 
         [HttpGet]

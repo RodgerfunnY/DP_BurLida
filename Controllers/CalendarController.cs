@@ -45,12 +45,14 @@ namespace DP_BurLida.Controllers
             var lastDayOfWeek = GetLastDayOfWeek(lastDayOfMonth);
 
             var orders = await _orderService.GetAllAsync();
-            var ordersInPeriod = orders.Where(o => o.CreationTimeData >= firstDayOfWeek && o.CreationTimeData <= lastDayOfWeek).ToList();
+            // Фильтруем только заказы с назначенной датой работы
+            var ordersWithWorkDate = orders.Where(o => o.WorkDate.HasValue).ToList();
+            var ordersInPeriod = ordersWithWorkDate.Where(o => o.WorkDate.Value >= firstDayOfWeek && o.WorkDate.Value <= lastDayOfWeek).ToList();
 
             var currentDate = firstDayOfWeek;
             while (currentDate <= lastDayOfWeek)
             {
-                var dayOrders = ordersInPeriod.Where(o => o.CreationTimeData.Date == currentDate.Date).ToList();
+                var dayOrders = ordersInPeriod.Where(o => o.WorkDate.Value.Date == currentDate.Date).ToList();
                 
                 calendar.Days.Add(new CalendarDay
                 {
@@ -79,6 +81,21 @@ namespace DP_BurLida.Controllers
             var dayOfWeek = (int)date.DayOfWeek;
             if (dayOfWeek == 0) dayOfWeek = 7;
             return date.AddDays(7 - dayOfWeek);
+        }
+
+        public async Task<IActionResult> DayDetails(DateTime? date)
+        {
+            if (!date.HasValue)
+                return RedirectToAction("Index");
+
+            var targetDate = date.Value.Date;
+            var orders = await _orderService.GetAllAsync();
+            
+            // Получаем заказы с назначенной датой работы на выбранный день
+            var dayOrders = orders.Where(o => o.WorkDate.HasValue && o.WorkDate.Value.Date == targetDate).ToList();
+
+            ViewBag.SelectedDate = targetDate;
+            return View(dayOrders);
         }
     }
 }

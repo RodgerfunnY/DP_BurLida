@@ -8,7 +8,8 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Календарь заказов - @Model.MonthName @Model.Year</h2>
+                <h2>Календарь работ - @Model.MonthName @Model.Year</h2>
+                <p class="text-muted">Заказы отображаются по дате выполнения работ</p>
                 <div class="btn-group" role="group">
                     <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })" 
                        class="btn btn-outline-primary @(Model.Month == 1 ? "disabled" : "")">
@@ -51,8 +52,12 @@
                                         <div class="orders-container">
                                             @foreach (var order in day.Orders.Take(3))
                                             {
-                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info">
+                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info - @order.WorkDate?.ToString("dd.MM.yyyy")">
                                                     <small>@order.NameClient @order.SurnameClient</small>
+                                                    @if (!string.IsNullOrEmpty(order.Status))
+                                                    {
+                                                        <br><small class="text-muted">@order.Status</small>
+                                                    }
                                                 </div>
                                             }
                                             @if (day.Orders.Count > 3)

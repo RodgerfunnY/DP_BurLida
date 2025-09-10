@@ -9,7 +9,10 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Заказы на @selectedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))</h2>
+                <div>
+                    <h2>Работы на @selectedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))</h2>
+                    <p class="text-muted">Заказы с назначенной датой выполнения работ</p>
+                </div>
                 <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left"></i> Назад к календарю
                 </a>
@@ -53,6 +56,17 @@
                                     <p class="card-text">
                                         <strong>Информация:</strong> @order.Info
                                     </p>
+                                    @if (!string.IsNullOrEmpty(order.Status))
+                                    {
+                                        <p class="card-text">
+                                            <strong>Статус:</strong> 
+                                            <span class="badge bg-primary">@order.Status</span>
+                                        </p>
+                                    }
+                                    <p class="card-text">
+                                        <strong>Дата работы:</strong> 
+                                        <span class="text-success fw-bold">@order.WorkDate?.ToString("dd.MM.yyyy")</span>
+                                    </p>
                                     <p class="card-text">
                                         <strong>Дата создания:</strong> @order.CreationTimeData.ToString("dd.MM.yyyy HH:mm")
                                     </p>
@@ -70,8 +84,8 @@
             else
             {
                 <div class="alert alert-info">
-                    <h4>На этот день заказов нет</h4>
-                    <p>На выбранную дату не запланировано ни одного заказа.</p>
+                    <h4>На этот день работ не запланировано</h4>
+                    <p>На выбранную дату не назначено ни одной работы. Заказы без назначенной даты работы не отображаются в календаре.</p>
                     <a href="@Url.Action("Create", "Order")" class="btn btn-primary">
                         Создать новый заказ
                     </a>

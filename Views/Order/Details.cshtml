@@ -82,6 +82,19 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreationTimeData)
         </dd>
+        <dt class = "col-sm-2">
+            Дата работы
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.WorkDate.HasValue)
+            {
+                @Model.WorkDate.Value.ToString("dd.MM.yyyy")
+            }
+            else
+            {
+                <span class="text-muted">Не назначена</span>
+            }
+        </dd>
     </dl>
 </div>
 <div>

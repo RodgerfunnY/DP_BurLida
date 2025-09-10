@@ -40,7 +40,6 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
-                    // Отладочная информация о ошибках валидации
                     foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                     {
                         System.Diagnostics.Debug.WriteLine($"Ошибка валидации: {error.ErrorMessage}");
@@ -48,7 +47,6 @@ namespace DP_BurLida.Controllers
                     return View(model);
                 }
 
-                // Отладочная информация о создаваемом пользователе
                 System.Diagnostics.Debug.WriteLine($"Создание пользователя: {model.Name} {model.Surname}, Email: {model.Email}");
 
                 await _userService.CreateAsync(model);

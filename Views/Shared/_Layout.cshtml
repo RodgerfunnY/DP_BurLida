@@ -25,35 +25,51 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Index">Главная</a>
+                                asp-action="Index">
+                                <i class="fas fa-home"></i> Главная
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Заявки</a>
+                                asp-action="Index">
+                                <i class="fas fa-clipboard-list"></i> Заявки
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="User"
-                                asp-action="Index">Сотрудники</a>
+                                asp-action="Index">
+                                <i class="fas fa-users"></i> Сотрудники
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Brigade"
-                                asp-action="Index">Бригады</a>
+                                asp-action="Index">
+                                <i class="fas fa-hard-hat"></i> Бригады
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Calendar"
-                                asp-action="Index">Календарь</a>
+                                asp-action="Index">
+                                <i class="fas fa-calendar-alt"></i> Календарь
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Статистика</a>
+                                asp-action="Index">
+                                <i class="fas fa-chart-bar"></i> Статистика
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Архив</a>
+                                asp-action="Index">
+                                <i class="fas fa-archive"></i> Архив
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Склад</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Sklad"
+                                asp-action="Index">
+                                <i class="fas fa-warehouse"></i> Склад
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -69,7 +85,16 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - DP_BurLida - <a asp-area="" asp-controller="Home" asp-action="Privacy">Конфиденциальность</a>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 - DP_BurLida</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-shield-alt"></i> Политика конфиденциальности
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

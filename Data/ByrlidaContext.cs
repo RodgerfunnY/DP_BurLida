@@ -11,6 +11,7 @@ namespace DP_BurLida.Data
         public DbSet<OrderModelData> OrderModelData { get; set; }
         public DbSet<BrigadeModelData> BrigadeModelData { get; set; }
         public DbSet<UserModelData> UserModelData { get; set; }
+        public DbSet<SkladModelData> SkladModelData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -65,6 +66,9 @@ namespace DP_BurLida.Data
                 .HasColumnName("Дата создания")
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.WorkDate)
+                .HasColumnName("Дата работы")
+                .IsRequired(false);
             });
 
             modelBuilder.Entity<BrigadeModelData>(entity =>

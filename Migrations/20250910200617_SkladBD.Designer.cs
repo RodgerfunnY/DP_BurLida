@@ -4,6 +4,7 @@ using DP_BurLida.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    partial class ByrlidaContextModelSnapshot : ModelSnapshot
+    [Migration("20250910200617_SkladBD")]
+    partial class SkladBD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,10 +138,6 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("Фамилия");
-
-                    b.Property<DateTime?>("WorkDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("Дата работы");
 
                     b.HasKey("Id");
 

@@ -1,0 +1,42 @@
+@model DP_BurLida.Data.ModelsData.SkladModelData
+
+@{
+    ViewData["Title"] = "Детали предмета";
+}
+
+<h1>Детали предмета</h1>
+
+<div>
+    <h4>Информация о предмете</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Название предмета
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NameSubjecte)
+        </dd>
+        <dt class="col-sm-2">
+            Категория
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+        <dt class="col-sm-2">
+            Количество
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            Информация
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Info)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Редактировать</a> |
+    <a asp-action="Index" class="btn btn-secondary">Вернуться к списку</a>
+</div>

@@ -17,10 +17,12 @@ namespace DP_BurLida.Data.ModelsData
         public int Pump { get; set; }
         public string Arrangement { get; set; }
         public string Info { get; set; }
+        public string Status { get; set; }
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
+        public DateTime? WorkDate { get; set; }
         public OrderModelData() { }
         public OrderModelData(int id, string nameClient, string surnameClient, string phone, string area, string district,
-            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, DateTime creationTimeData)
+            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, string status, DateTime creationTimeData, DateTime? workDate = null)
         {
             Id = id;
             NameClient = nameClient;
@@ -34,7 +36,9 @@ namespace DP_BurLida.Data.ModelsData
             Pump = pump;
             Arrangement = arrangement;
             Info = info;
+            Status = status;
             CreationTimeData = creationTimeData;
+            WorkDate = workDate;
         }
     }
 }

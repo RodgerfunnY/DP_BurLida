@@ -22,6 +22,7 @@ namespace DP_BurLida
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<IBrigadeServices, BrigadeServices>();
+            builder.Services.AddScoped<ISkladServices, SkladServices>();
             builder.Services.AddScoped(typeof(ICrudServices<>), typeof(CrudServices<>));
             var app = builder.Build();
 

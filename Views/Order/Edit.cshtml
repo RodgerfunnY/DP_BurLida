@@ -70,8 +70,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="CreationTimeData" class="control-label">Дата создания</label>
-                <input asp-for="CreationTimeData" class="form-control" />
+                <input asp-for="CreationTimeData" class="form-control" readonly />
                 <span asp-validation-for="CreationTimeData" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkDate" class="control-label">Дата работы</label>
+                <input asp-for="WorkDate" type="date" class="form-control" />
+                <span asp-validation-for="WorkDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

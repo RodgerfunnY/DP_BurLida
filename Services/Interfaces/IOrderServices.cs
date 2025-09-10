@@ -6,6 +6,6 @@ namespace DP_BurLida.Services.Interfaces
 {
     public interface IOrderServices : ICrudServices<OrderModelData>
     {
-
+        Task<List<OrderModelData>> SearchAsync(string searchTerm);
     }
 }

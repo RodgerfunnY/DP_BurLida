@@ -71,16 +71,16 @@ namespace DP_BurLida.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.NameBrigade)
-                      .IsRequired()
-                      .HasMaxLength(100);
+                .IsRequired()
+                .HasMaxLength(100);
                 entity.Property(e => e.Technic)
-                      .HasMaxLength(200);
+                .HasMaxLength(200);
                 entity.Property(e => e.Info)
-                      .HasMaxLength(500);
+                .HasMaxLength(500);
                 entity.HasOne(e => e.ResponsibleUser)
-                      .WithMany()
-                      .HasForeignKey(e => e.ResponsibleUserId)
-                      .OnDelete(DeleteBehavior.SetNull);
+                .WithMany()
+                .HasForeignKey(e => e.ResponsibleUserId)
+                .OnDelete(DeleteBehavior.SetNull);
             });
 
         }

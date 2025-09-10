@@ -14,9 +14,20 @@ namespace DP_BurLida.Controllers
             _orderService = orderService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchTerm)
         {
-            var orders = await _orderService.GetAllAsync();
+            List<OrderModelData> orders;
+            
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                orders = await _orderService.SearchAsync(searchTerm);
+                ViewBag.SearchTerm = searchTerm;
+            }
+            else
+            {
+                orders = await _orderService.GetAllAsync();
+            }
+            
             return View(orders);
         }
 

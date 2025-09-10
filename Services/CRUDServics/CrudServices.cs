@@ -8,7 +8,7 @@ namespace DP_BurLida.Services.CRUDServics
 {
     public class CrudServices<TModel> : ICrudServices<TModel> where TModel : class
     {
-        private readonly ByrlidaContext _context;
+        protected readonly ByrlidaContext _context;
 
         public CrudServices(ByrlidaContext context)
         {

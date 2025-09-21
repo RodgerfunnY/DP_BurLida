@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Требуется авторизация";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-lock fa-3x text-warning mb-3"></i>
+                    <h2 class="card-title">Требуется авторизация</h2>
+                    <p class="card-text">
+                        Для доступа к этой странице необходимо войти в систему.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>Войти в систему
+                        </a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary">
+                            <i class="fas fa-user-plus me-2"></i>Зарегистрироваться
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

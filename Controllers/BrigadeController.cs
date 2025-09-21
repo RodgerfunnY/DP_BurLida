@@ -1,19 +1,33 @@
 ﻿using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 
 namespace DP_BurLida.Controllers
 {
+    [Authorize]
     public class BrigadeController : Controller
     {
         private readonly IBrigadeServices _brigadeService;
+        private readonly IUserServices _userService;
 
-        public BrigadeController(IBrigadeServices brigadeService)
+        public BrigadeController(IBrigadeServices brigadeService, IUserServices userService)
         {
             _brigadeService = brigadeService;
+            _userService = userService;
+        }
+
+        // Вспомогательный метод для загрузки пользователей
+        private async Task<SelectList> GetUsersSelectList(int? selectedUserId = null)
+        {
+            var users = await _userService.GetAllAsync();
+            var userItems = users.Select(u => new { 
+                u.Id, 
+                FullName = $"{u.Name} {u.Surname}".Trim() 
+            });
+            return new SelectList(userItems, "Id", "FullName", selectedUserId);
         }
 
         public async Task<ActionResult> Index()
@@ -32,10 +46,7 @@ namespace DP_BurLida.Controllers
         // GET: OrderController/Create
         public async Task<ActionResult> Create()
         {
-            var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
-            var users = await userService.GetAllAsync();
-            var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
-            ViewBag.Users = new SelectList(userItems, "Id", "FullName");
+            ViewBag.Users = await GetUsersSelectList();
             return View();
         }
 
@@ -60,11 +71,7 @@ namespace DP_BurLida.Controllers
             if (brigade == null)
                 return NotFound();
             
-            var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
-            var users = await userService.GetAllAsync();
-            var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
-            ViewBag.Users = new SelectList(userItems, "Id", "FullName", brigade.ResponsibleUserId);
-            
+            ViewBag.Users = await GetUsersSelectList(brigade.ResponsibleUserId);
             return View(brigade);
         }
 
@@ -75,11 +82,7 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var userService = HttpContext.RequestServices.GetRequiredService<IUserServices>();
-                var users = await userService.GetAllAsync();
-                var userItems = users.Select(u => new { u.Id, FullName = ($"{u.Name} {u.Surname}").Trim() });
-                ViewBag.Users = new SelectList(userItems, "Id", "FullName", brigade.ResponsibleUserId);
-                
+                ViewBag.Users = await GetUsersSelectList(brigade.ResponsibleUserId);
                 return View(brigade);
             }
 

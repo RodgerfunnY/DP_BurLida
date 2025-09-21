@@ -1,10 +1,12 @@
 using DP_BurLida.Models;
 using DP_BurLida.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
 namespace DP_BurLida.Controllers
 {
+    [Authorize]
     public class CalendarController : Controller
     {
         private readonly IOrderServices _orderService;

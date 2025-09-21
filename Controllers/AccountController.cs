@@ -1,9 +1,14 @@
 using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DP_BurLida.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IUserServices _userService;
@@ -55,11 +60,32 @@ namespace DP_BurLida.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Здесь должна быть логика аутентификации
-                // var result = await _signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: false);
+                // Простая демонстрационная аутентификация
+                // В реальном проекте здесь должна быть проверка пароля
+                if (email == "admin@example.com" && password == "admin123")
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, "Администратор"),
+                        new Claim(ClaimTypes.Email, email),
+                        new Claim(ClaimTypes.NameIdentifier, "1")
+                    };
 
-                // Временно перенаправляем на главную страницу
-                return RedirectToAction("Index", "Home");
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = rememberMe
+                    };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+                        new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неверный email или пароль");
+                }
             }
             return View();
         }
@@ -147,9 +173,7 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // Здесь должна быть логика выхода
-            // await _signInManager.SignOutAsync();
-
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
     }

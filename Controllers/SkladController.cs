@@ -1,9 +1,11 @@
 ﻿using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DP_BurLida.Controllers
 {
+    [Authorize]
     public class SkladController : Controller
     {
         private readonly ISkladServices _skladService;

@@ -8,7 +8,7 @@
         public string Info { get; set; }
         public int ResponsibleUserId { get; set; }
         public UserModelData ResponsibleUser { get; set; }
-
+          
         public BrigadeModelData(int id, string nameBrigade, string technic,
                                string info, int responsibleUserId, UserModelData responsibleUser)
         {

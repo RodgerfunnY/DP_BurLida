@@ -3,6 +3,7 @@ using DP_BurLida.Services.CRUDServics;
 using DP_BurLida.Services.Implementations;
 using DP_BurLida.Services.Interfaces;
 using DP_BurLida.Services.InterfacesServics;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,17 @@ namespace DP_BurLida
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnections")));
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            
+            // Настройка Cookie Authentication
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    options.AccessDeniedPath = "/Account/Login";
+                    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                    options.SlidingExpiration = true;
+                });
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<IBrigadeServices, BrigadeServices>();

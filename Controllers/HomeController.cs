@@ -1,10 +1,12 @@
 using System.Diagnostics;
 using DP_BurLida.Models;
 using DP_BurLida.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DP_BurLida.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,19 +20,26 @@ namespace DP_BurLida.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var allOrders = await _orderService.GetAllAsync();
-            
-            var statistics = new
+            if (User.Identity?.IsAuthenticated == true)
             {
-                TotalOrders = allOrders.Count,
-                WaitingOrders = allOrders.Count(o => o.Status == "Ожидание"),
-                InWorkOrders = allOrders.Count(o => o.Status == "В работе"),
-                RepairOrders = allOrders.Count(o => o.Status == "Ремонт"),
-                CompletedOrders = allOrders.Count(o => o.Status == "Завершен")
-            };
-            
-            ViewBag.Statistics = statistics;
-            return View();
+                var allOrders = await _orderService.GetAllAsync();
+                
+                var statistics = new
+                {
+                    TotalOrders = allOrders.Count,
+                    WaitingOrders = allOrders.Count(o => o.Status == "Ожидание"),
+                    InWorkOrders = allOrders.Count(o => o.Status == "В работе"),
+                    RepairOrders = allOrders.Count(o => o.Status == "Ремонт"),
+                    CompletedOrders = allOrders.Count(o => o.Status == "Завершен")
+                };
+                
+                ViewBag.Statistics = statistics;
+                return View();
+            }
+            else
+            {
+                return View("Unauthorized");
+            }
         }
 
         public IActionResult Privacy()

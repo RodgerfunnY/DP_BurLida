@@ -12,10 +12,14 @@ namespace DP_BurLida.Controllers
     public class AccountController : Controller
     {
         private readonly IUserServices _userService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public AccountController(IUserServices userService)
+        public AccountController(IUserServices userService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userService = userService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Account/Register
@@ -28,22 +32,41 @@ namespace DP_BurLida.Controllers
         // POST: Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(UserModelData user, string password, string confirmPassword)
+        public async Task<IActionResult> Register(string email, string password, string confirmPassword, string name, string surname, string phone)
         {
             if (ModelState.IsValid)
             {
                 if (password != confirmPassword)
                 {
                     ModelState.AddModelError("", "Пароли не совпадают");
-                    return View(user);
+                    return View();
                 }
 
-                // Здесь должна быть логика создания пользователя
-                // await _userService.CreateAsync(user, password);
+                var user = new IdentityUser { UserName = email, Email = email };
+                var result = await _userManager.CreateAsync(user, password);
 
-                return RedirectToAction("Login");
+                if (result.Succeeded)
+                {
+                    // Создаем запись в UserModelData
+                    var userModel = new UserModelData
+                    {
+                        Name = name,
+                        Surname = surname,
+                        Email = email,
+                        Phone = phone
+                    };
+                    await _userService.CreateAsync(userModel);
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            return View(user);
+            return View();
         }
 
         // GET: Account/Login

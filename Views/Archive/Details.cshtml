@@ -114,6 +114,35 @@
                 <span class="text-muted">Не назначена</span>
             }
         </dd>
+        
+        <!-- Информация о бригадах -->
+        <dt class = "col-sm-2">
+            Бригада бурения
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.DrillingBrigade != null)
+            {
+                @($"{Model.DrillingBrigade.NameBrigade} (Ответственный: {Model.DrillingBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+            }
+            else
+            {
+                <span class="text-muted">Не назначена</span>
+            }
+        </dd>
+        
+        <dt class = "col-sm-2">
+            Бригада обустройства
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.ArrangementBrigade != null)
+            {
+                @($"{Model.ArrangementBrigade.NameBrigade} (Ответственный: {Model.ArrangementBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+            }
+            else
+            {
+                <span class="text-muted">Не назначена</span>
+            }
+        </dd>
     </dl>
 </div>
 <div>

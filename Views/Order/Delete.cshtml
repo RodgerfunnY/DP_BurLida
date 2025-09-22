@@ -1,13 +1,52 @@
 ﻿@model DP_BurLida.Data.ModelsData.OrderModelData
 
 @{
-    ViewData["Title"] = "Удаление";
+    ViewData["Title"] = "Удаление заказа";
 }
-
 
 <h1>Вы уверены, что хотите удалить заказ?</h1>
 
 <div>
+    <h4>Информация о заказе</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Клиент</dt>
+        <dd class="col-sm-10">@Model.NameClient @Model.SurnameClient</dd>
+        
+        <dt class="col-sm-2">Телефон</dt>
+        <dd class="col-sm-10">@Model.Phone</dd>
+        
+        <dt class="col-sm-2">Адрес</dt>
+        <dd class="col-sm-10">@Model.Area, @Model.District, @Model.City</dd>
+        
+        <dt class="col-sm-2">Статус</dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.Status))
+            {
+                <span class="badge @(Model.Status switch {
+                    "Ожидание" => "bg-warning",
+                    "В работе" => "bg-primary", 
+                    "Ремонт" => "bg-danger",
+                    "Завершен" => "bg-success",
+                    _ => "bg-secondary"
+                })">@Model.Status</span>
+            }
+            else
+            {
+                <span class="text-muted">Не указан</span>
+            }
+        </dd>
+        
+        <dt class="col-sm-2">Дата создания</dt>
+        <dd class="col-sm-10">@Model.CreationTimeData.ToString("dd.MM.yyyy HH:mm")</dd>
+        
+        @if (Model.WorkDate.HasValue)
+        {
+            <dt class="col-sm-2">Дата работы</dt>
+            <dd class="col-sm-10">@Model.WorkDate.Value.ToString("dd.MM.yyyy")</dd>
+        }
+    </dl>
+
     <form asp-action="Delete" method="post">
         @Html.AntiForgeryToken()
         <input type="hidden" asp-for="Id" />

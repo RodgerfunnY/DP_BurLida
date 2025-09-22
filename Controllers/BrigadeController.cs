@@ -23,11 +23,15 @@ namespace DP_BurLida.Controllers
         private async Task<SelectList> GetUsersSelectList(int? selectedUserId = null)
         {
             var users = await _userService.GetAllAsync();
-            var userItems = users.Select(u => new { 
-                u.Id, 
-                FullName = $"{u.Name} {u.Surname}".Trim() 
-            });
-            return new SelectList(userItems, "Id", "FullName", selectedUserId);
+            
+            // Отладочная информация
+            Console.WriteLine($"Загрузка пользователей для SelectList. Количество: {users.Count()}");
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Пользователь: ID={user.Id}, FullName={user.FullName}");
+            }
+            
+            return new SelectList(users, "Id", "FullName", selectedUserId);
         }
 
         public async Task<ActionResult> Index()
@@ -55,10 +59,17 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(BrigadeModelData model)
         {
+            // Очищаем ошибки валидации для навигационного свойства
+            ModelState.Remove("ResponsibleUser");
+            
             if (!ModelState.IsValid)
             {
+                ViewBag.Users = await GetUsersSelectList(model.ResponsibleUserId);
                 return View(model);
             }
+
+            // Отладочная информация
+            Console.WriteLine($"Создание бригады: ResponsibleUserId = {model.ResponsibleUserId}");
 
             await _brigadeService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
@@ -80,11 +91,17 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(BrigadeModelData brigade)
         {
+            // Очищаем ошибки валидации для навигационного свойства
+            ModelState.Remove("ResponsibleUser");
+            
             if (!ModelState.IsValid)
             {
                 ViewBag.Users = await GetUsersSelectList(brigade.ResponsibleUserId);
                 return View(brigade);
             }
+
+            // Отладочная информация
+            Console.WriteLine($"Редактирование бригады: ResponsibleUserId = {brigade.ResponsibleUserId}");
 
             await _brigadeService.UpdateAsync(brigade);
             return RedirectToAction(nameof(Index));
@@ -107,7 +124,6 @@ namespace DP_BurLida.Controllers
         {
             await _brigadeService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-
         }
     }
 }

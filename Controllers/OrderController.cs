@@ -3,7 +3,6 @@ using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DP_BurLida.Controllers
 {
@@ -110,7 +109,6 @@ namespace DP_BurLida.Controllers
         {
             await _orderService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-
         }
     }
 }

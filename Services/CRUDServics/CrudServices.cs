@@ -14,9 +14,9 @@ namespace DP_BurLida.Services.CRUDServics
         {
             _context = context;
         }
-        public async Task<List<TModel>> GetAllAsync() => await _context.Set<TModel>().ToListAsync();
+        public virtual async Task<List<TModel>> GetAllAsync() => await _context.Set<TModel>().ToListAsync();
 
-        public async Task<TModel> GetByIdAsync(int id)
+        public virtual async Task<TModel> GetByIdAsync(int id)
         {
             if (id <= 0)
             {

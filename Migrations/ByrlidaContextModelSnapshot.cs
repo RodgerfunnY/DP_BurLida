@@ -22,6 +22,48 @@ namespace DP_BurLida.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeEquipmentModelData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AssignmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("BrigadeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrigadeId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.ToTable("BrigadeEquipmentModelData", (string)null);
+                });
+
             modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeModelData", b =>
                 {
                     b.Property<int>("Id")
@@ -40,7 +82,7 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ResponsibleUserId")
+                    b.Property<int?>("ResponsibleUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Technic")
@@ -53,6 +95,97 @@ namespace DP_BurLida.Migrations
                     b.HasIndex("ResponsibleUserId");
 
                     b.ToTable("BrigadeModelData");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.EquipmentModelData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("TotalQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EquipmentModelData", (string)null);
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderBrigadeModelData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AssignmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("BrigadeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrigadeId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderBrigadeModelData", (string)null);
                 });
 
             modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderModelData", b =>
@@ -181,25 +314,61 @@ namespace DP_BurLida.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BrigadeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserModelData");
+                    b.HasIndex("BrigadeId");
+
+                    b.ToTable("UserModelData", (string)null);
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeEquipmentModelData", b =>
+                {
+                    b.HasOne("DP_BurLida.Data.ModelsData.BrigadeModelData", "Brigade")
+                        .WithMany("BrigadeEquipments")
+                        .HasForeignKey("BrigadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DP_BurLida.Data.ModelsData.EquipmentModelData", "Equipment")
+                        .WithMany("BrigadeEquipments")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brigade");
+
+                    b.Navigation("Equipment");
                 });
 
             modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeModelData", b =>
@@ -207,10 +376,57 @@ namespace DP_BurLida.Migrations
                     b.HasOne("DP_BurLida.Data.ModelsData.UserModelData", "ResponsibleUser")
                         .WithMany()
                         .HasForeignKey("ResponsibleUserId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ResponsibleUser");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderBrigadeModelData", b =>
+                {
+                    b.HasOne("DP_BurLida.Data.ModelsData.BrigadeModelData", "Brigade")
+                        .WithMany("OrderBrigades")
+                        .HasForeignKey("BrigadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DP_BurLida.Data.ModelsData.OrderModelData", "Order")
+                        .WithMany("OrderBrigades")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brigade");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.UserModelData", b =>
+                {
+                    b.HasOne("DP_BurLida.Data.ModelsData.BrigadeModelData", "Brigade")
+                        .WithMany("Members")
+                        .HasForeignKey("BrigadeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Brigade");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.BrigadeModelData", b =>
+                {
+                    b.Navigation("BrigadeEquipments");
+
+                    b.Navigation("Members");
+
+                    b.Navigation("OrderBrigades");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.EquipmentModelData", b =>
+                {
+                    b.Navigation("BrigadeEquipments");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderModelData", b =>
+                {
+                    b.Navigation("OrderBrigades");
                 });
 #pragma warning restore 612, 618
         }

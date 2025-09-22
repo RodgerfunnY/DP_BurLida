@@ -5,7 +5,7 @@
 namespace DP_BurLida.Migrations
 {
     /// <inheritdoc />
-    public partial class WorkStatysOrder1 : Migration
+    public partial class AddBrigadeToOrders1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

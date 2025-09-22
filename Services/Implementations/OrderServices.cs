@@ -16,6 +16,28 @@ namespace DP_BurLida.Services.Implementations
         {
         }
 
+        // Переопределяем метод для загрузки связанных данных
+        public override async Task<List<OrderModelData>> GetAllAsync()
+        {
+            return await _context.Set<OrderModelData>()
+                .Include(o => o.DrillingBrigade)
+                .Include(o => o.ArrangementBrigade)
+                .ToListAsync();
+        }
+
+        // Переопределяем метод GetByIdAsync для загрузки связанных данных
+        public override async Task<OrderModelData> GetByIdAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException($"Некорекктный ID - {id}");
+            }
+            return await _context.Set<OrderModelData>()
+                .Include(o => o.DrillingBrigade)
+                .Include(o => o.ArrangementBrigade)
+                .FirstOrDefaultAsync(o => o.Id == id);
+        }
+
         public async Task<List<OrderModelData>> SearchAsync(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -23,7 +45,10 @@ namespace DP_BurLida.Services.Implementations
                 return await GetAllAsync();
             }
 
-            var allOrders = await _context.OrderModelData.ToListAsync();
+            var allOrders = await _context.Set<OrderModelData>()
+                .Include(o => o.DrillingBrigade)
+                .Include(o => o.ArrangementBrigade)
+                .ToListAsync();
             var searchLower = searchTerm.ToLower();
             var searchResults = new List<OrderModelData>();
 

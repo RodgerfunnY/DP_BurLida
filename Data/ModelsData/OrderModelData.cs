@@ -20,10 +20,24 @@ namespace DP_BurLida.Data.ModelsData
         public string Status { get; set; }
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
         public DateTime? WorkDate { get; set; }
+        
+        // Связи с бригадами
+        public int? DrillingBrigadeId { get; set; }
+        public int? ArrangementBrigadeId { get; set; }
+        
+        // Навигационные свойства
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
+        public BrigadeModelData DrillingBrigade { get; set; }
+        
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
+        public BrigadeModelData ArrangementBrigade { get; set; }
 
         public OrderModelData() { }
         public OrderModelData(int id, string nameClient, string surnameClient, string phone, string area, string district,
-            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, string status, DateTime creationTimeData, DateTime? workDate = null)
+            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, string status, DateTime creationTimeData, DateTime? workDate = null, 
+            int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
         {
             Id = id;
             NameClient = nameClient;
@@ -40,6 +54,8 @@ namespace DP_BurLida.Data.ModelsData
             Status = status;
             CreationTimeData = creationTimeData;
             WorkDate = workDate;
+            DrillingBrigadeId = drillingBrigadeId;
+            ArrangementBrigadeId = arrangementBrigadeId;
         }
     }
 }

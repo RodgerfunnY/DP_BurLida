@@ -3,6 +3,7 @@ using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DP_BurLida.Controllers
 {
@@ -10,10 +11,20 @@ namespace DP_BurLida.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderServices _orderService;
+        private readonly IBrigadeServices _brigadeService;
 
-        public OrderController(IOrderServices orderService)
+        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService)
         {
             _orderService = orderService;
+            _brigadeService = brigadeService;
+        }
+
+        // Вспомогательный метод для загрузки бригад
+        private async Task LoadBrigadesForView(int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
+        {
+            var brigades = await _brigadeService.GetAllAsync();
+            ViewBag.DrillingBrigades = new SelectList(brigades, "Id", "NameBrigade", drillingBrigadeId);
+            ViewBag.ArrangementBrigades = new SelectList(brigades, "Id", "NameBrigade", arrangementBrigadeId);
         }
 
         public async Task<ActionResult> Index(string searchTerm)
@@ -43,8 +54,9 @@ namespace DP_BurLida.Controllers
         }
 
         // GET: OrderController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            await LoadBrigadesForView();
             return View("Create");
         }
 
@@ -53,8 +65,13 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(OrderModelData model)
         {
+            // Очищаем ошибки валидации для навигационных свойств
+            ModelState.Remove("DrillingBrigade");
+            ModelState.Remove("ArrangementBrigade");
+            
             if (!ModelState.IsValid)
             {
+                await LoadBrigadesForView(model.DrillingBrigadeId, model.ArrangementBrigadeId);
                 return View(model);
             }
             await _orderService.CreateAsync(model);
@@ -67,6 +84,8 @@ namespace DP_BurLida.Controllers
             var order = await _orderService.GetByIdAsync(id);
             if (order == null)
                 return NotFound();
+            
+            await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
             return View(order);
         }
 
@@ -75,8 +94,13 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(OrderModelData order)
         {
+            // Очищаем ошибки валидации для навигационных свойств
+            ModelState.Remove("DrillingBrigade");
+            ModelState.Remove("ArrangementBrigade");
+            
             if (!ModelState.IsValid)
             {
+                await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
                 return View(order);
             }
 
@@ -88,6 +112,7 @@ namespace DP_BurLida.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Ошибка при сохранении: " + ex.Message);
+                await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
                 return View(order);
             }
         }

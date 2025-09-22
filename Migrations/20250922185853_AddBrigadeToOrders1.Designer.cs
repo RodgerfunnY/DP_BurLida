@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    [Migration("20250910200617_SkladBD")]
-    partial class SkladBD
+    [Migration("20250922185853_AddBrigadeToOrders1")]
+    partial class AddBrigadeToOrders1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ResponsibleUserId")
+                    b.Property<int?>("ResponsibleUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Technic")
@@ -55,7 +55,7 @@ namespace DP_BurLida.Migrations
 
                     b.HasIndex("ResponsibleUserId");
 
-                    b.ToTable("BrigadeModelData");
+                    b.ToTable("BrigadeModelData", (string)null);
                 });
 
             modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderModelData", b =>
@@ -77,6 +77,9 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Обустройство");
+
+                    b.Property<int?>("ArrangementBrigadeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -100,6 +103,9 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Район");
+
+                    b.Property<int?>("DrillingBrigadeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Info")
                         .IsRequired()
@@ -139,7 +145,15 @@ namespace DP_BurLida.Migrations
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("Фамилия");
 
+                    b.Property<DateTime?>("WorkDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Дата работы");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ArrangementBrigadeId");
+
+                    b.HasIndex("DrillingBrigadeId");
 
                     b.ToTable("Заказы", (string)null);
                 });
@@ -206,10 +220,26 @@ namespace DP_BurLida.Migrations
                     b.HasOne("DP_BurLida.Data.ModelsData.UserModelData", "ResponsibleUser")
                         .WithMany()
                         .HasForeignKey("ResponsibleUserId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ResponsibleUser");
+                });
+
+            modelBuilder.Entity("DP_BurLida.Data.ModelsData.OrderModelData", b =>
+                {
+                    b.HasOne("DP_BurLida.Data.ModelsData.BrigadeModelData", "ArrangementBrigade")
+                        .WithMany()
+                        .HasForeignKey("ArrangementBrigadeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("DP_BurLida.Data.ModelsData.BrigadeModelData", "DrillingBrigade")
+                        .WithMany()
+                        .HasForeignKey("DrillingBrigadeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ArrangementBrigade");
+
+                    b.Navigation("DrillingBrigade");
                 });
 #pragma warning restore 612, 618
         }

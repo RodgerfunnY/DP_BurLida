@@ -69,10 +69,22 @@ namespace DP_BurLida.Data
                 entity.Property(e => e.WorkDate)
                 .HasColumnName("Дата работы")
                 .IsRequired(false);
+                
+                // Связи с бригадами
+                entity.HasOne(e => e.DrillingBrigade)
+                .WithMany()
+                .HasForeignKey(e => e.DrillingBrigadeId)
+                .OnDelete(DeleteBehavior.NoAction);
+                
+                entity.HasOne(e => e.ArrangementBrigade)
+                .WithMany()
+                .HasForeignKey(e => e.ArrangementBrigadeId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<BrigadeModelData>(entity =>
             {
+                entity.ToTable("BrigadeModelData");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.NameBrigade)
                 .IsRequired()

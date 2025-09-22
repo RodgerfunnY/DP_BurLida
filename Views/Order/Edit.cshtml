@@ -90,6 +90,24 @@
                        value="@(Model.WorkDate?.ToString("yyyy-MM-dd"))" />
                 <span asp-validation-for="WorkDate" class="text-danger"></span>
             </div>
+            
+            <!-- Поля для выбора бригад -->
+            <div class="form-group">
+                <label asp-for="DrillingBrigadeId" class="control-label">Бригада бурения</label>
+                <select asp-for="DrillingBrigadeId" class="form-control" asp-items="ViewBag.DrillingBrigades">
+                    <option value="">-- выберите бригаду бурения --</option>
+                </select>
+                <span asp-validation-for="DrillingBrigadeId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="ArrangementBrigadeId" class="control-label">Бригада обустройства</label>
+                <select asp-for="ArrangementBrigadeId" class="form-control" asp-items="ViewBag.ArrangementBrigades">
+                    <option value="">-- выберите бригаду обустройства --</option>
+                </select>
+                <span asp-validation-for="ArrangementBrigadeId" class="text-danger"></span>
+            </div>
+            
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-success" />
                 <a asp-action="Index" class="btn btn-secondary">Отмена</a>

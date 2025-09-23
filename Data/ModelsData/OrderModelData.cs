@@ -21,11 +21,9 @@ namespace DP_BurLida.Data.ModelsData
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
         public DateTime? WorkDate { get; set; }
         
-        // Связи с бригадами
         public int? DrillingBrigadeId { get; set; }
         public int? ArrangementBrigadeId { get; set; }
         
-        // Навигационные свойства
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
         public BrigadeModelData DrillingBrigade { get; set; }

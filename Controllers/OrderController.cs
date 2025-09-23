@@ -19,7 +19,6 @@ namespace DP_BurLida.Controllers
             _brigadeService = brigadeService;
         }
 
-        // Вспомогательный метод для загрузки бригад
         private async Task LoadBrigadesForView(int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
         {
             var brigades = await _brigadeService.GetAllAsync();
@@ -65,7 +64,6 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(OrderModelData model)
         {
-            // Очищаем ошибки валидации для навигационных свойств
             ModelState.Remove("DrillingBrigade");
             ModelState.Remove("ArrangementBrigade");
             
@@ -94,7 +92,6 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(OrderModelData order)
         {
-            // Очищаем ошибки валидации для навигационных свойств
             ModelState.Remove("DrillingBrigade");
             ModelState.Remove("ArrangementBrigade");
             

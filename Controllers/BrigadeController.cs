@@ -19,7 +19,6 @@ namespace DP_BurLida.Controllers
             _userService = userService;
         }
 
-        // Вспомогательный метод для загрузки пользователей
         private async Task<SelectList> GetUsersSelectList(int? selectedUserId = null)
         {
             var users = await _userService.GetAllAsync();
@@ -59,7 +58,6 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(BrigadeModelData model)
         {
-            // Очищаем ошибки валидации для навигационного свойства
             ModelState.Remove("ResponsibleUser");
             
             if (!ModelState.IsValid)
@@ -68,7 +66,6 @@ namespace DP_BurLida.Controllers
                 return View(model);
             }
 
-            // Отладочная информация
             Console.WriteLine($"Создание бригады: ResponsibleUserId = {model.ResponsibleUserId}");
 
             await _brigadeService.CreateAsync(model);
@@ -91,7 +88,6 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(BrigadeModelData brigade)
         {
-            // Очищаем ошибки валидации для навигационного свойства
             ModelState.Remove("ResponsibleUser");
             
             if (!ModelState.IsValid)
@@ -100,7 +96,6 @@ namespace DP_BurLida.Controllers
                 return View(brigade);
             }
 
-            // Отладочная информация
             Console.WriteLine($"Редактирование бригады: ResponsibleUserId = {brigade.ResponsibleUserId}");
 
             await _brigadeService.UpdateAsync(brigade);

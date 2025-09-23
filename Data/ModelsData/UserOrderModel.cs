@@ -10,7 +10,6 @@ namespace DP_BurLida.Data.ModelsData
         public string Email { get; set; }
         public string Phone { get; set; }
         
-        // Вычисляемое свойство для отображения полного имени
         public string FullName => $"{Name} {Surname}".Trim();
 
         public UserModelData() { }

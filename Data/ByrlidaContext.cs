@@ -4,10 +4,8 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace DP_BurLida.Data
 {
-    //Необхид данный класс для работы с баззой данных через прил
     public class ByrlidaContext : DbContext
     {
-        // определние таблиц с моделью
         public DbSet<OrderModelData> OrderModelData { get; set; }
         public DbSet<BrigadeModelData> BrigadeModelData { get; set; }
         public DbSet<UserModelData> UserModelData { get; set; }
@@ -69,8 +67,7 @@ namespace DP_BurLida.Data
                 entity.Property(e => e.WorkDate)
                 .HasColumnName("Дата работы")
                 .IsRequired(false);
-                
-                // Связи с бригадами
+
                 entity.HasOne(e => e.DrillingBrigade)
                 .WithMany()
                 .HasForeignKey(e => e.DrillingBrigadeId)

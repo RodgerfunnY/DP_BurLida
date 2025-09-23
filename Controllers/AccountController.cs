@@ -84,8 +84,7 @@ namespace DP_BurLida.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Простая демонстрационная аутентификация
-                // В реальном проекте здесь должна быть проверка пароля
+
                 if (email == "admin@example.com" && password == "admin123")
                 {
                     var claims = new List<Claim>
@@ -118,10 +117,6 @@ namespace DP_BurLida.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            // Здесь должна быть логика получения текущего пользователя
-            // var user = await _userService.GetCurrentUserAsync();
-
-            // Временно создаем тестового пользователя
             var user = new UserModelData
             {
                 Id = 1,
@@ -138,7 +133,6 @@ namespace DP_BurLida.Controllers
         [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
-            // Здесь должна быть логика получения текущего пользователя
             var user = new UserModelData
             {
                 Id = 1,
@@ -183,9 +177,6 @@ namespace DP_BurLida.Controllers
                     ModelState.AddModelError("", "Новые пароли не совпадают");
                     return View();
                 }
-
-                // Здесь должна быть логика смены пароля
-                // var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
 
                 return RedirectToAction("Profile");
             }

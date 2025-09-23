@@ -16,7 +16,6 @@ namespace DP_BurLida.Services.Implementations
         {
         }
 
-        // Переопределяем метод для загрузки связанных данных
         public override async Task<List<OrderModelData>> GetAllAsync()
         {
             return await _context.Set<OrderModelData>()
@@ -25,7 +24,6 @@ namespace DP_BurLida.Services.Implementations
                 .ToListAsync();
         }
 
-        // Переопределяем метод GetByIdAsync для загрузки связанных данных
         public override async Task<OrderModelData> GetByIdAsync(int id)
         {
             if (id <= 0)

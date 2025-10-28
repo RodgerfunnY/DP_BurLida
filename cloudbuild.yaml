@@ -1,0 +1,33 @@
+# Google Cloud Build config to build, push and deploy to Cloud Run (Artifact Registry)
+# Ensure the Artifact Registry repo exists:
+# gcloud artifacts repositories create $_REPO --repository-format=docker --location=$_REGION
+
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/dp-burlida:$COMMIT_SHA', '.']
+
+# images section auto-pushes the tagged image to AR
+images:
+- '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/dp-burlida:$COMMIT_SHA'
+
+# Deploy to Cloud Run after image is available
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+  entrypoint: bash
+  args:
+    - -c
+    - |
+      gcloud run deploy $_SERVICE \
+        --image $_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/dp-burlida:$COMMIT_SHA \
+        --platform managed \
+        --region $_REGION \
+        --allow-unauthenticated \
+        --port 8080 \
+        --set-env-vars ASPNETCORE_ENVIRONMENT=Production
+
+substitutions:
+  _REGION: europe-central2
+  _REPO: dp-burlida
+  _SERVICE: dp-burlida
+
+options:
+  logging: CLOUD_LOGGING_ONLY

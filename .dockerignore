@@ -1,0 +1,26 @@
+# Git / IDE
+.git
+.gitignore
+.vs
+.vscode
+*.user
+*.suo
+*.swp
+*.DS_Store
+
+# Build artifacts
+bin
+obj
+**/bin
+**/obj
+
+# Node / Frontend
+node_modules
+**/node_modules
+
+# Static maps and vendor libs (optional to exclude)
+wwwroot/**/*.map
+wwwroot/lib
+
+# Logs
+*.log

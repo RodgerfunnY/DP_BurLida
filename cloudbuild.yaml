@@ -22,12 +22,15 @@ images:
         --region $_REGION \
         --allow-unauthenticated \
         --port 8080 \
-        --set-env-vars ASPNETCORE_ENVIRONMENT=Production
+        --set-env-vars ASPNETCORE_ENVIRONMENT=Production,ConnectionStrings__DefaultConnection="$_DB_MAIN",ConnectionStrings__DefaultConnections="$_DB_AUTH"
 
 substitutions:
   _REGION: europe-central2
   _REPO: dp-burlida
   _SERVICE: dp-burlida
+  # Fill these via --substitutions when running gcloud builds submit
+  _DB_MAIN: ""
+  _DB_AUTH: ""
 
 options:
   logging: CLOUD_LOGGING_ONLY

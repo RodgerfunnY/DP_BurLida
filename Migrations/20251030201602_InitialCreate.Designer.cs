@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    [Migration("20250922185853_AddBrigadeToOrders1")]
-    partial class AddBrigadeToOrders1
+    [Migration("20251030201602_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,14 +69,12 @@ namespace DP_BurLida.Migrations
                     b.Property<string>("Area")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Область");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Arrangement")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Обустройство");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("ArrangementBrigadeId")
                         .HasColumnType("int");
@@ -84,25 +82,21 @@ namespace DP_BurLida.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Населеный пункт");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreationTimeData")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("Дата создания")
                         .HasDefaultValueSql("GETDATE()");
 
                     b.Property<int>("Diameter")
                         .HasMaxLength(4)
-                        .HasColumnType("int")
-                        .HasColumnName("Диаметр скважины");
+                        .HasColumnType("int");
 
                     b.Property<string>("District")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Район");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("DrillingBrigadeId")
                         .HasColumnType("int");
@@ -110,30 +104,25 @@ namespace DP_BurLida.Migrations
                     b.Property<string>("Info")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasColumnName("Дополнительная информация");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("NameClient")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasColumnName("Имя");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)")
-                        .HasColumnName("Номер телефона");
+                        .HasColumnType("nvarchar(14)");
 
                     b.Property<int>("PricePerMeter")
                         .HasMaxLength(4)
-                        .HasColumnType("int")
-                        .HasColumnName("Цена за метр");
+                        .HasColumnType("int");
 
                     b.Property<int>("Pump")
                         .HasMaxLength(5)
-                        .HasColumnType("int")
-                        .HasColumnName("Насос с монтажом");
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -142,12 +131,10 @@ namespace DP_BurLida.Migrations
                     b.Property<string>("SurnameClient")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
-                        .HasColumnName("Фамилия");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime?>("WorkDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("Дата работы");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -155,7 +142,7 @@ namespace DP_BurLida.Migrations
 
                     b.HasIndex("DrillingBrigadeId");
 
-                    b.ToTable("Заказы", (string)null);
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("DP_BurLida.Data.ModelsData.SkladModelData", b =>

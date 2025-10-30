@@ -14,60 +14,46 @@ namespace DP_BurLida.Data
         {
             modelBuilder.Entity<OrderModelData>(entity =>
             {
-                entity.ToTable("Заказы");
+                entity.ToTable("Order");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.NameClient) //работа со столбцом
-                .HasColumnName("Имя") //название столбца
                 .IsRequired() //значение должно быть обязательно
                 .HasMaxLength(30); //Макс длинна 
                 entity.Property(e => e.SurnameClient)
-                .HasColumnName("Фамилия")
                 .IsRequired()
                 .HasMaxLength(30);
                 entity.Property(e => e.Phone)
-                .HasColumnName("Номер телефона")
                 .IsRequired()
                 .HasMaxLength(14);
                 entity.Property(e => e.Area)
-                .HasColumnName("Область")
                 .IsRequired()
                 .HasMaxLength(50);
                 entity.Property(e => e.District)
-                .HasColumnName("Район")
                 .IsRequired()
                 .HasMaxLength(50);
                 entity.Property(e => e.City)
-                .HasColumnName("Населеный пункт")
                 .IsRequired()
                 .HasMaxLength(50);
                 entity.Property(e => e.Diameter)
-                .HasColumnName("Диаметр скважины")
                 .IsRequired()
                 .HasMaxLength(4);
                 entity.Property(e => e.PricePerMeter)
-                .HasColumnName("Цена за метр")
                 .IsRequired()
                 .HasMaxLength(4);
                 entity.Property(e => e.Pump)
-                .HasColumnName("Насос с монтажом")
                 .IsRequired()
                 .HasMaxLength(5);
                 entity.Property(e => e.Arrangement)
-                .HasColumnName("Обустройство")
                 .IsRequired()
                 .HasMaxLength(50);
                 entity.Property(e => e.Info)
-                .HasColumnName("Дополнительная информация")
                 .IsRequired()
                 .HasMaxLength(200);
                 entity.Property(e => e.CreationTimeData)
-                .HasColumnName("Дата создания")
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
                 entity.Property(e => e.WorkDate)
-                .HasColumnName("Дата работы")
                 .IsRequired(false);
-
                 entity.HasOne(e => e.DrillingBrigade)
                 .WithMany()
                 .HasForeignKey(e => e.DrillingBrigadeId)

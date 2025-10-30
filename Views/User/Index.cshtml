@@ -4,12 +4,13 @@
     ViewData["Title"] = "Сотрудники";
 }
 
+<div class="content-card">
 <h1>Сотрудники</h1>
 
 <p>
-    <a asp-action="Create">Добавить нового</a>
+    <a asp-action="Create" class="btn btn-success">Добавить нового</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -51,3 +52,4 @@
 }
     </tbody>
 </table>
+</div>

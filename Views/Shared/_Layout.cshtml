@@ -13,47 +13,60 @@
 </head>
 
 <body>
+    @{ var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+       var currentAction = ViewContext.RouteData.Values["action"]?.ToString(); }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DP_BurLida</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span>DP_BurLida</span>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Index">Главная</a>
+                            <a class="nav-link@(currentController=="Home" ? " active fw-semibold" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house me-1"></i> Главная
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Заявки</a>
+                            <a class="nav-link@(currentController=="Order" ? " active fw-semibold" : "")" asp-area="" asp-controller="Order" asp-action="Index">
+                                <i class="fa-solid fa-file-lines me-1"></i> Заявки
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User"
-                                asp-action="Index">Сотрудники</a>
+                            <a class="nav-link@(currentController=="User" ? " active fw-semibold" : "")" asp-area="" asp-controller="User" asp-action="Index">
+                                <i class="fa-solid fa-users me-1"></i> Сотрудники
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Brigade"
-                                asp-action="Index">Бригады</a>
+                            <a class="nav-link@(currentController=="Brigade" ? " active fw-semibold" : "")" asp-area="" asp-controller="Brigade" asp-action="Index">
+                                <i class="fa-solid fa-people-group me-1"></i> Бригады
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Calendar"
-                                asp-action="Index">Календарь</a>
+                            <a class="nav-link@(currentController=="Calendar" ? " active fw-semibold" : "")" asp-area="" asp-controller="Calendar" asp-action="Index">
+                                <i class="fa-solid fa-calendar-days me-1"></i> Календарь
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Order"
-                                asp-action="Index">Статистика</a>
+                            <a class="nav-link@(currentController=="Order" && currentAction=="Statistics" ? " active fw-semibold" : "")" asp-area="" asp-controller="Order" asp-action="Index">
+                                <i class="fa-solid fa-chart-column me-1"></i> Статистика
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Archive"
-                                asp-action="Index">Архив</a>
+                            <a class="nav-link@(currentController=="Archive" ? " active fw-semibold" : "")" asp-area="" asp-controller="Archive" asp-action="Index">
+                                <i class="fa-solid fa-box-archive me-1"></i> Архив
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sklad"
-                                asp-action="Index">Склад</a>
+                            <a class="nav-link@(currentController=="Sklad" ? " active fw-semibold" : "")" asp-area="" asp-controller="Sklad" asp-action="Index">
+                                <i class="fa-solid fa-warehouse me-1"></i> Склад
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -61,14 +74,14 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container py-4">
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container py-3">
             <div class="row">
                 <div class="col-md-6">
                     <p>&copy; 2025 - DP_BurLida</p>

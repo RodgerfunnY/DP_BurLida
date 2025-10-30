@@ -28,6 +28,92 @@ body {
   text-align: end;
 }
 
+/* Layout enhancements */
+body {
+  background-color: #f5f7fb;
+}
+
+main {
+  min-height: 60vh;
+}
+
+/* Navbar tweaks for readability on dark background */
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+  color: #fff;
+}
+
+.navbar-brand span {
+  font-weight: 600;
+}
+
+/* Card look for content blocks */
+.content-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(18, 38, 63, 0.08);
+  padding: 1.25rem;
+}
+
+/* Table beautification */
+table.table {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(18, 38, 63, 0.06);
+}
+
+table.table thead th {
+  background-color: #f1f3f5;
+  color: #343a40;
+  font-weight: 600;
+  border-bottom: 2px solid #e9ecef;
+}
+
+table.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #2563eb;
+  border-color: #1d4ed8;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1e40af;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #e9ecef;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border-color: #dee2e6;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
+
+/* Utility spacing for pages without explicit cards */
+.page-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 16px rgba(18, 38, 63, 0.06);
+}
+
 .form-floating>.form-control-plaintext:focus::placeholder,
 .form-floating>.form-control:focus::placeholder {
   text-align: start;

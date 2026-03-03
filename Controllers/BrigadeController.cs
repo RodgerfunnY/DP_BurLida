@@ -1,4 +1,4 @@
-﻿using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +22,7 @@ namespace DP_BurLida.Controllers
         private async Task<SelectList> GetUsersSelectList(int? selectedUserId = null)
         {
             var users = await _userService.GetAllAsync();
-            
-            // Отладочная информация
-            Console.WriteLine($"Загрузка пользователей для SelectList. Количество: {users.Count()}");
-            foreach (var user in users)
-            {
-                Console.WriteLine($"Пользователь: ID={user.Id}, FullName={user.FullName}");
-            }
-            
+
             return new SelectList(users, "Id", "FullName", selectedUserId);
         }
 
@@ -66,8 +59,6 @@ namespace DP_BurLida.Controllers
                 return View(model);
             }
 
-            Console.WriteLine($"Создание бригады: ResponsibleUserId = {model.ResponsibleUserId}");
-
             await _brigadeService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
         }
@@ -95,8 +86,6 @@ namespace DP_BurLida.Controllers
                 ViewBag.Users = await GetUsersSelectList(brigade.ResponsibleUserId);
                 return View(brigade);
             }
-
-            Console.WriteLine($"Редактирование бригады: ResponsibleUserId = {brigade.ResponsibleUserId}");
 
             await _brigadeService.UpdateAsync(brigade);
             return RedirectToAction(nameof(Index));

@@ -15,9 +15,9 @@
         <form asp-action="Index" method="get" class="d-flex">
             <div class="input-group">
                 <input type="text" name="searchTerm" class="form-control" 
-                       placeholder="Поиск по имени, фамилии, телефону, адресу..." 
+                       placeholder="Поиск по адресу, насосу, обустройству, телефону, имени..." 
                        value="@ViewBag.SearchTerm"
-                       title="Поиск по всем полям заказа" />
+                       title="Поиск по адресу, насосу, обустройству, телефону, имени, координатам и др." />
                 <button type="submit" class="btn btn-outline-secondary">
                     Поиск
                 </button>
@@ -51,14 +51,12 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Имя клиента</th>
+            <th>Адрес</th>
+            <th>Скважина (диаметр)</th>
+            <th>Насос</th>
+            <th>Обустройство</th>
             <th>Телефон</th>
-            <th>Статус</th>
-            <th>Дата выполнения</th>
-            <th>Город</th>
-            <th>Район</th>
-            <th>Бригада бурения</th>
-            <th>Бригада обустройства</th>
+            <th>Имя клиента</th>
             <th>Дата завершения</th>
             <th>Действия</th>
         </tr>
@@ -68,65 +66,42 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NameClient) @Html.DisplayFor(modelItem => item.SurnameClient)
+                    @item.City
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
+                    @item.Diameter
                 </td>
                 <td>
-                    @if (!string.IsNullOrEmpty(item.Status))
+                    @{
+                        var pumpText = item.Pump switch
+                        {
+                            0 => "не нужен",
+                            600 => "монтаж насоса заказчика от 600 руб",
+                            1100 => "насос от 1100 руб",
+                            1101 => "насос от 1100 - взять 4куб насос",
+                            _ => item.Pump.ToString()
+                        };
+                    }
+                    @pumpText
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Arrangement))
                     {
-                        <span class="badge @(item.Status switch {
-                            "Ожидание" => "bg-warning",
-                            "В работе" => "bg-primary", 
-                            "Ремонт" => "bg-danger",
-                            "Завершен" => "bg-success",
-                            _ => "bg-secondary"
-                        })">@item.Status</span>
+                        @item.Arrangement
                     }
                     else
                     {
-                        <span class="text-muted">Не указан</span>
+                        <span class="text-muted">Не указано</span>
                     }
                 </td>
                 <td>
-                    @if (item.WorkDate.HasValue)
-                    {
-                        @item.WorkDate.Value.ToString("dd.MM.yyyy")
-                    }
-                    else
-                    {
-                        <span class="text-muted">Не назначена</span>
-                    }
+                    @item.Phone
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.City)
+                    @item.NameClient
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.District)
-                </td>
-                <td>
-                    @if (item.DrillingBrigade != null)
-                    {
-                        <span class="badge bg-primary">@item.DrillingBrigade.NameBrigade</span>
-                    }
-                    else
-                    {
-                        <span class="text-muted">Не назначена</span>
-                    }
-                </td>
-                <td>
-                    @if (item.ArrangementBrigade != null)
-                    {
-                        <span class="badge bg-success">@item.ArrangementBrigade.NameBrigade</span>
-                    }
-                    else
-                    {
-                        <span class="text-muted">Не назначена</span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationTimeData)
+                    @item.CreationTimeData
                 </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробности</a>

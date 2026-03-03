@@ -4,6 +4,7 @@ using DP_BurLida.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    partial class ByrlidaContextModelSnapshot : ModelSnapshot
+    [Migration("20260303081637_AddOrderExtraFields")]
+    partial class AddOrderExtraFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,27 +82,23 @@ namespace DP_BurLida.Migrations
                     b.Property<DateTime?>("ArrangementDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ArrangementDone")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Contractor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Coordinates")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTimeData")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Depth")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Diameter")
                         .HasMaxLength(4)
@@ -112,12 +111,6 @@ namespace DP_BurLida.Migrations
 
                     b.Property<int?>("DrillingBrigadeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("DynamicLevel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Filter")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Info")
                         .IsRequired()
@@ -145,16 +138,12 @@ namespace DP_BurLida.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("int");
 
-                    b.Property<string>("PumpInstalled")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PumpModel")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sewer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaticLevel")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")

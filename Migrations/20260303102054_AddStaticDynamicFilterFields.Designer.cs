@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    [Migration("20251030201602_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260303102054_AddStaticDynamicFilterFields")]
+    partial class AddStaticDynamicFilterFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,10 +79,19 @@ namespace DP_BurLida.Migrations
                     b.Property<int?>("ArrangementBrigadeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("ArrangementDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Contractor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Coordinates")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTimeData")
                         .ValueGeneratedOnAdd()
@@ -101,10 +110,19 @@ namespace DP_BurLida.Migrations
                     b.Property<int?>("DrillingBrigadeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DynamicLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Filter")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Info")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("MetersCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("NameClient")
                         .IsRequired()
@@ -123,6 +141,15 @@ namespace DP_BurLida.Migrations
                     b.Property<int>("Pump")
                         .HasMaxLength(5)
                         .HasColumnType("int");
+
+                    b.Property<string>("PumpModel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sewer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaticLevel")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()

@@ -1,4 +1,4 @@
-﻿@model DP_BurLida.Data.ModelsData.OrderModelData
+@model DP_BurLida.Data.ModelsData.OrderModelData
 
 @{
     ViewData["Title"] = "Редактирование заказа";
@@ -8,41 +8,22 @@
 
 <h4>Данные заказа</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row">
+        <!-- ЛЕВАЯ КОЛОНКА -->
+        <div class="col-md-6">
+            <!-- 1. Адрес -->
             <div class="form-group">
-                <label asp-for="NameClient" class="control-label">Имя клиента</label>
-                <input asp-for="NameClient" class="form-control" />
-                <span asp-validation-for="NameClient" class="text-danger"></span>
+                <label asp-for="Address" class="control-label">Адрес</label>
+                <input asp-for="Address" class="form-control" />
+                <span class="form-text text-muted">Полный адрес объекта.</span>
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="SurnameClient" class="control-label">Фамилия клиента</label>
-                <input asp-for="SurnameClient" class="form-control" />
-                <span asp-validation-for="SurnameClient" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label">Телефон</label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Area" class="control-label">Область</label>
-                <input asp-for="Area" class="form-control" />
-                <span asp-validation-for="Area" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="District" class="control-label">Район</label>
-                <input asp-for="District" class="form-control" />
-                <span asp-validation-for="District" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label">Город</label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
+
+            <!-- 2. Диаметр -->
             <div class="form-group">
                 <label asp-for="Diameter" class="control-label">Диаметр</label>
                 <select asp-for="Diameter" class="form-control">
@@ -53,6 +34,8 @@
                 </select>
                 <span asp-validation-for="Diameter" class="text-danger"></span>
             </div>
+
+            <!-- 3. Цена за метр -->
             <div class="form-group">
                 <label asp-for="PricePerMeter" class="control-label">Цена за метр</label>
                 <select asp-for="PricePerMeter" class="form-control">
@@ -70,57 +53,104 @@
                 </select>
                 <span asp-validation-for="PricePerMeter" class="text-danger"></span>
             </div>
+
+            <!-- 4. Насос -->
             <div class="form-group">
                 <label asp-for="Pump" class="control-label">Насос</label>
                 <select asp-for="Pump" class="form-control">
-                    <option value="">-- выберите насос --</option>
-                    <option value="0">0</option>
-                    <option value="600">600</option>
-                    <option value="1200">1200</option>
+                    <option value="0">не нужен</option>
+                    <option value="600">монтаж насоса заказчика от 600 руб</option>
+                    <option value="1100">насос от 1100 руб</option>
+                    <option value="1101">насос от 1100 - взять 4куб насос</option>
                 </select>
                 <span asp-validation-for="Pump" class="text-danger"></span>
             </div>
+
+            <!-- 5. Обустройство -->
             <div class="form-group">
                 <label asp-for="Arrangement" class="control-label">Обустройство</label>
                 <select asp-for="Arrangement" class="form-control">
-                    <option value="">-- выберите обустройство --</option>
-                    <option value="Адаптер">Адаптер</option>
-                    <option value="Бетонный кессон">Бетонный кессон</option>
-                    <option value="Пластиковый кессон">Пластиковый кессон</option>
-                    <option value="Врезка в систему">Врезка в систему</option>
-                    <option value="Ничего">Ничего</option>
+                    <option value="Не нужно">не нужно</option>
+                    <option value="Врезать адаптер от 1000 руб">врезать адаптер от 1000руб</option>
+                    <option value="Врезка через адаптер от 1300 руб">врезка через адаптер от 1300руб</option>
+                    <option value="Адаптер от 2000 руб">адаптер от 2000руб</option>
+                    <option value="Кессон ж/б от 3500 руб">Кессон ж/б от 3500 руб</option>
+                    <option value="Пластиковый кессон от 6500 руб">платиковый кессон от 6500 руб</option>
                 </select>
+                <span class="form-text text-muted">Необязательное поле.</span>
                 <span asp-validation-for="Arrangement" class="text-danger"></span>
             </div>
+
+            <!-- 6. КАНАЛИЗАЦИЯ -->
+            <div class="form-group">
+                <label asp-for="Sewer" class="control-label">Канализация</label>
+                <input asp-for="Sewer" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="Sewer" class="text-danger"></span>
+            </div>
+
+            <!-- 7. ИНФОРМАЦИЯ -->
             <div class="form-group">
                 <label asp-for="Info" class="control-label">Информация</label>
                 <input asp-for="Info" class="form-control" />
                 <span asp-validation-for="Info" class="text-danger"></span>
             </div>
+
+            <!-- 8. Номер телефона -->
             <div class="form-group">
-                <label asp-for="Status" class="control-label">Статус</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="">Выберите статус</option>
-                    <option value="Ожидание">Ожидание</option>
-                    <option value="В работе">В работе</option>
-                    <option value="Ремонт">Ремонт</option>
-                    <option value="Завершен">Завершен</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <label asp-for="Phone" class="control-label">Телефон</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
+
+            <!-- 9. Имя клиента -->
+            <div class="form-group">
+                <label asp-for="NameClient" class="control-label">Имя клиента</label>
+                <input asp-for="NameClient" class="form-control" />
+                <span asp-validation-for="NameClient" class="text-danger"></span>
+            </div>
+
+            <!-- 10. Координаты -->
+            <div class="form-group">
+                <label asp-for="Coordinates" class="control-label">Координаты</label>
+                <input asp-for="Coordinates" class="form-control" />
+                <span class="form-text text-muted">Формат: широта, долгота.</span>
+                <span asp-validation-for="Coordinates" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <div class="col-md-6">
+            <!-- 11. Дата создания -->
             <div class="form-group">
                 <label asp-for="CreationTimeData" class="control-label">Дата создания</label>
                 <input asp-for="CreationTimeData" class="form-control" readonly />
                 <span asp-validation-for="CreationTimeData" class="text-danger"></span>
             </div>
+
+            <!-- 12. Статус -->
             <div class="form-group">
-                <label asp-for="WorkDate" class="control-label">Дата работы</label>
+                <label asp-for="Status" class="control-label">Статус</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="">Выберите статус</option>
+                    <option value="Ожидание">Ожидание</option>
+                    <option value="Бурение">Бурение</option>
+                    <option value="Обустройство">Обустройство</option>
+                    <option value="Ремонт">Ремонт</option>
+                    <option value="Завершен">Завершен</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- 13. Дата бурения -->
+            <div class="form-group">
+                <label asp-for="WorkDate" class="control-label">Дата бурения</label>
                 <input asp-for="WorkDate" type="date" class="form-control" 
                        value="@(Model.WorkDate?.ToString("yyyy-MM-dd"))" />
                 <span asp-validation-for="WorkDate" class="text-danger"></span>
             </div>
-            
-            <!-- Поля для выбора бригад -->
+
+            <!-- 14. Бригада бурения -->
             <div class="form-group">
                 <label asp-for="DrillingBrigadeId" class="control-label">Бригада бурения</label>
                 <select asp-for="DrillingBrigadeId" class="form-control" asp-items="ViewBag.DrillingBrigades">
@@ -128,7 +158,65 @@
                 </select>
                 <span asp-validation-for="DrillingBrigadeId" class="text-danger"></span>
             </div>
-            
+
+            <!-- 15. Количество метров -->
+            <div class="form-group">
+                <label asp-for="MetersCount" class="control-label">Количество метров</label>
+                <input asp-for="MetersCount" type="number" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="MetersCount" class="text-danger"></span>
+            </div>
+
+            <!-- 16. Глубина -->
+            <div class="form-group">
+                <label asp-for="Depth" class="control-label">Глубина</label>
+                <input asp-for="Depth" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="Depth" class="text-danger"></span>
+            </div>
+
+            <!-- 17. Динамика -->
+            <div class="form-group">
+                <label asp-for="DynamicLevel" class="control-label">Динамика</label>
+                <input asp-for="DynamicLevel" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="DynamicLevel" class="text-danger"></span>
+            </div>
+
+            <!-- 18. Статика -->
+            <div class="form-group">
+                <label asp-for="StaticLevel" class="control-label">Статика</label>
+                <input asp-for="StaticLevel" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="StaticLevel" class="text-danger"></span>
+            </div>
+
+            <!-- 19. Фильтр -->
+            <div class="form-group">
+                <label asp-for="Filter" class="control-label">Фильтр</label>
+                <input asp-for="Filter" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="Filter" class="text-danger"></span>
+            </div>
+
+            <!-- 20. Насос смонтирован -->
+            <div class="form-group">
+                <label asp-for="PumpInstalled" class="control-label">Насос смонтирован</label>
+                <input asp-for="PumpInstalled" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="PumpInstalled" class="text-danger"></span>
+            </div>
+
+            <!-- 21. Дата обустройства -->
+            <div class="form-group">
+                <label asp-for="ArrangementDate" class="control-label">Дата обустройства</label>
+                <input asp-for="ArrangementDate" type="date" class="form-control"
+                       value="@(Model.ArrangementDate?.ToString("yyyy-MM-dd"))" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="ArrangementDate" class="text-danger"></span>
+            </div>
+
+            <!-- 22. Бригада обустройства -->
             <div class="form-group">
                 <label asp-for="ArrangementBrigadeId" class="control-label">Бригада обустройства</label>
                 <select asp-for="ArrangementBrigadeId" class="form-control" asp-items="ViewBag.ArrangementBrigades">
@@ -136,14 +224,22 @@
                 </select>
                 <span asp-validation-for="ArrangementBrigadeId" class="text-danger"></span>
             </div>
-            
+
+            <!-- 23. Обустройство выполнено -->
             <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-success" />
-                <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+                <label asp-for="ArrangementDone" class="control-label">Обустройство выполнено</label>
+                <input asp-for="ArrangementDone" class="form-control" />
+                <span class="form-text text-muted">Необязательное поле.</span>
+                <span asp-validation-for="ArrangementDone" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Сохранить" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
 
 <div>
     <a asp-action="Index">Вернуться к списку</a>

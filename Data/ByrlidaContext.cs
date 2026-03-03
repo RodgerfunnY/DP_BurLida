@@ -1,6 +1,5 @@
-﻿using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data.ModelsData;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace DP_BurLida.Data
 {

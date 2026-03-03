@@ -1,4 +1,4 @@
-﻿using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -72,6 +72,15 @@ namespace DP_BurLida.Controllers
                 await LoadBrigadesForView(model.DrillingBrigadeId, model.ArrangementBrigadeId);
                 return View(model);
             }
+
+            // Поля, которые больше не вводятся вручную в форме
+            model.SurnameClient ??= string.Empty;
+            model.Area ??= string.Empty;
+            model.District ??= string.Empty;
+            model.City = model.Address ?? string.Empty;
+            // Обустройство в БД не допускает NULL, задаём значение по умолчанию
+            model.Arrangement ??= "Не нужно";
+
             await _orderService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
         }
@@ -83,6 +92,7 @@ namespace DP_BurLida.Controllers
             if (order == null)
                 return NotFound();
             
+            order.Address = order.City;
             await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
             return View(order);
         }
@@ -103,6 +113,12 @@ namespace DP_BurLida.Controllers
 
             try
             {
+                order.SurnameClient ??= string.Empty;
+                order.Area ??= string.Empty;
+                order.District ??= string.Empty;
+                order.City = order.Address ?? string.Empty;
+                order.Arrangement ??= "Не нужно";
+
                 await _orderService.UpdateAsync(order);
                 return RedirectToAction(nameof(Index));
             }

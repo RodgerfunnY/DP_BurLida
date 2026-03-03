@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace DP_BurLida.Data.ModelsData
 {
@@ -7,20 +7,81 @@ namespace DP_BurLida.Data.ModelsData
     {
         public int Id { get; set; }
         public string NameClient { get; set; }
-        public string SurnameClient { get; set; }
+        public string? SurnameClient { get; set; }
         public string Phone { get; set; }
-        public string Area { get; set; }
-        public string District { get; set; }
-        public string City { get; set; }
+        public string? Area { get; set; }
+        public string? District { get; set; }
+        public string? City { get; set; }
         public int Diameter { get; set; }
         public int PricePerMeter { get; set; }
         public int Pump { get; set; }
-        public string Arrangement { get; set; }
+        /// <summary>
+        /// Количество метров (необязательное поле).
+        /// </summary>
+        public int? MetersCount { get; set; }
+        /// <summary>
+        /// Глубина (необязательное поле).
+        /// </summary>
+        public string? Depth { get; set; }
+        /// <summary>
+        /// Статика (необязательное поле).
+        /// </summary>
+        public string? StaticLevel { get; set; }
+        /// <summary>
+        /// Динамика (необязательное поле).
+        /// </summary>
+        public string? DynamicLevel { get; set; }
+        /// <summary>
+        /// Фильтр (необязательное поле).
+        /// </summary>
+        public string? Filter { get; set; }
+        /// <summary>
+        /// Модель насоса (необязательное поле).
+        /// </summary>
+        public string? PumpModel { get; set; }
+        /// <summary>
+        /// Тип обустройства, свободный ввод (необязательное поле).
+        /// </summary>
+        public string? Arrangement { get; set; }
+        /// <summary>
+        /// Монтировали насос (необязательное поле).
+        /// </summary>
+        public string? PumpInstalled { get; set; }
+        /// <summary>
+        /// Обустройство выполнено (необязательное поле).
+        /// </summary>
+        public string? ArrangementDone { get; set; }
         public string Info { get; set; }
         public string Status { get; set; }
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
+        /// <summary>
+        /// Дата бурения (ранее Дата работы).
+        /// </summary>
         public DateTime? WorkDate { get; set; }
-        
+        /// <summary>
+        /// Дата обустройства (необязательное поле).
+        /// </summary>
+        public DateTime? ArrangementDate { get; set; }
+
+        /// <summary>
+        /// Кому отдать подряд (Саша, Олег, Александр) – необязательное поле.
+        /// </summary>
+        public string? Contractor { get; set; }
+
+        /// <summary>
+        /// Координаты объекта (для отображения на карте).
+        /// Формат можно использовать как \"широта,долгота\".
+        /// </summary>
+        public string? Coordinates { get; set; }
+
+        /// <summary>
+        /// Описание канализации (необязательное текстовое поле).
+        /// </summary>
+        public string? Sewer { get; set; }
+
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public string? Address { get; set; }
+
         public int? DrillingBrigadeId { get; set; }
         public int? ArrangementBrigadeId { get; set; }
         
@@ -33,28 +94,6 @@ namespace DP_BurLida.Data.ModelsData
         public BrigadeModelData ArrangementBrigade { get; set; }
 
         public OrderModelData() { }
-        public OrderModelData(int id, string nameClient, string surnameClient, string phone, string area, string district,
-            string city, int diameter, int pricePerMeter, int pump, string arrangement, string info, string status, DateTime creationTimeData, DateTime? workDate = null, 
-            int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
-        {
-            Id = id;
-            NameClient = nameClient;
-            SurnameClient = surnameClient;
-            Phone = phone;
-            Area = area;
-            District = district;
-            City = city;
-            Diameter = diameter;
-            PricePerMeter = pricePerMeter;
-            Pump = pump;
-            Arrangement = arrangement;
-            Info = info;
-            Status = status;
-            CreationTimeData = creationTimeData;
-            WorkDate = workDate;
-            DrillingBrigadeId = drillingBrigadeId;
-            ArrangementBrigadeId = arrangementBrigadeId;
-        }
     }
 }
 

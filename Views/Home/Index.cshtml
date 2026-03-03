@@ -1,6 +1,7 @@
-﻿@{
+@{
     ViewData["Title"] = "Главная страница";
     var stats = ViewBag.Statistics as dynamic;
+    var ordersForMapJson = ViewBag.OrdersForMapJson as string ?? "[]";
 }
 
 <div class="container-fluid">
@@ -64,19 +65,21 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Карта обслуживания</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="me-2">Фильтр по статусу:</span>
+                        <select id="statusFilter" class="form-select form-select-sm" style="width:auto;">
+                            <option value="">Все</option>
+                            <option value="Ожидание">Ожидание</option>
+                            <option value="Бурение">Бурение</option>
+                            <option value="Обустройство">Обустройство</option>
+                            <option value="Ремонт">Ремонт</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body p-0">
-                    <iframe 
-                        src="https://www.google.com/maps/d/embed?mid=1n5SqxLEAfDC1Aca5b1YlvdFzvak&femb=1&ll=53.88947644837849%2C25.20702347153498&z=11" 
-                        width="100%" 
-                        height="500" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    <div id="map" style="width: 100%; height: 500px;"></div>
                 </div>
             </div>
         </div>
@@ -88,3 +91,80 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=4241305e-2e84-4c08-92f5-27f017cf2057&lang=ru_RU" type="text/javascript"></script>
+    <script>
+        const ordersForMap = @Html.Raw(ordersForMapJson);
+        let ymapsMap;
+        let allPlacemarks = [];
+
+        function initMapYandex() {
+            ymapsMap = new ymaps.Map("map", {
+                center: [53.9, 27.55],
+                zoom: 9
+            });
+
+            const statusPresets = {
+                "Ожидание": "islands#orangeCircleIcon",
+                "Ремонт": "islands#redCircleIcon",
+                "Бурение": "islands#greenCircleIcon",
+                "Обустройство": "islands#blueCircleIcon"
+            };
+
+            const points = [];
+
+            ordersForMap.forEach(o => {
+                if (!o.coordinates) return;
+                const parts = o.coordinates.split(/[,\s]+/).map(x => parseFloat(x.replace(",", ".")));
+                if (parts.length < 2 || isNaN(parts[0]) || isNaN(parts[1])) return;
+
+                const coords = [parts[0], parts[1]];
+                const preset = statusPresets[o.status] || "islands#grayCircleIcon";
+
+                const placemark = new ymaps.Placemark(
+                    coords,
+                    {
+                        balloonContent: `<strong>${o.nameClient ?? ""}</strong><br/>Статус: ${o.status ?? ""}`
+                    },
+                    {
+                        preset: preset
+                    }
+                );
+
+                placemark.orderStatus = o.status;
+
+                ymapsMap.geoObjects.add(placemark);
+                allPlacemarks.push(placemark);
+                points.push(coords);
+            });
+
+            if (points.length > 0) {
+                const bounds = ymaps.util.bounds.fromPoints(points);
+                ymapsMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 20 });
+            }
+
+            const statusFilter = document.getElementById("statusFilter");
+            if (statusFilter) {
+                statusFilter.addEventListener("change", () => {
+                    const value = statusFilter.value;
+                    allPlacemarks.forEach(p => {
+                        if (!value || p.orderStatus === value) {
+                            if (!ymapsMap.geoObjects.contains(p)) {
+                                ymapsMap.geoObjects.add(p);
+                            }
+                        } else {
+                            if (ymapsMap.geoObjects.contains(p)) {
+                                ymapsMap.geoObjects.remove(p);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        if (window.ymaps) {
+            ymaps.ready(initMapYandex);
+        }
+    </script>
+}

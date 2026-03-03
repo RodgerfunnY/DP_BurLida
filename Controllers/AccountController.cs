@@ -115,7 +115,7 @@ namespace DP_BurLida.Controllers
 
         // GET: Account/Profile
         [HttpGet]
-        public async Task<IActionResult> Profile()
+        public IActionResult Profile()
         {
             var user = new UserModelData
             {
@@ -131,7 +131,7 @@ namespace DP_BurLida.Controllers
 
         // GET: Account/EditProfile
         [HttpGet]
-        public async Task<IActionResult> EditProfile()
+        public IActionResult EditProfile()
         {
             var user = new UserModelData
             {
@@ -168,7 +168,7 @@ namespace DP_BurLida.Controllers
         // POST: Account/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(string currentPassword, string newPassword, string confirmNewPassword)
+        public IActionResult ChangePassword(string currentPassword, string newPassword, string confirmNewPassword)
         {
             if (ModelState.IsValid)
             {

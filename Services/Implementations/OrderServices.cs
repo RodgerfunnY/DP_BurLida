@@ -1,12 +1,9 @@
-﻿using DP_BurLida.Data;
+using DP_BurLida.Data;
 using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.CRUDServics;
 using DP_BurLida.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 
 namespace DP_BurLida.Services.Implementations
 {
@@ -27,13 +24,17 @@ namespace DP_BurLida.Services.Implementations
         public override async Task<OrderModelData> GetByIdAsync(int id)
         {
             if (id <= 0)
-            {
-                throw new ArgumentException($"Некорекктный ID - {id}");
-            }
-            return await _context.Set<OrderModelData>()
+                throw new ArgumentException($"Некорректный ID - {id}");
+            var order = await _context.Set<OrderModelData>()
                 .Include(o => o.DrillingBrigade)
                 .Include(o => o.ArrangementBrigade)
                 .FirstOrDefaultAsync(o => o.Id == id);
+            if (order == null)
+            {
+                
+                throw new InvalidOperationException($"Заявка с ID={id} не найдена.");
+            }
+            return order;
         }
 
         public async Task<List<OrderModelData>> SearchAsync(string searchTerm)
@@ -47,55 +48,27 @@ namespace DP_BurLida.Services.Implementations
                 .Include(o => o.DrillingBrigade)
                 .Include(o => o.ArrangementBrigade)
                 .ToListAsync();
+
             var searchLower = searchTerm.ToLower();
-            var searchResults = new List<OrderModelData>();
 
-
-            foreach (var order in allOrders)
-            {
-                bool found = false;
-                
-                if (order.NameClient != null && order.NameClient.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.SurnameClient != null && order.SurnameClient.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.Phone != null && order.Phone.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.Area != null && order.Area.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.District != null && order.District.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.City != null && order.City.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.Arrangement != null && order.Arrangement.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                else if (order.Info != null && order.Info.ToLower().Contains(searchLower))
-                {
-                    found = true;
-                }
-                
-
-                if (found)
-                {
-                    searchResults.Add(order);
-                }
-            }
-
-            return searchResults;
+            return allOrders
+                .Where(order =>
+                    (!string.IsNullOrEmpty(order.NameClient) && order.NameClient.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Phone) && order.Phone.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.City) && order.City.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Arrangement) && order.Arrangement.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Info) && order.Info.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Contractor) && order.Contractor.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Coordinates) && order.Coordinates.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Sewer) && order.Sewer.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Depth) && order.Depth.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.StaticLevel) && order.StaticLevel.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.DynamicLevel) && order.DynamicLevel.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.Filter) && order.Filter.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.PumpInstalled) && order.PumpInstalled.ToLower().Contains(searchLower)) ||
+                    (!string.IsNullOrEmpty(order.ArrangementDone) && order.ArrangementDone.ToLower().Contains(searchLower))
+                )
+                .ToList();
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data.ModelsData;
 using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DP_BurLida.Controllers
 {
@@ -43,17 +42,11 @@ namespace DP_BurLida.Controllers
         {
             if (!ModelState.IsValid)
             {
-                    foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Ошибка валидации: {error.ErrorMessage}");
-                    }
-                    return View(model);
-                }
+                return View(model);
+            }
 
-                System.Diagnostics.Debug.WriteLine($"Создание пользователя: {model.Name} {model.Surname}, Email: {model.Email}");
-
-                await _userService.CreateAsync(model);
-                return RedirectToAction(nameof(Index));
+            await _userService.CreateAsync(model);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: UserController/Edit/5
@@ -93,7 +86,7 @@ namespace DP_BurLida.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             await _userService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));

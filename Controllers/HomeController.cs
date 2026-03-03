@@ -24,17 +24,34 @@ namespace DP_BurLida.Controllers
             if (User.Identity?.IsAuthenticated == true)
             {
                 var allOrders = await _orderService.GetAllAsync();
-                
+
                 var statistics = new
                 {
                     TotalOrders = allOrders.Count,
                     WaitingOrders = allOrders.Count(o => o.Status == "Ожидание"),
-                    InWorkOrders = allOrders.Count(o => o.Status == "В работе"),
+                    InWorkOrders = allOrders.Count(o => o.Status == "Бурение" || o.Status == "Обустройство"),
                     RepairOrders = allOrders.Count(o => o.Status == "Ремонт"),
                     CompletedOrders = allOrders.Count(o => o.Status == "Завершен")
                 };
-                
+
+                var ordersForMap = allOrders
+                    .Where(o => !string.IsNullOrEmpty(o.Coordinates) && !string.IsNullOrEmpty(o.Status))
+                    .Select(o => new
+                    {
+                        o.Id,
+                        o.NameClient,
+                        o.Status,
+                        o.Coordinates
+                    })
+                    .ToList();
+
+                var jsonOptions = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+                };
+
                 ViewBag.Statistics = statistics;
+                ViewBag.OrdersForMapJson = System.Text.Json.JsonSerializer.Serialize(ordersForMap, jsonOptions);
                 return View();
             }
             else

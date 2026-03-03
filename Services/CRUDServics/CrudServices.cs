@@ -1,8 +1,7 @@
-﻿using DP_BurLida.Data;
-using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data;
 using DP_BurLida.Services.InterfacesServics;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DP_BurLida.Services.CRUDServics
 {
@@ -20,9 +19,14 @@ namespace DP_BurLida.Services.CRUDServics
         {
             if (id <= 0)
             {
-                throw new ArgumentException($"Некорекктный ID - {id}");
+                throw new ArgumentException($"Некорректный ID - {id}");
             }
-            return await _context.Set<TModel>().FindAsync(id);
+            var entity = await _context.Set<TModel>().FindAsync(id);
+            if (entity == null)
+            {
+                throw new InvalidOperationException($"Сущность типа {typeof(TModel).Name} с ID={id} не найдена.");
+            }
+            return entity;
         }
 
         public async Task<TModel> CreateAsync(TModel model)

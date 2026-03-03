@@ -125,7 +125,7 @@
                 const placemark = new ymaps.Placemark(
                     coords,
                     {
-                        balloonContent: `<strong>${o.nameClient ?? ""}</strong><br/>Статус: ${o.status ?? ""}`
+                        balloonContent: `<strong>${o.address ?? ""}</strong><br/>Статус: ${o.status ?? ""}`
                     },
                     {
                         preset: preset

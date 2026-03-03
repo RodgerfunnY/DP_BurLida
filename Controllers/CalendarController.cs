@@ -47,6 +47,12 @@ namespace DP_BurLida.Controllers
             var lastDayOfWeek = GetLastDayOfWeek(lastDayOfMonth);
 
             var orders = await _orderService.GetAllAsync();
+
+            // Заявки без даты бурения (для правой панели)
+            calendar.UnscheduledOrders = orders
+                .Where(o => !o.WorkDate.HasValue && o.Status != "Завершен")
+                .ToList();
+
             var ordersWithWorkDate = orders.Where(o => o.WorkDate.HasValue).ToList();
             var ordersInPeriod = ordersWithWorkDate.Where(o => o.WorkDate.Value >= firstDayOfWeek && o.WorkDate.Value <= lastDayOfWeek).ToList();
 
@@ -82,6 +88,25 @@ namespace DP_BurLida.Controllers
             var dayOfWeek = (int)date.DayOfWeek;
             if (dayOfWeek == 0) dayOfWeek = 7;
             return date.AddDays(7 - dayOfWeek);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateWorkDate(int orderId, string newDate)
+        {
+            if (orderId <= 0 || string.IsNullOrWhiteSpace(newDate))
+                return BadRequest("Некорректные данные.");
+
+            if (!DateTime.TryParseExact(newDate, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var parsedDate))
+            {
+                return BadRequest("Некорректный формат даты.");
+            }
+
+            var order = await _orderService.GetByIdAsync(orderId);
+            order.WorkDate = parsedDate;
+            await _orderService.UpdateAsync(order);
+
+            return Ok(new { success = true });
         }
 
         public async Task<IActionResult> DayDetails(DateTime? date)

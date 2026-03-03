@@ -4,6 +4,7 @@ using DP_BurLida.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DP_BurLida.Migrations
 {
     [DbContext(typeof(ByrlidaContext))]
-    partial class ByrlidaContextModelSnapshot : ModelSnapshot
+    [Migration("20260303120558_IncreaseTextFieldsTo1000")]
+    partial class IncreaseTextFieldsTo1000
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,8 +88,8 @@ namespace DP_BurLida.Migrations
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Contractor")
                         .HasColumnType("nvarchar(max)");
@@ -126,8 +129,8 @@ namespace DP_BurLida.Migrations
 
                     b.Property<string>("Info")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int?>("MetersCount")
                         .HasColumnType("int");

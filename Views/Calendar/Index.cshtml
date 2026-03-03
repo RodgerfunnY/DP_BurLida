@@ -6,10 +6,12 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
+        <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Календарь работ - @Model.MonthName @Model.Year</h2>
-                <p class="text-muted">Заказы отображаются по дате выполнения работ</p>
+                <div>
+                    <h2>Календарь работ - @Model.MonthName @Model.Year</h2>
+                    <p class="text-muted mb-0">Заказы отображаются по дате выполнения работ</p>
+                </div>
                 <div class="btn-group" role="group">
                     <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })" 
                        class="btn btn-primary @(Model.Month == 1 ? "disabled" : "")">
@@ -56,7 +58,7 @@
                                                     <small>@order.NameClient @order.SurnameClient</small>
                                                     @if (!string.IsNullOrEmpty(order.Status))
                                                     {
-                                                        <br><small class="badge @(order.Status switch {
+                                                        <br /><small class="badge @(order.Status switch {
                                                             "Ожидание" => "bg-warning",
                                                             "В работе" => "bg-primary", 
                                                             "Ремонт" => "bg-danger",
@@ -81,17 +83,94 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-3 mt-4 mt-md-0">
+            <h5 class="mb-3">Заявки без даты бурения</h5>
+            @if (Model.UnscheduledOrders != null && Model.UnscheduledOrders.Any())
+            {
+                <p class="text-muted small">Перетащи карточку на нужный день календаря.</p>
+                <div class="list-group small">
+                    @foreach (var order in Model.UnscheduledOrders.OrderBy(o => o.CreationTimeData))
+                    {
+                        <div class="list-group-item list-group-item-action mb-2 order-card-draggable"
+                             draggable="true"
+                             data-order-id="@order.Id"
+                             title="@order.NameClient - @order.City">
+                            <div class="fw-semibold">@order.NameClient</div>
+                            @if (!string.IsNullOrEmpty(order.City))
+                            {
+                                <div class="text-muted">@order.City</div>
+                            }
+                            @if (!string.IsNullOrEmpty(order.Status))
+                            {
+                                <div class="mt-1">
+                                    <span class="badge @(order.Status switch {
+                                        "Ожидание" => "bg-warning",
+                                        "Бурение" => "bg-primary",
+                                        "Обустройство" => "bg-info",
+                                        "Ремонт" => "bg-danger",
+                                        "Завершен" => "bg-success",
+                                        _ => "bg-secondary"
+                                    })">@order.Status</span>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Все заявки имеют дату бурения.</p>
+            }
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            $('.calendar-day').click(function() {
+        $(document).ready(function () {
+            // Переход к списку заказов за день по клику
+            $('.calendar-day').click(function () {
                 var date = $(this).data('date');
                 if (date) {
                     window.location.href = '@Url.Action("DayDetails")' + '?date=' + date;
                 }
+            });
+
+            // Drag & Drop заявок на календарь
+            var draggedOrderId = null;
+
+            $('.order-card-draggable').on('dragstart', function (e) {
+                draggedOrderId = $(this).data('order-id');
+            });
+
+            $('.calendar-day').on('dragover', function (e) {
+                e.preventDefault();
+                $(this).addClass('calendar-day-drop-hover');
+            });
+
+            $('.calendar-day').on('dragleave', function () {
+                $(this).removeClass('calendar-day-drop-hover');
+            });
+
+            $('.calendar-day').on('drop', function (e) {
+                e.preventDefault();
+                $(this).removeClass('calendar-day-drop-hover');
+
+                var date = $(this).data('date');
+                var orderId = draggedOrderId;
+
+                if (!date || !orderId) {
+                    return;
+                }
+
+                $.post('@Url.Action("UpdateWorkDate", "Calendar")', { orderId: orderId, newDate: date })
+                    .done(function () {
+                        window.location.reload();
+                    })
+                    .fail(function () {
+                        alert('Не удалось сохранить дату бурения.');
+                    });
             });
         });
     </script>

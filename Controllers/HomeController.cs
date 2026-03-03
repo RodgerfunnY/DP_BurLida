@@ -34,14 +34,19 @@ namespace DP_BurLida.Controllers
                     CompletedOrders = allOrders.Count(o => o.Status == "Завершен")
                 };
 
+                // Для карты показываем только активные заказы (не из архива)
                 var ordersForMap = allOrders
-                    .Where(o => !string.IsNullOrEmpty(o.Coordinates) && !string.IsNullOrEmpty(o.Status))
+                    .Where(o => 
+                        o.Status != "Завершен" &&
+                        !string.IsNullOrEmpty(o.Coordinates) && 
+                        !string.IsNullOrEmpty(o.Status))
                     .Select(o => new
                     {
                         o.Id,
                         o.NameClient,
                         o.Status,
-                        o.Coordinates
+                        o.Coordinates,
+                        Address = o.City
                     })
                     .ToList();
 

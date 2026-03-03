@@ -32,7 +32,7 @@ namespace DP_BurLida.Data
                 .HasMaxLength(50);
                 entity.Property(e => e.City)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(1000);
                 entity.Property(e => e.Diameter)
                 .IsRequired()
                 .HasMaxLength(4);
@@ -47,7 +47,7 @@ namespace DP_BurLida.Data
                 .HasMaxLength(50);
                 entity.Property(e => e.Info)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(1000);
                 entity.Property(e => e.CreationTimeData)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");

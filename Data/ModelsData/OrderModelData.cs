@@ -11,6 +11,7 @@ namespace DP_BurLida.Data.ModelsData
         public string Phone { get; set; }
         public string? Area { get; set; }
         public string? District { get; set; }
+        [MaxLength(1000)]
         public string? City { get; set; }
         public int Diameter { get; set; }
         public int PricePerMeter { get; set; }
@@ -22,18 +23,22 @@ namespace DP_BurLida.Data.ModelsData
         /// <summary>
         /// Глубина (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? Depth { get; set; }
         /// <summary>
         /// Статика (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? StaticLevel { get; set; }
         /// <summary>
         /// Динамика (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? DynamicLevel { get; set; }
         /// <summary>
         /// Фильтр (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? Filter { get; set; }
         /// <summary>
         /// Модель насоса (необязательное поле).
@@ -46,11 +51,14 @@ namespace DP_BurLida.Data.ModelsData
         /// <summary>
         /// Монтировали насос (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? PumpInstalled { get; set; }
         /// <summary>
         /// Обустройство выполнено (необязательное поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? ArrangementDone { get; set; }
+        [MaxLength(1000)]
         public string Info { get; set; }
         public string Status { get; set; }
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
@@ -72,11 +80,13 @@ namespace DP_BurLida.Data.ModelsData
         /// Координаты объекта (для отображения на карте).
         /// Формат можно использовать как \"широта,долгота\".
         /// </summary>
+        [MaxLength(1000)]
         public string? Coordinates { get; set; }
 
         /// <summary>
         /// Описание канализации (необязательное текстовое поле).
         /// </summary>
+        [MaxLength(1000)]
         public string? Sewer { get; set; }
 
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]

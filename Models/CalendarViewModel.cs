@@ -7,6 +7,7 @@ namespace DP_BurLida.Models
         public int Year { get; set; }
         public int Month { get; set; }
         public List<CalendarDay> Days { get; set; } = new List<CalendarDay>();
+        public List<OrderModelData> UnscheduledOrders { get; set; } = new List<OrderModelData>();
         public string MonthName => GetMonthName(Month);
         
         private string GetMonthName(int month)

@@ -1,4 +1,4 @@
-﻿@model DP_BurLida.Data.ModelsData.UserModelData
+@model DP_BurLida.Data.ModelsData.UserModelData
 
 @{
     ViewData["Title"] = "Детали сотрудника";
@@ -33,6 +33,18 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class = "col-sm-2">
+            Роль
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.Role
+        </dd>
+        <dt class = "col-sm-2">
+            Подтвержден
+        </dt>
+        <dd class = "col-sm-10">
+            @(Model.IsApproved ? "Да" : "Нет")
         </dd>
     </dl>
 </div>

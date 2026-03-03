@@ -23,7 +23,9 @@ namespace DP_BurLida.Controllers
         {
             var users = await _userService.GetAllAsync();
 
-            return new SelectList(users, "Id", "FullName", selectedUserId);
+            var approvedUsers = users.Where(u => u.IsApproved).ToList();
+
+            return new SelectList(approvedUsers, "Id", "FullName", selectedUserId);
         }
 
         public async Task<ActionResult> Index()

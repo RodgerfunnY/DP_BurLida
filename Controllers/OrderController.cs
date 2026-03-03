@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using System.Linq;
 
 namespace DP_BurLida.Controllers
 {
@@ -44,7 +45,10 @@ namespace DP_BurLida.Controllers
                 var allOrders = await _orderService.GetAllAsync();
                 orders = allOrders.Where(o => o.Status != "Завершен").ToList();
             }
-            
+
+            // Ограничиваем видимость заявок для мастеров по их бригаде
+            orders = await FilterOrdersForCurrentUser(orders);
+
             return View(orders);
         }
 
@@ -52,6 +56,12 @@ namespace DP_BurLida.Controllers
         public async Task<ActionResult> Details(int id)
         {
             var order = await _orderService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+
+            if (!await CanAccessOrder(order))
+                return Forbid();
+
             return View(order);
         }
 
@@ -96,16 +106,10 @@ namespace DP_BurLida.Controllers
         /// </summary>
         private async Task<string?> GetCurrentUserDisplayName()
         {
-            var email = User.FindFirst(ClaimTypes.Email)?.Value;
-
-            if (!string.IsNullOrWhiteSpace(email))
+            var user = await GetCurrentUserProfile();
+            if (user != null)
             {
-                var users = await _userService.GetAllAsync();
-                var user = users.FirstOrDefault(u => u.Email == email);
-                if (user != null)
-                {
-                    return user.FullName;
-                }
+                return user.FullName;
             }
 
             return User.Identity?.Name;
@@ -117,6 +121,9 @@ namespace DP_BurLida.Controllers
             var order = await _orderService.GetByIdAsync(id);
             if (order == null)
                 return NotFound();
+
+            if (!await CanAccessOrder(order))
+                return Forbid();
             
             order.Address = order.City;
             await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
@@ -130,7 +137,7 @@ namespace DP_BurLida.Controllers
         {
             ModelState.Remove("DrillingBrigade");
             ModelState.Remove("ArrangementBrigade");
-            
+
             if (!ModelState.IsValid)
             {
                 await LoadBrigadesForView(order.DrillingBrigadeId, order.ArrangementBrigadeId);
@@ -162,6 +169,9 @@ namespace DP_BurLida.Controllers
             var order = await _orderService.GetByIdAsync(id);
             if (order == null)
                 return NotFound();
+
+            if (!await CanAccessOrder(order))
+                return Forbid();
             return View(order);
         }
 
@@ -171,8 +181,77 @@ namespace DP_BurLida.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            var order = await _orderService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+
+            if (!await CanAccessOrder(order))
+                return Forbid();
+
             await _orderService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// Ограничивает список заявок для ролей бурового и монтажного мастеров только их бригадами.
+        /// Остальным ролям возвращает полный список.
+        /// </summary>
+        private async Task<List<OrderModelData>> FilterOrdersForCurrentUser(List<OrderModelData> orders)
+        {
+            var currentUser = await GetCurrentUserProfile();
+            if (currentUser == null || string.IsNullOrWhiteSpace(currentUser.Role))
+                return orders;
+
+            if (currentUser.Role != "DrillingMaster" && currentUser.Role != "MountingMaster")
+                return orders;
+
+            var brigades = await _brigadeService.GetAllAsync();
+            var userBrigadeIds = brigades
+                .Where(b => b.ResponsibleUserId == currentUser.Id)
+                .Select(b => b.Id)
+                .ToList();
+
+            if (!userBrigadeIds.Any())
+                return new List<OrderModelData>();
+
+            if (currentUser.Role == "DrillingMaster")
+            {
+                orders = orders
+                    .Where(o => o.DrillingBrigadeId.HasValue &&
+                                userBrigadeIds.Contains(o.DrillingBrigadeId.Value))
+                    .ToList();
+            }
+            else // MountingMaster
+            {
+                orders = orders
+                    .Where(o => o.ArrangementBrigadeId.HasValue &&
+                                userBrigadeIds.Contains(o.ArrangementBrigadeId.Value))
+                    .ToList();
+            }
+
+            return orders;
+        }
+
+        private async Task<bool> CanAccessOrder(OrderModelData order)
+        {
+            var filtered = await FilterOrdersForCurrentUser(new List<OrderModelData> { order });
+            return filtered.Any();
+        }
+
+        /// <summary>
+        /// Получает профиль текущего пользователя по его email.
+        /// </summary>
+        private async Task<UserModelData?> GetCurrentUserProfile()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                var users = await _userService.GetAllAsync();
+                return users.FirstOrDefault(u => u.Email == email);
+            }
+
+            return null;
         }
     }
 }

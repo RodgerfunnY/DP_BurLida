@@ -51,9 +51,12 @@
                     <a asp-controller="Order" asp-action="Create" class="list-group-item list-group-item-action">
                         <i class="fas fa-plus"></i> Создать заказ
                     </a>
-                    <a asp-controller="User" asp-action="Index" class="list-group-item list-group-item-action">
-                        <i class="fas fa-users"></i> Управление сотрудниками
-                    </a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Director"))
+                    {
+                        <a asp-controller="User" asp-action="Index" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users"></i> Управление сотрудниками
+                        </a>
+                    }
                     <a asp-action="Logout" class="list-group-item list-group-item-action text-danger">
                         <i class="fas fa-sign-out-alt"></i> Выйти из системы
                     </a>

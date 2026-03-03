@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Identity;
-
 namespace DP_BurLida.Data.ModelsData
 {
     public class UserModelData
@@ -9,6 +7,18 @@ namespace DP_BurLida.Data.ModelsData
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        
+        /// <summary>
+        /// Роль пользователя в системе:
+        /// Admin, Director, Manager, DrillingMaster, MountingMaster, Pending.
+        /// </summary>
+        public string Role { get; set; } = "Pending";
+
+        /// <summary>
+        /// Подтвержден ли сотрудник администратором или директором.
+        /// Только подтвержденные пользователи могут работать в системе.
+        /// </summary>
+        public bool IsApproved { get; set; } = false;
         
         public string FullName => $"{Name} {Surname}".Trim();
 

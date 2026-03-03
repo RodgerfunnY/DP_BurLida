@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DP_BurLida.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Director")]
     public class UserController : Controller
     {
         private readonly IUserServices _userService;

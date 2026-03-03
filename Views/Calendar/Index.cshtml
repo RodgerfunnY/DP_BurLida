@@ -7,21 +7,42 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <ul class="nav nav-tabs mb-3">
+                <li class="nav-item">
+                    <a class="nav-link @(Model.CalendarType == "drilling" ? "active" : "")"
+                       href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "drilling" })">
+                        График бурения
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(Model.CalendarType == "montage" ? "active" : "")"
+                       href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "montage" })">
+                        Монтажный график
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(Model.CalendarType == "contractors" ? "active" : "")"
+                       href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "contractors" })">
+                        Календарь подрядчиков
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <h2>Календарь работ - @Model.MonthName @Model.Year</h2>
+                    <h2>@Model.CalendarTitle - @Model.MonthName @Model.Year</h2>
                     <p class="text-muted mb-0">Заказы отображаются по дате выполнения работ</p>
                 </div>
                 <div class="btn-group" role="group">
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1 })" 
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1, type = Model.CalendarType })" 
                        class="btn btn-primary @(Model.Month == 1 ? "disabled" : "")">
                         Предыдущий месяц
                     </a>
-                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month })" 
+                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month, type = Model.CalendarType })" 
                        class="btn btn-secondary">
                         Текущий месяц
                     </a>
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1 })" 
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1, type = Model.CalendarType })" 
                        class="btn btn-primary @(Model.Month == 12 ? "disabled" : "")">
                         Следующий месяц
                     </a>
@@ -54,15 +75,21 @@
                                         <div class="orders-container">
                                             @foreach (var order in day.Orders.Take(3))
                                             {
-                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info - @order.WorkDate?.ToString("dd.MM.yyyy")">
+                                                var dateText = Model.CalendarType == "montage"
+                                                    ? order.ArrangementDate?.ToString("dd.MM.yyyy")
+                                                    : order.WorkDate?.ToString("dd.MM.yyyy");
+                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info - @dateText">
                                                     <small>@order.NameClient @order.SurnameClient</small>
                                                     @if (!string.IsNullOrEmpty(order.Status))
                                                     {
-                                                        <br /><small class="badge @(order.Status switch {
+                                                        <br />
+                                                        <small class="badge @(order.Status switch {
                                                             "Ожидание" => "bg-warning",
-                                                            "В работе" => "bg-primary", 
+                                                            "Бурение" => "bg-primary",
+                                                            "Обустройство" => "bg-info",
                                                             "Ремонт" => "bg-danger",
                                                             "Завершен" => "bg-success",
+                                                            "Отдали подрядчикам" => "bg-dark",
                                                             _ => "bg-secondary"
                                                         }) badge-sm">@order.Status</small>
                                                     }
@@ -85,7 +112,7 @@
         </div>
 
         <div class="col-md-3 mt-4 mt-md-0">
-            <h5 class="mb-3">Заявки без даты бурения</h5>
+            <h5 class="mb-3">Заявки без даты</h5>
             @if (Model.UnscheduledOrders != null && Model.UnscheduledOrders.Any())
             {
                 <p class="text-muted small">Перетащи карточку на нужный день календаря.</p>
@@ -110,6 +137,7 @@
                                         "Обустройство" => "bg-info",
                                         "Ремонт" => "bg-danger",
                                         "Завершен" => "bg-success",
+                                        "Отдали подрядчикам" => "bg-dark",
                                         _ => "bg-secondary"
                                     })">@order.Status</span>
                                 </div>
@@ -120,7 +148,16 @@
             }
             else
             {
-                <p class="text-muted">Все заявки имеют дату бурения.</p>
+                <p class="text-muted">
+                    @if (Model.CalendarType == "montage")
+                    {
+                        @:Все заявки имеют дату обустройства.
+                    }
+                    else
+                    {
+                        @:Все заявки имеют дату бурения.
+                    }
+                </p>
             }
         </div>
     </div>
@@ -133,7 +170,8 @@
             $('.calendar-day').click(function () {
                 var date = $(this).data('date');
                 if (date) {
-                    window.location.href = '@Url.Action("DayDetails")' + '?date=' + date;
+                    var type = '@Model.CalendarType';
+                    window.location.href = '@Url.Action("DayDetails")' + '?date=' + date + '&type=' + type;
                 }
             });
 
@@ -159,17 +197,18 @@
 
                 var date = $(this).data('date');
                 var orderId = draggedOrderId;
+                var type = '@Model.CalendarType';
 
                 if (!date || !orderId) {
                     return;
                 }
 
-                $.post('@Url.Action("UpdateWorkDate", "Calendar")', { orderId: orderId, newDate: date })
+                $.post('@Url.Action("UpdateWorkDate", "Calendar")', { orderId: orderId, newDate: date, calendarType: type })
                     .done(function () {
                         window.location.reload();
                     })
                     .fail(function () {
-                        alert('Не удалось сохранить дату бурения.');
+                        alert('Не удалось сохранить дату.');
                     });
             });
         });

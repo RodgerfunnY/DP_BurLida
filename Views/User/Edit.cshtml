@@ -1,4 +1,4 @@
-﻿@model DP_BurLida.Data.ModelsData.UserModelData
+@model DP_BurLida.Data.ModelsData.UserModelData
 
 @{
     ViewData["Title"] = "Редактирование";
@@ -32,6 +32,22 @@
                 <label asp-for="Phone" class="control-label">Телефон</label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role" class="control-label">Роль (статус в компании)</label>
+                <select asp-for="Role" class="form-control">
+                    <option value="Admin">Администратор</option>
+                    <option value="Director">Директор</option>
+                    <option value="Manager">Менеджер</option>
+                    <option value="DrillingMaster">Буровой мастер</option>
+                    <option value="MountingMaster">Монтажный мастер</option>
+                    <option value="Pending">Ожидает подтверждения</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check mt-2">
+                <input asp-for="IsApproved" class="form-check-input" />
+                <label asp-for="IsApproved" class="form-check-label">Подтвержден</label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />

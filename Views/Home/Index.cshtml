@@ -12,78 +12,81 @@
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-warning">Ожидание</h5>
-                    <h2 class="text-warning">@stats.WaitingOrders</h2>
-                    <p class="card-text">заказов в ожидании</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-primary">В работе</h5>
-                    <h2 class="text-primary">@stats.InWorkOrders</h2>
-                    <p class="card-text">заказов выполняется</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-danger">Ремонт</h5>
-                    <h2 class="text-danger">@stats.RepairOrders</h2>
-                    <p class="card-text">заказов на ремонте</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title text-success">Завершено</h5>
-                    <h2 class="text-success">@stats.CompletedOrders</h2>
-                    <p class="card-text">заказов завершено</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h4 class="card-title">Общее количество заказов</h4>
-                    <h1 class="display-4 text-info">@stats.TotalOrders</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Карта обслуживания</h5>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="me-2">Фильтр по статусу:</span>
-                        <select id="statusFilter" class="form-select form-select-sm" style="width:auto;">
-                            <option value="">Все</option>
-                            <option value="Ожидание">Ожидание</option>
-                            <option value="Бурение">Бурение</option>
-                            <option value="Обустройство">Обустройство</option>
-                            <option value="Ремонт">Ремонт</option>
-                        </select>
+    @if (!(User.IsInRole("DrillingMaster") || User.IsInRole("MountingMaster")))
+    {
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">Ожидание</h5>
+                        <h2 class="text-warning">@stats.WaitingOrders</h2>
+                        <p class="card-text">заказов в ожидании</p>
                     </div>
                 </div>
-                <div class="card-body p-0">
-                    <div id="map" style="width: 100%; height: 500px;"></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">В работе</h5>
+                        <h2 class="text-primary">@stats.InWorkOrders</h2>
+                        <p class="card-text">заказов выполняется</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Ремонт</h5>
+                        <h2 class="text-danger">@stats.RepairOrders</h2>
+                        <p class="card-text">заказов на ремонте</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Завершено</h5>
+                        <h2 class="text-success">@stats.CompletedOrders</h2>
+                        <p class="card-text">заказов завершено</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h4 class="card-title">Общее количество заказов</h4>
+                        <h1 class="display-4 text-info">@stats.TotalOrders</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Карта обслуживания</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="me-2">Фильтр по статусу:</span>
+                            <select id="statusFilter" class="form-select form-select-sm" style="width:auto;">
+                                <option value="">Все</option>
+                                <option value="Ожидание">Ожидание</option>
+                                <option value="Бурение">Бурение</option>
+                                <option value="Обустройство">Обустройство</option>
+                                <option value="Ремонт">Ремонт</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="map" style="width: 100%; height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     <div class="row mt-4">
         <div class="col-12 text-center">

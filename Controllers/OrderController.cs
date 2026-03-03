@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace DP_BurLida.Controllers
 {
@@ -12,11 +13,13 @@ namespace DP_BurLida.Controllers
     {
         private readonly IOrderServices _orderService;
         private readonly IBrigadeServices _brigadeService;
+        private readonly IUserServices _userService;
 
-        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService)
+        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService, IUserServices userService)
         {
             _orderService = orderService;
             _brigadeService = brigadeService;
+            _userService = userService;
         }
 
         private async Task LoadBrigadesForView(int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
@@ -72,7 +75,6 @@ namespace DP_BurLida.Controllers
                 await LoadBrigadesForView(model.DrillingBrigadeId, model.ArrangementBrigadeId);
                 return View(model);
             }
-
             // Поля, которые больше не вводятся вручную в форме
             model.SurnameClient ??= string.Empty;
             model.Area ??= string.Empty;
@@ -81,8 +83,32 @@ namespace DP_BurLida.Controllers
             // Обустройство в БД не допускает NULL, задаём значение по умолчанию
             model.Arrangement ??= "Не нужно";
 
+            // Автоматически заполняем, кто создал заявку, из личного кабинета/аккаунта
+            model.CreatedBy = await GetCurrentUserDisplayName();
+
             await _orderService.CreateAsync(model);
             return RedirectToAction(nameof(Index));
+        }
+        
+        /// <summary>
+        /// Получает отображаемое имя текущего пользователя для записи в заявку.
+        /// Сначала пытается взять профиль из UserModelData по email, иначе берёт User.Identity.Name.
+        /// </summary>
+        private async Task<string?> GetCurrentUserDisplayName()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                var users = await _userService.GetAllAsync();
+                var user = users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                {
+                    return user.FullName;
+                }
+            }
+
+            return User.Identity?.Name;
         }
         // GET: OrderController/Edit/5
         [HttpGet]

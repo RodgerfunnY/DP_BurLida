@@ -51,6 +51,8 @@ namespace DP_BurLida.Data
                 entity.Property(e => e.CreationTimeData)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.CreatedBy)
+                .HasMaxLength(255);
                 entity.Property(e => e.WorkDate)
                 .IsRequired(false);
                 entity.HasOne(e => e.DrillingBrigade)

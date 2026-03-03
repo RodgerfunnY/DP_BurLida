@@ -61,6 +61,13 @@ namespace DP_BurLida.Data.ModelsData
         [MaxLength(1000)]
         public string Info { get; set; }
         public string Status { get; set; }
+
+        /// <summary>
+        /// Имя пользователя, создавшего заявку.
+        /// </summary>
+        [MaxLength(255)]
+        public string? CreatedBy { get; set; }
+        
         public DateTime CreationTimeData { get; set; } = DateTime.Now;
         /// <summary>
         /// Дата бурения (ранее Дата работы).

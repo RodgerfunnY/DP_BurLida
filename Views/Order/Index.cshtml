@@ -58,6 +58,7 @@
             <th>Обустройство</th>
             <th>Телефон</th>
             <th>Имя клиента</th>
+            <th>Создал</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -99,6 +100,16 @@
                 </td>
                 <td>
                     @item.NameClient
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.CreatedBy))
+                    {
+                        @item.CreatedBy
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Редактировать</a>

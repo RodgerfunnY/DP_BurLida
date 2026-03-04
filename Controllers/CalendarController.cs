@@ -59,8 +59,8 @@ namespace DP_BurLida.Controllers
             // Ограничиваем список заявок для мастеров по их бригаде
             var visibleOrders = await FilterOrdersForCurrentUser(allOrders);
 
-            // Фильтрация заказов по типу календаря
-            var filteredOrders = FilterOrdersByType(visibleOrders, calendarType);
+            // Фильтрация заказов по типу календаря и установка заголовка
+            var filteredOrders = FilterOrdersByType(visibleOrders, calendarType, calendar);
 
             // Для разных типов календаря используем разные поля даты:
             // drilling/contractors — WorkDate, montage — ArrangementDate.
@@ -106,7 +106,10 @@ namespace DP_BurLida.Controllers
         /// <summary>
         /// Фильтрует заказы по типу календаря и выставляет человекочитаемый заголовок.
         /// </summary>
-        private IEnumerable<Data.ModelsData.OrderModelData> FilterOrdersByType(IEnumerable<Data.ModelsData.OrderModelData> orders, string? calendarType)
+        private IEnumerable<Data.ModelsData.OrderModelData> FilterOrdersByType(
+            IEnumerable<Data.ModelsData.OrderModelData> orders,
+            string? calendarType,
+            CalendarViewModel? calendar = null)
         {
             var type = string.IsNullOrWhiteSpace(calendarType) ? "drilling" : calendarType.ToLowerInvariant();
 
@@ -114,10 +117,31 @@ namespace DP_BurLida.Controllers
 
             return type switch
             {
-                "montage" => notCompleted.Where(o => o.Status == "Обустройство" || o.Status == "Ремонт"),
-                "contractors" => notCompleted.Where(o => o.Status == "Отдали подрядчикам"),
-                _ => notCompleted.Where(o => o.Status == "Ожидание" || o.Status == "Бурение")
+                "montage" => SetTitleAndFilter(
+                    calendar,
+                    "Монтажный график",
+                    notCompleted.Where(o => o.ArrangementBrigadeId.HasValue)),
+                "contractors" => SetTitleAndFilter(
+                    calendar,
+                    "Календарь подрядчиков",
+                    notCompleted.Where(o => o.Status == "Отдали подрядчикам")),
+                _ => SetTitleAndFilter(
+                    calendar,
+                    "График бурения",
+                    notCompleted.Where(o => o.Status == "Ожидание" || o.Status == "Бурение"))
             };
+        }
+
+        private IEnumerable<Data.ModelsData.OrderModelData> SetTitleAndFilter(
+            CalendarViewModel? calendar,
+            string title,
+            IEnumerable<Data.ModelsData.OrderModelData> query)
+        {
+            if (calendar != null)
+            {
+                calendar.CalendarTitle = title;
+            }
+            return query;
         }
 
         private DateTime GetFirstDayOfWeek(DateTime date)

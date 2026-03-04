@@ -5,6 +5,54 @@
 }
 
 <div class="content-card">
+<style>
+    .order-row {
+        cursor: pointer;
+    }
+
+    .orders-table {
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+    }
+
+    .orders-table thead tr th {
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .orders-table tbody tr.order-row td {
+        background-color: #ffffff;
+        border-top: 1px solid #d0d7e2;
+        border-bottom: 1px solid #d0d7e2;
+    }
+
+    .orders-table tbody tr.order-row td:first-child {
+        border-left: 1px solid #d0d7e2;
+        border-top-left-radius: 0.75rem;
+        border-bottom-left-radius: 0.75rem;
+    }
+
+    .orders-table tbody tr.order-row td:last-child {
+        border-right: 1px solid #d0d7e2;
+        border-top-right-radius: 0.75rem;
+        border-bottom-right-radius: 0.75rem;
+    }
+
+    .orders-table tbody tr.order-row:hover td {
+        background-color: #f9fafb;
+    }
+
+    .order-details-row > td {
+        border-top: none;
+        padding-top: 0;
+    }
+
+    .order-details-card {
+        border-radius: 1rem;
+        border: 1.5px solid #d0d7e2;
+        background-color: #ffffff;
+        box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
+    }
+</style>
 <h1>Заказы</h1>
 
 <div class="row mb-3">
@@ -49,7 +97,7 @@
     </div>
 }
 <div class="table-responsive">
-<table class="table table-striped">
+<table class="table align-middle orders-table">
     <thead>
         <tr>
             <th>Адрес</th>
@@ -65,26 +113,19 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @item.City
-                </td>
-                <td>
-                    @item.Diameter
-                </td>
-                <td>
-                    @{
-                        var pumpText = item.Pump switch
-                        {
-                            0 => "не нужен",
-                            600 => "монтаж насоса заказчика от 600 руб",
-                            1100 => "насос от 1100 руб",
-                            1101 => "насос от 1100 - взять 4куб насос",
-                            _ => item.Pump.ToString()
-                        };
-                    }
-                    @pumpText
-                </td>
+            var pumpText = item.Pump switch
+            {
+                0 => "не нужен",
+                600 => "монтаж насоса заказчика от 600 руб",
+                1100 => "насос от 1100 руб",
+                1101 => "насос от 1100 - взять 4куб насос",
+                _ => item.Pump.ToString()
+            };
+
+            <tr class="order-row" data-order-id="@item.Id">
+                <td>@item.City</td>
+                <td>@item.Diameter</td>
+                <td>@pumpText</td>
                 <td>
                     @if (!string.IsNullOrEmpty(item.Arrangement))
                     {
@@ -95,12 +136,8 @@
                         <span class="text-muted">Не указано</span>
                     }
                 </td>
-                <td>
-                    @item.Phone
-                </td>
-                <td>
-                    @item.NameClient
-                </td>
+                <td>@item.Phone</td>
+                <td>@item.NameClient</td>
                 <td>
                     @if (!string.IsNullOrEmpty(item.CreatedBy))
                     {
@@ -111,10 +148,98 @@
                         <span class="text-muted">Не указано</span>
                     }
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Редактировать</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробности</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Удалить</a>
+                <td class="text-nowrap order-actions">
+                    <a asp-action="Edit" asp-route-id="@item.Id"
+                       class="btn btn-sm btn-outline-warning me-1"
+                       title="Редактировать">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-info me-1 order-toggle-details"
+                            data-target="#order-details-@item.Id"
+                            title="Показать подробности">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <a asp-action="Delete" asp-route-id="@item.Id"
+                       class="btn btn-sm btn-outline-danger"
+                       title="Удалить">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            <tr class="order-details-row collapse" id="order-details-@item.Id">
+                <td colspan="8">
+                    <div class="card order-details-card mb-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Имя клиента:</strong> @item.NameClient</p>
+                                    <p class="mb-1"><strong>Телефон:</strong> @item.Phone</p>
+                                    <p class="mb-1"><strong>Адрес:</strong> @item.City</p>
+                                    <p class="mb-1"><strong>Диаметр:</strong> @item.Diameter мм</p>
+                                    <p class="mb-1"><strong>Цена за метр:</strong> @item.PricePerMeter руб.</p>
+                                    <p class="mb-1"><strong>Насос (Вт):</strong> @pumpText</p>
+                                    <p class="mb-1"><strong>Модель насоса:</strong> @(string.IsNullOrEmpty(item.PumpModel) ? "Не указана" : item.PumpModel)</p>
+                                    <p class="mb-1"><strong>Количество метров:</strong> @(item.MetersCount.HasValue ? item.MetersCount.ToString() : "Не указано")</p>
+                                    <p class="mb-1"><strong>Статика:</strong> @(string.IsNullOrEmpty(item.StaticLevel) ? "Не указано" : item.StaticLevel)</p>
+                                    <p class="mb-1"><strong>Динамика:</strong> @(string.IsNullOrEmpty(item.DynamicLevel) ? "Не указано" : item.DynamicLevel)</p>
+                                    <p class="mb-1"><strong>Фильтр:</strong> @(string.IsNullOrEmpty(item.Filter) ? "Не указано" : item.Filter)</p>
+                                    <p class="mb-1"><strong>Канализация:</strong> @(string.IsNullOrEmpty(item.Sewer) ? "Не указано" : item.Sewer)</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Обустройство:</strong> @(!string.IsNullOrEmpty(item.Arrangement) ? item.Arrangement : "Не указано")</p>
+                                    <p class="mb-1"><strong>Комментарий:</strong> @item.Info</p>
+                                    <p class="mb-1"><strong>Координаты:</strong> @(string.IsNullOrEmpty(item.Coordinates) ? "Не указаны" : item.Coordinates)</p>
+                                    <p class="mb-1"><strong>Отдать подрядчикам:</strong> @(string.IsNullOrEmpty(item.Contractor) ? "Не выбрано" : item.Contractor)</p>
+                                    <p class="mb-1"><strong>Создал:</strong> @(!string.IsNullOrEmpty(item.CreatedBy) ? item.CreatedBy : "Не указано")</p>
+                                    <p class="mb-1"><strong>Дата создания:</strong> @item.CreationTimeData.ToString("dd.MM.yyyy HH:mm")</p>
+                                    <p class="mb-1">
+                                        <strong>Статус:</strong>
+                                        @if (!string.IsNullOrEmpty(item.Status))
+                                        {
+                                            <span class="badge @(item.Status switch {
+                                                "Ожидание" => "bg-warning",
+                                                "Бурение" => "bg-primary",
+                                                "Обустройство" => "bg-info",
+                                                "Ремонт" => "bg-danger",
+                                                "Завершен" => "bg-success",
+                                                "Отдали подрядчикам" => "bg-dark",
+                                                _ => "bg-secondary"
+                                            })">@item.Status</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Не указан</span>
+                                        }
+                                    </p>
+                                    <p class="mb-1"><strong>Дата бурения:</strong> @(item.WorkDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
+                                    <p class="mb-1"><strong>Дата обустройства:</strong> @(item.ArrangementDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
+                                    <p class="mb-1">
+                                        <strong>Бригада бурения:</strong>
+                                        @if (item.DrillingBrigade != null)
+                                        {
+                                            @($"{item.DrillingBrigade.NameBrigade} (Ответственный: {item.DrillingBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                                        }
+                                        else
+                                        {
+                                            @:Не назначена
+                                        }
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Бригада обустройства:</strong>
+                                        @if (item.ArrangementBrigade != null)
+                                        {
+                                            @($"{item.ArrangementBrigade.NameBrigade} (Ответственный: {item.ArrangementBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                                        }
+                                        else
+                                        {
+                                            @:Не назначена
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
         }
@@ -131,3 +256,39 @@
     </div>
 }
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Клик по иконке глаза
+            document.querySelectorAll('.order-toggle-details').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    // Не даём событию всплыть до строки, чтобы не было двойного переключения
+                    event.stopPropagation();
+                    var targetSelector = this.getAttribute('data-target');
+                    var row = document.querySelector(targetSelector);
+                    if (!row) return;
+
+                    row.classList.toggle('show');
+                });
+            });
+
+            // Клик по любой части строки заказа (кроме ячейки с действиями)
+            document.querySelectorAll('.order-row').forEach(function (row) {
+                row.addEventListener('click', function (e) {
+                    if (e.target.closest('.order-actions')) {
+                        return;
+                    }
+
+                    var orderId = this.getAttribute('data-order-id');
+                    if (!orderId) return;
+
+                    var detailsRow = document.querySelector('#order-details-' + orderId);
+                    if (!detailsRow) return;
+
+                    detailsRow.classList.toggle('show');
+                });
+            });
+        });
+    </script>
+}

@@ -27,11 +27,11 @@ namespace DP_BurLida.Controllers
 
                 var statistics = new
                 {
-                    TotalOrders = allOrders.Count,
                     WaitingOrders = allOrders.Count(o => o.Status == "Ожидание"),
-                    InWorkOrders = allOrders.Count(o => o.Status == "Бурение" || o.Status == "Обустройство"),
-                    RepairOrders = allOrders.Count(o => o.Status == "Ремонт"),
-                    CompletedOrders = allOrders.Count(o => o.Status == "Завершен")
+                    DrillingOrders = allOrders.Count(o => o.Status == "Бурение"),
+                    ArrangementOrders = allOrders.Count(o => o.Status == "Обустройство"),
+                    ContractorsOrders = allOrders.Count(o => o.Status == "Отдали подрядчикам"),
+                    RepairOrders = allOrders.Count(o => o.Status == "Ремонт")
                 };
 
                 // Для карты показываем только активные заказы (не из архива)

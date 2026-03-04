@@ -5,6 +5,43 @@
 }
 
 <div class="container-fluid">
+    <style>
+        .dashboard-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.08);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.18);
+        }
+
+        .dashboard-icon {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+        }
+
+        .dashboard-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+    </style>
     <div class="row">
         <div class="col-12">
             <h1 class="text-center mb-4">Система управления заказами</h1>
@@ -14,51 +51,49 @@
 
     @if (!(User.IsInRole("DrillingMaster") || User.IsInRole("MountingMaster")))
     {
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card text-center">
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card dashboard-card text-center bg-white">
                     <div class="card-body">
-                        <h5 class="card-title text-warning">Ожидание</h5>
-                        <h2 class="text-warning">@stats.WaitingOrders</h2>
-                        <p class="card-text">заказов в ожидании</p>
+                        <div class="dashboard-label text-warning">Ожидание</div>
+                        <div class="dashboard-value text-warning">@stats.WaitingOrders</div>
+                        <div class="text-muted small mt-1">заказов в ожидании</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card dashboard-card text-center bg-white">
                     <div class="card-body">
-                        <h5 class="card-title text-primary">В работе</h5>
-                        <h2 class="text-primary">@stats.InWorkOrders</h2>
-                        <p class="card-text">заказов выполняется</p>
+                        <div class="dashboard-label text-primary">Бурение</div>
+                        <div class="dashboard-value text-primary">@stats.DrillingOrders</div>
+                        <div class="text-muted small mt-1">заказов на бурение</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card dashboard-card text-center bg-white">
                     <div class="card-body">
-                        <h5 class="card-title text-danger">Ремонт</h5>
-                        <h2 class="text-danger">@stats.RepairOrders</h2>
-                        <p class="card-text">заказов на ремонте</p>
+                        <div class="dashboard-label text-info">Обустройство</div>
+                        <div class="dashboard-value text-info">@stats.ArrangementOrders</div>
+                        <div class="text-muted small mt-1">заказов на обустройство</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card dashboard-card text-center bg-white">
                     <div class="card-body">
-                        <h5 class="card-title text-success">Завершено</h5>
-                        <h2 class="text-success">@stats.CompletedOrders</h2>
-                        <p class="card-text">заказов завершено</p>
+                        <div class="dashboard-label text-dark">Подрядчики</div>
+                        <div class="dashboard-value text-dark">@stats.ContractorsOrders</div>
+                        <div class="text-muted small mt-1">заказов у подрядчиков</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card text-center">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card dashboard-card text-center bg-white">
                     <div class="card-body">
-                        <h4 class="card-title">Общее количество заказов</h4>
-                        <h1 class="display-4 text-info">@stats.TotalOrders</h1>
+                        <div class="dashboard-label text-danger">Ремонт</div>
+                        <div class="dashboard-value text-danger">@stats.RepairOrders</div>
+                        <div class="text-muted small mt-1">заказов на ремонте</div>
                     </div>
                 </div>
             </div>

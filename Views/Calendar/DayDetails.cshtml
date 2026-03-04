@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Заказы на день";
     var selectedDate = ViewBag.SelectedDate as DateTime?;
+    var calendarType = (ViewBag.CalendarType as string ?? "drilling").ToLowerInvariant();
+    var isMontage = calendarType == "montage";
 }
 
 <div class="container">
@@ -29,51 +31,75 @@
                                     <h5 class="card-title mb-0">@order.NameClient @order.SurnameClient</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">
-                                        <strong>Телефон:</strong> @order.Phone
+                                    <p class="card-text mb-1">
+                                        <strong>@(isMontage ? "Дата обустройства:" : "Дата бурения:")</strong>
+                                        @{
+                                            var workDate = isMontage ? order.ArrangementDate : order.WorkDate;
+                                        }
+                                        <span class="text-success fw-bold">@workDate?.ToString("dd.MM.yyyy")</span>
                                     </p>
-                                    <p class="card-text">
-                                        <strong>Область:</strong> @order.Area
+
+                                    <p class="card-text mb-1">
+                                        <strong>Бригада:</strong>
+                                        @if (isMontage && order.ArrangementBrigade != null)
+                                        {
+                                            @($"{order.ArrangementBrigade.NameBrigade} (Ответственный: {order.ArrangementBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                                        }
+                                        else if (!isMontage && order.DrillingBrigade != null)
+                                        {
+                                            @($"{order.DrillingBrigade.NameBrigade} (Ответственный: {order.DrillingBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                                        }
+                                        else
+                                        {
+                                            @:Не назначена
+                                        }
                                     </p>
-                                    <p class="card-text">
-                                        <strong>Район:</strong> @order.District
+
+                                    <p class="card-text mb-1">
+                                        <strong>Адрес:</strong> @order.City
                                     </p>
-                                    <p class="card-text">
-                                        <strong>Город:</strong> @order.City
+
+                                    <p class="card-text mb-1">
+                                        <strong>Координаты:</strong> @(string.IsNullOrEmpty(order.Coordinates) ? "Не указаны" : order.Coordinates)
                                     </p>
-                                    <p class="card-text">
+
+                                    <p class="card-text mb-1">
                                         <strong>Диаметр:</strong> @order.Diameter мм
                                     </p>
-                                    <p class="card-text">
+                                    <p class="card-text mb-1">
                                         <strong>Цена за метр:</strong> @order.PricePerMeter руб.
                                     </p>
-                                    <p class="card-text">
+                                    <p class="card-text mb-1">
                                         <strong>Насос:</strong> @order.Pump
                                     </p>
-                                    <p class="card-text">
-                                        <strong>Расположение:</strong> @order.Arrangement
+                                    <p class="card-text mb-1">
+                                        <strong>Обустройство:</strong> @order.Arrangement
                                     </p>
-                                    <p class="card-text">
-                                        <strong>Информация:</strong> @order.Info
+                                    <p class="card-text mb-1">
+                                        <strong>Комментарий:</strong> @order.Info
+                                    </p>
+                                    <p class="card-text mb-1">
+                                        <strong>Менеджер:</strong> @(string.IsNullOrEmpty(order.CreatedBy) ? "Не указано" : order.CreatedBy)
+                                    </p>
+                                    <p class="card-text mb-1">
+                                        <strong>Телефон:</strong> @order.Phone
                                     </p>
                                     @if (!string.IsNullOrEmpty(order.Status))
                                     {
-                                        <p class="card-text">
+                                        <p class="card-text mb-1">
                                             <strong>Статус:</strong> 
                                             <span class="badge @(order.Status switch {
                                                 "Ожидание" => "bg-warning",
-                                                "В работе" => "bg-primary", 
+                                                "Бурение" => "bg-primary", 
+                                                "Обустройство" => "bg-info",
                                                 "Ремонт" => "bg-danger",
                                                 "Завершен" => "bg-success",
+                                                "Отдали подрядчикам" => "bg-dark",
                                                 _ => "bg-secondary"
                                             })">@order.Status</span>
                                         </p>
                                     }
-                                    <p class="card-text">
-                                        <strong>Дата работы:</strong> 
-                                        <span class="text-success fw-bold">@order.WorkDate?.ToString("dd.MM.yyyy")</span>
-                                    </p>
-                                    <p class="card-text">
+                                    <p class="card-text mb-1">
                                         <strong>Дата создания:</strong> @order.CreationTimeData.ToString("dd.MM.yyyy HH:mm")
                                     </p>
                                 </div>

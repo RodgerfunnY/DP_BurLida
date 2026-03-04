@@ -134,6 +134,20 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
+            <!-- 11.1. Чья бригада -->
+            <div class="form-group">
+                <label asp-for="BrigadeStatus" class="control-label">Чья бригада</label>
+                <select asp-for="BrigadeStatus" class="form-control">
+                    <option value="">-- не выбрано --</option>
+                    <option value="приоритет нашей бригаде">приоритет нашей бригаде</option>
+                    <option value="Наша бригада">Наша бригада</option>
+                    <option value="Возможно подрядчики">Возможно подрядчики</option>
+                    <option value="подрядчик">подрядчик</option>
+                </select>
+                <span class="form-text text-muted">Используется для визуального выделения заявок в списке и календаре.</span>
+                <span asp-validation-for="BrigadeStatus" class="text-danger"></span>
+            </div>
+
             <!-- 12. Дата бурения -->
             <div class="form-group">
                 <label asp-for="WorkDate" class="control-label">Дата бурения</label>
@@ -198,6 +212,14 @@
                 <span asp-validation-for="PumpInstalled" class="text-danger"></span>
             </div>
 
+            <!-- 19.1. Итого за бурение скважины -->
+            <div class="form-group">
+                <label asp-for="TotalDrillingAmount" class="control-label">Итого за бурение скважины</label>
+                <input asp-for="TotalDrillingAmount" class="form-control" />
+                <span class="form-text text-muted">Необязательное текстовое поле.</span>
+                <span asp-validation-for="TotalDrillingAmount" class="text-danger"></span>
+            </div>
+
             <!-- 20. Дата обустройства -->
             <div class="form-group">
                 <label asp-for="ArrangementDate" class="control-label">Дата обустройства</label>
@@ -221,6 +243,13 @@
                 <input asp-for="ArrangementDone" class="form-control" />
                 <span class="form-text text-muted">Необязательное поле.</span>
                 <span asp-validation-for="ArrangementDone" class="text-danger"></span>
+            </div>
+            <!-- 22.1. Итого за обустройство -->
+            <div class="form-group">
+                <label asp-for="TotalArrangementAmount" class="control-label">Итого за обустройство</label>
+                <input asp-for="TotalArrangementAmount" class="form-control" />
+                <span class="form-text text-muted">Необязательное текстовое поле.</span>
+                <span asp-validation-for="TotalArrangementAmount" class="text-danger"></span>
             </div>
 
             <!-- 23. Отдать подрядчикам -->

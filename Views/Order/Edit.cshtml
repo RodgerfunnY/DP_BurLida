@@ -124,7 +124,8 @@
             <!-- 11. Дата создания -->
             <div class="form-group">
                 <label asp-for="CreationTimeData" class="control-label">Дата создания</label>
-                <input asp-for="CreationTimeData" class="form-control" readonly />
+                <input class="form-control" value="@Model.CreationTimeData.ToString("dd.MM.yyyy HH:mm")" readonly />
+                <input type="hidden" asp-for="CreationTimeData" />
                 <span asp-validation-for="CreationTimeData" class="text-danger"></span>
             </div>
 
@@ -148,6 +149,20 @@
                     <option value="Завершен">Завершен</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- 12.1. Чья бригада -->
+            <div class="form-group">
+                <label asp-for="BrigadeStatus" class="control-label">Чья бригада</label>
+                <select asp-for="BrigadeStatus" class="form-control">
+                    <option value="">-- не выбрано --</option>
+                    <option value="приоритет нашей бригаде">приоритет нашей бригаде</option>
+                    <option value="Наша бригада">Наша бригада</option>
+                    <option value="Возможно подрядчики">Возможно подрядчики</option>
+                    <option value="подрядчик">подрядчик</option>
+                </select>
+                <span class="form-text text-muted">Используется для визуального выделения заявок в списке и календаре.</span>
+                <span asp-validation-for="BrigadeStatus" class="text-danger"></span>
             </div>
 
             <!-- 13. Дата бурения -->
@@ -214,6 +229,13 @@
                 <span class="form-text text-muted">Необязательное поле.</span>
                 <span asp-validation-for="PumpInstalled" class="text-danger"></span>
             </div>
+            <!-- 20.1. Итого за бурение скважины -->
+            <div class="form-group">
+                <label asp-for="TotalDrillingAmount" class="control-label">Итого за бурение скважины</label>
+                <input asp-for="TotalDrillingAmount" class="form-control" />
+                <span class="form-text text-muted">Необязательное текстовое поле.</span>
+                <span asp-validation-for="TotalDrillingAmount" class="text-danger"></span>
+            </div>
 
             <!-- 21. Дата обустройства -->
             <div class="form-group">
@@ -239,6 +261,13 @@
                 <input asp-for="ArrangementDone" class="form-control" />
                 <span class="form-text text-muted">Необязательное поле.</span>
                 <span asp-validation-for="ArrangementDone" class="text-danger"></span>
+            </div>
+            <!-- 23.1. Итого за обустройство -->
+            <div class="form-group">
+                <label asp-for="TotalArrangementAmount" class="control-label">Итого за обустройство</label>
+                <input asp-for="TotalArrangementAmount" class="form-control" />
+                <span class="form-text text-muted">Необязательное текстовое поле.</span>
+                <span asp-validation-for="TotalArrangementAmount" class="text-danger"></span>
             </div>
         </div>
     </div>

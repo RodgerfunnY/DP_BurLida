@@ -1,0 +1,184 @@
+@model DP_BurLida.Models.StatisticsViewModel
+
+@{
+    ViewData["Title"] = "Статистика";
+}
+
+<div class="content-card">
+    <style>
+        .stats-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+
+        .stats-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .stats-card {
+            border-radius: 0.75rem;
+            border: 1px solid #d0d7e2;
+            background-color: #ffffff;
+            box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
+        }
+
+        .stats-table thead th {
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+    </style>
+
+    <div class="stats-header">
+        <div>
+            <h2 class="mb-1">Статистика по сотрудникам</h2>
+            <div class="text-muted">
+                Период: @Model.StartDate.ToString("dd.MM.yyyy") &mdash; @Model.EndDate.ToString("dd.MM.yyyy")
+            </div>
+        </div>
+        <form asp-action="Index" method="get" class="d-flex align-items-end gap-2">
+            <div>
+                <label class="form-label mb-1">Дата с</label>
+                <input type="date" name="startDate" class="form-control"
+                       value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+            </div>
+            <div>
+                <label class="form-label mb-1">Дата по</label>
+                <input type="date" name="endDate" class="form-control"
+                       value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-filter me-1"></i> Применить
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Сбросить
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="stats-section">
+        <h3>Менеджеры</h3>
+        <div class="stats-card">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle stats-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Сотрудник</th>
+                            <th>Email</th>
+                            <th class="text-end">Количество заявок</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Managers.Any())
+                        {
+                            foreach (var m in Model.Managers)
+                            {
+                                <tr>
+                                    <td>@m.FullName</td>
+                                    <td>@m.Email</td>
+                                    <td class="text-end fw-semibold">@m.TotalOrders</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">
+                                    Нет данных по менеджерам за выбранный период.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <h3>Буровые мастера (буровые бригады)</h3>
+        <div class="stats-card">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle stats-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Бригада</th>
+                            <th>Ответственный мастер</th>
+                            <th class="text-end">Всего пробурено, м</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.DrillingBrigades.Any())
+                        {
+                            foreach (var b in Model.DrillingBrigades)
+                            {
+                                <tr>
+                                    <td>@b.BrigadeName</td>
+                                    <td>@(string.IsNullOrEmpty(b.ResponsibleMasterName) ? "Не назначен" : b.ResponsibleMasterName)</td>
+                                    <td class="text-end fw-semibold">@b.TotalMeters</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">
+                                    Нет данных по буровым бригадам за выбранный период.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <h3>Монтажные мастера</h3>
+        <div class="stats-card">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle stats-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Сотрудник</th>
+                            <th>Email</th>
+                            <th class="text-end">Завершённых объектов</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.MountingMasters.Any())
+                        {
+                            foreach (var m in Model.MountingMasters)
+                            {
+                                <tr>
+                                    <td>@m.FullName</td>
+                                    <td>@m.Email</td>
+                                    <td class="text-end fw-semibold">@m.TotalCompletedObjects</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">
+                                    Нет данных по монтажным мастерам за выбранный период.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

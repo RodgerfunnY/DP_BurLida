@@ -52,6 +52,21 @@
         background-color: #ffffff;
         box-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.06);
     }
+
+    .order-brigade-priority .order-details-card,
+    tr.order-brigade-priority td {
+        background-color: #ffe5e5 !important;
+    }
+
+    .order-brigade-ours .order-details-card,
+    tr.order-brigade-ours td {
+        background-color: #e6ffea !important;
+    }
+
+    .order-brigade-maybe-contractors .order-details-card,
+    tr.order-brigade-maybe-contractors td {
+        background-color: #fff8e1 !important;
+    }
 </style>
 <h1>Заказы</h1>
 
@@ -121,8 +136,15 @@
                 1101 => "насос от 1100 - взять 4куб насос",
                 _ => item.Pump.ToString()
             };
+            var brigadeClass = item.BrigadeStatus switch
+            {
+                "приоритет нашей бригаде" => "order-brigade-priority",
+                "Наша бригада" => "order-brigade-ours",
+                "Возможно подрядчики" => "order-brigade-maybe-contractors",
+                _ => string.Empty
+            };
 
-            <tr class="order-row" data-order-id="@item.Id">
+            <tr class="order-row @brigadeClass" data-order-id="@item.Id">
                 <td>@item.City</td>
                 <td>@item.Diameter</td>
                 <td>@pumpText</td>
@@ -167,32 +189,24 @@
                     </a>
                 </td>
             </tr>
-            <tr class="order-details-row collapse" id="order-details-@item.Id">
+            <tr class="order-details-row collapse @brigadeClass" id="order-details-@item.Id">
                 <td colspan="8">
                     <div class="card order-details-card mb-2">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p class="mb-1"><strong>Имя клиента:</strong> @item.NameClient</p>
-                                    <p class="mb-1"><strong>Телефон:</strong> @item.Phone</p>
                                     <p class="mb-1"><strong>Адрес:</strong> @item.City</p>
                                     <p class="mb-1"><strong>Диаметр:</strong> @item.Diameter мм</p>
                                     <p class="mb-1"><strong>Цена за метр:</strong> @item.PricePerMeter руб.</p>
-                                    <p class="mb-1"><strong>Насос (Вт):</strong> @pumpText</p>
-                                    <p class="mb-1"><strong>Модель насоса:</strong> @(string.IsNullOrEmpty(item.PumpModel) ? "Не указана" : item.PumpModel)</p>
-                                    <p class="mb-1"><strong>Количество метров:</strong> @(item.MetersCount.HasValue ? item.MetersCount.ToString() : "Не указано")</p>
-                                    <p class="mb-1"><strong>Статика:</strong> @(string.IsNullOrEmpty(item.StaticLevel) ? "Не указано" : item.StaticLevel)</p>
-                                    <p class="mb-1"><strong>Динамика:</strong> @(string.IsNullOrEmpty(item.DynamicLevel) ? "Не указано" : item.DynamicLevel)</p>
-                                    <p class="mb-1"><strong>Фильтр:</strong> @(string.IsNullOrEmpty(item.Filter) ? "Не указано" : item.Filter)</p>
+                                    <p class="mb-1"><strong>Насос:</strong> @pumpText</p>
+                                    <p class="mb-1"><strong>Обустройство:</strong> @(!string.IsNullOrEmpty(item.Arrangement) ? item.Arrangement : "Не указано")</p>
                                     <p class="mb-1"><strong>Канализация:</strong> @(string.IsNullOrEmpty(item.Sewer) ? "Не указано" : item.Sewer)</p>
+                                    <p class="mb-1"><strong>Комментарий:</strong> @item.Info</p>
+                                    <p class="mb-1"><strong>Телефон:</strong> @item.Phone</p>
+                                    <p class="mb-1"><strong>Имя клиента:</strong> @item.NameClient</p>
+                                    <p class="mb-1"><strong>Координаты:</strong> @(string.IsNullOrEmpty(item.Coordinates) ? "Не указаны" : item.Coordinates)</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p class="mb-1"><strong>Обустройство:</strong> @(!string.IsNullOrEmpty(item.Arrangement) ? item.Arrangement : "Не указано")</p>
-                                    <p class="mb-1"><strong>Комментарий:</strong> @item.Info</p>
-                                    <p class="mb-1"><strong>Координаты:</strong> @(string.IsNullOrEmpty(item.Coordinates) ? "Не указаны" : item.Coordinates)</p>
-                                    <p class="mb-1"><strong>Отдать подрядчикам:</strong> @(string.IsNullOrEmpty(item.Contractor) ? "Не выбрано" : item.Contractor)</p>
-                                    <p class="mb-1"><strong>Создал:</strong> @(!string.IsNullOrEmpty(item.CreatedBy) ? item.CreatedBy : "Не указано")</p>
-                                    <p class="mb-1"><strong>Дата создания:</strong> @item.CreationTimeData.ToString("dd.MM.yyyy HH:mm")</p>
                                     <p class="mb-1">
                                         <strong>Статус:</strong>
                                         @if (!string.IsNullOrEmpty(item.Status))
@@ -212,8 +226,8 @@
                                             <span class="text-muted">Не указан</span>
                                         }
                                     </p>
+                                    <p class="mb-1"><strong>Чья бригада:</strong> @(string.IsNullOrEmpty(item.BrigadeStatus) ? "Не указано" : item.BrigadeStatus)</p>
                                     <p class="mb-1"><strong>Дата бурения:</strong> @(item.WorkDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
-                                    <p class="mb-1"><strong>Дата обустройства:</strong> @(item.ArrangementDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
                                     <p class="mb-1">
                                         <strong>Бригада бурения:</strong>
                                         @if (item.DrillingBrigade != null)
@@ -225,7 +239,15 @@
                                             @:Не назначена
                                         }
                                     </p>
-                                    <p class="mb-0">
+                                    <p class="mb-1"><strong>Количество метров:</strong> @(item.MetersCount.HasValue ? item.MetersCount.ToString() : "Не указано")</p>
+                                    <p class="mb-1"><strong>Глубина:</strong> @(string.IsNullOrEmpty(item.Depth) ? "Не указано" : item.Depth)</p>
+                                    <p class="mb-1"><strong>Динамика:</strong> @(string.IsNullOrEmpty(item.DynamicLevel) ? "Не указано" : item.DynamicLevel)</p>
+                                    <p class="mb-1"><strong>Статика:</strong> @(string.IsNullOrEmpty(item.StaticLevel) ? "Не указано" : item.StaticLevel)</p>
+                                    <p class="mb-1"><strong>Фильтр:</strong> @(string.IsNullOrEmpty(item.Filter) ? "Не указано" : item.Filter)</p>
+                                    <p class="mb-1"><strong>Насос смонтирован:</strong> @(string.IsNullOrEmpty(item.PumpInstalled) ? "Не указано" : item.PumpInstalled)</p>
+                                    <p class="mb-1"><strong>Итого за бурение скважины:</strong> @(string.IsNullOrEmpty(item.TotalDrillingAmount) ? "Не указано" : item.TotalDrillingAmount)</p>
+                                    <p class="mb-1"><strong>Дата обустройства:</strong> @(item.ArrangementDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
+                                    <p class="mb-1">
                                         <strong>Бригада обустройства:</strong>
                                         @if (item.ArrangementBrigade != null)
                                         {
@@ -236,6 +258,9 @@
                                             @:Не назначена
                                         }
                                     </p>
+                                    <p class="mb-1"><strong>Обустройство выполнено:</strong> @(string.IsNullOrEmpty(item.ArrangementDone) ? "Не указано" : item.ArrangementDone)</p>
+                                    <p class="mb-1"><strong>Итого за обустройство:</strong> @(string.IsNullOrEmpty(item.TotalArrangementAmount) ? "Не указано" : item.TotalArrangementAmount)</p>
+                                    <p class="mb-0"><strong>Отдать подрядчикам:</strong> @(string.IsNullOrEmpty(item.Contractor) ? "Не выбрано" : item.Contractor)</p>
                                 </div>
                             </div>
                         </div>

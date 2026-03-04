@@ -35,7 +35,7 @@
             @Html.DisplayFor(model => model.PricePerMeter)
         </dd>
         <dt class = "col-sm-2">
-            Насос (Вт)
+            Насос
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Pump)
@@ -138,6 +138,12 @@
             }
         </dd>
         <dt class = "col-sm-2">
+            Чья бригада
+        </dt>
+        <dd class = "col-sm-10">
+            @(string.IsNullOrEmpty(Model.BrigadeStatus) ? "Не указано" : Model.BrigadeStatus)
+        </dd>
+        <dt class = "col-sm-2">
             Дата создания
         </dt>
         <dd class = "col-sm-10">
@@ -181,6 +187,18 @@
             {
                 <span class="text-muted">Не выбрано</span>
             }
+        </dd>
+        <dt class = "col-sm-2">
+            Итого за бурение скважины
+        </dt>
+        <dd class = "col-sm-10">
+            @(string.IsNullOrEmpty(Model.TotalDrillingAmount) ? "Не указано" : Model.TotalDrillingAmount)
+        </dd>
+        <dt class = "col-sm-2">
+            Итого за обустройство
+        </dt>
+        <dd class = "col-sm-10">
+            @(string.IsNullOrEmpty(Model.TotalArrangementAmount) ? "Не указано" : Model.TotalArrangementAmount)
         </dd>
         <dt class = "col-sm-2">
             Координаты

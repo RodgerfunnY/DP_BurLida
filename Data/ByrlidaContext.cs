@@ -48,6 +48,12 @@ namespace DP_BurLida.Data
                 entity.Property(e => e.Info)
                 .IsRequired()
                 .HasMaxLength(1000);
+                entity.Property(e => e.TotalDrillingAmount)
+                .HasMaxLength(1000);
+                entity.Property(e => e.TotalArrangementAmount)
+                .HasMaxLength(1000);
+                entity.Property(e => e.BrigadeStatus)
+                .HasMaxLength(50);
                 entity.Property(e => e.CreationTimeData)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");

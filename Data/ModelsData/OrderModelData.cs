@@ -58,9 +58,25 @@ namespace DP_BurLida.Data.ModelsData
         /// </summary>
         [MaxLength(1000)]
         public string? ArrangementDone { get; set; }
+        /// <summary>
+        /// Итого за бурение скважины (необязательное поле, текстовое).
+        /// </summary>
+        [MaxLength(1000)]
+        public string? TotalDrillingAmount { get; set; }
+        /// <summary>
+        /// Итого за обустройство (необязательное поле, текстовое).
+        /// </summary>
+        [MaxLength(1000)]
+        public string? TotalArrangementAmount { get; set; }
         [MaxLength(1000)]
         public string Info { get; set; }
         public string Status { get; set; }
+
+        /// <summary>
+        /// Чья бригада: приоритет нашей бригаде, Наша бригада, Возможно подрядчики, подрядчик.
+        /// </summary>
+        [MaxLength(50)]
+        public string? BrigadeStatus { get; set; }
 
         /// <summary>
         /// Имя пользователя, создавшего заявку.

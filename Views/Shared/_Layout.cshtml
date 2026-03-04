@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 
 <head>
@@ -57,22 +57,24 @@
                                 <i class="fa-solid fa-calendar-days me-1"></i> Календарь
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link@(currentController=="User" ? " active fw-semibold" : "")" asp-area="" asp-controller="User" asp-action="Index">
-                                <i class="fa-solid fa-users me-1"></i> Сотрудники
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link@(currentController=="Brigade" ? " active fw-semibold" : "")" asp-area="" asp-controller="Brigade" asp-action="Index">
-                                <i class="fa-solid fa-people-group me-1"></i> Бригады
-                            </a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link@(currentController=="Order" && currentAction=="Statistics" ? " active fw-semibold" : "")" asp-area="" asp-controller="Order" asp-action="Index">
-                                <i class="fa-solid fa-chart-column me-1"></i> Статистика
-                            </a>
-                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Director"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link@(currentController=="User" ? " active fw-semibold" : "")" asp-area="" asp-controller="User" asp-action="Index">
+                                    <i class="fa-solid fa-users me-1"></i> Сотрудники
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link@(currentController=="Brigade" ? " active fw-semibold" : "")" asp-area="" asp-controller="Brigade" asp-action="Index">
+                                    <i class="fa-solid fa-people-group me-1"></i> Бригады
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link@(currentController=="Statistics" ? " active fw-semibold" : "")" asp-area="" asp-controller="Statistics" asp-action="Index">
+                                    <i class="fa-solid fa-chart-column me-1"></i> Статистика
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link@(currentController=="Archive" ? " active fw-semibold" : "")" asp-area="" asp-controller="Archive" asp-action="Index">
                                 <i class="fa-solid fa-box-archive me-1"></i> Архив

@@ -5,6 +5,50 @@
 }
 
 <div class="container-fluid">
+    <style>
+        /* Цветовая схема для пометки "Чья бригада" с хорошей читаемостью текста */
+        .order-item-priority {
+            background-color: #ffebee;          /* очень светло-красный */
+            border-left: 3px solid #d32f2f;     /* красная полоса */
+            color: #b71c1c;                     /* тёмно-красный текст */
+        }
+
+        .order-item-ours {
+            background-color: #e8f5e9;          /* очень светло-зелёный */
+            border-left: 3px solid #2e7d32;     /* зелёная полоса */
+            color: #1b5e20;                     /* тёмно-зелёный текст */
+        }
+
+        .order-item-maybe-contractors {
+            background-color: #fffde7;          /* очень светло-жёлтый */
+            border-left: 3px solid #f9a825;     /* жёлтая полоса */
+            color: #5d4037;                     /* тёмно-коричневый текст */
+        }
+
+        .order-item-priority small,
+        .order-item-ours small,
+        .order-item-maybe-contractors small {
+            color: inherit;                     /* сохраняем контрастный цвет текста */
+        }
+
+        .list-group-item-priority {
+            background-color: #ffebee;
+            border-left: 4px solid #d32f2f;
+            color: #b71c1c;
+        }
+
+        .list-group-item-ours {
+            background-color: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            color: #1b5e20;
+        }
+
+        .list-group-item-maybe-contractors {
+            background-color: #fffde7;
+            border-left: 4px solid #f9a825;
+            color: #5d4037;
+        }
+    </style>
     <div class="row">
         <div class="col-md-9">
             <ul class="nav nav-tabs mb-3">
@@ -78,7 +122,14 @@
                                                 var dateText = Model.CalendarType == "montage"
                                                     ? order.ArrangementDate?.ToString("dd.MM.yyyy")
                                                     : order.WorkDate?.ToString("dd.MM.yyyy");
-                                                <div class="order-item" title="@order.NameClient @order.SurnameClient - @order.Info - @dateText">
+                                                var brigadeClass = order.BrigadeStatus switch
+                                                {
+                                                    "приоритет нашей бригаде" => "order-item-priority",
+                                                    "Наша бригада" => "order-item-ours",
+                                                    "Возможно подрядчики" => "order-item-maybe-contractors",
+                                                    _ => string.Empty
+                                                };
+                                                <div class="order-item @brigadeClass" title="@order.NameClient @order.SurnameClient - @order.Info - @dateText">
                                                     <small>@order.NameClient @order.SurnameClient</small>
                                                     @if (!string.IsNullOrEmpty(order.Status))
                                                     {
@@ -119,9 +170,17 @@
                 <div class="list-group small">
                     @foreach (var order in Model.UnscheduledOrders.OrderBy(o => o.CreationTimeData))
                     {
+                        var brigadeClass = order.BrigadeStatus switch
+                        {
+                            "приоритет нашей бригаде" => "list-group-item-priority",
+                            "Наша бригада" => "list-group-item-ours",
+                            "Возможно подрядчики" => "list-group-item-maybe-contractors",
+                            _ => string.Empty
+                        };
                         <div class="list-group-item list-group-item-action mb-2 order-card-draggable"
                              draggable="true"
                              data-order-id="@order.Id"
+                             class="list-group-item list-group-item-action mb-2 order-card-draggable @brigadeClass"
                              title="@order.NameClient - @order.City">
                             <div class="fw-semibold">@order.NameClient</div>
                             @if (!string.IsNullOrEmpty(order.City))

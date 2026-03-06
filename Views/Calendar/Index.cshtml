@@ -48,6 +48,19 @@
             border-left: 4px solid #f9a825;
             color: #5d4037;
         }
+
+        /* Компактное отображение заявок в ячейках календаря — адрес в одну строку */
+        .orders-container .order-item {
+            display: block;
+            padding: 2px 4px;
+            margin-bottom: 2px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 110px;          /* показываем часть адреса, даже если ячейка шире */
+            box-sizing: border-box;
+        }
     </style>
     <div class="row">
         <div class="col-md-9">
@@ -129,8 +142,8 @@
                                                     "Возможно подрядчики" => "order-item-maybe-contractors",
                                                     _ => string.Empty
                                                 };
-                                                <div class="order-item @brigadeClass" title="@order.NameClient @order.SurnameClient - @order.Info - @dateText">
-                                                    <small>@order.NameClient @order.SurnameClient</small>
+                                                <div class="order-item @brigadeClass" title="@order.City - @order.Info - @order.NameClient @order.SurnameClient - @dateText">
+                                                    <small>@order.City</small>
                                                     @if (!string.IsNullOrEmpty(order.Status))
                                                     {
                                                         <br />
@@ -177,15 +190,14 @@
                             "Возможно подрядчики" => "list-group-item-maybe-contractors",
                             _ => string.Empty
                         };
-                        <div class="list-group-item list-group-item-action mb-2 order-card-draggable"
+                        <div class="list-group-item list-group-item-action mb-2 order-card-draggable @brigadeClass"
                              draggable="true"
                              data-order-id="@order.Id"
-                             class="list-group-item list-group-item-action mb-2 order-card-draggable @brigadeClass"
-                             title="@order.NameClient - @order.City">
-                            <div class="fw-semibold">@order.NameClient</div>
+                             title="@order.Info @(string.IsNullOrEmpty(order.City) ? "" : " - " + order.City)">
+                            <div class="fw-semibold">@order.Info</div>
                             @if (!string.IsNullOrEmpty(order.City))
                             {
-                                <div class="text-muted">@order.City</div>
+                                <div class="text-muted small">@order.City</div>
                             }
                             @if (!string.IsNullOrEmpty(order.Status))
                             {

@@ -120,7 +120,9 @@ namespace DP_BurLida.Controllers
                 "montage" => SetTitleAndFilter(
                     calendar,
                     "Монтажный график",
-                    notCompleted.Where(o => o.ArrangementBrigadeId.HasValue)),
+                    notCompleted.Where(o =>
+                        o.Status == "Обустройство" ||
+                        o.ArrangementBrigadeId.HasValue)),
                 "contractors" => SetTitleAndFilter(
                     calendar,
                     "Календарь подрядчиков",

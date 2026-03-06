@@ -10,382 +10,415 @@
     @Html.AntiForgeryToken()
     <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="row">
-        <!-- ЛЕВАЯ КОЛОНКА -->
-        <div class="col-md-6">
-            <!-- 1. Адрес -->
-            <div class="form-group">
-                <label asp-for="Address" class="control-label">Адрес</label>
-                <input asp-for="Address" class="form-control" />
-                <span class="form-text text-muted">Полный адрес объекта (улица, дом, населённый пункт).</span>
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
+    <ul class="nav nav-tabs mb-3" id="orderCreateTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="create-main-tab" data-bs-toggle="tab" data-bs-target="#create-main" type="button" role="tab" aria-controls="create-main" aria-selected="true">
+                Основная информация
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="create-drilling-tab" data-bs-toggle="tab" data-bs-target="#create-drilling" type="button" role="tab" aria-controls="create-drilling" aria-selected="false">
+                Бурение
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="create-arrangement-tab" data-bs-toggle="tab" data-bs-target="#create-arrangement" type="button" role="tab" aria-controls="create-arrangement" aria-selected="false">
+                Обустройство
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="create-installment-tab" data-bs-toggle="tab" data-bs-target="#create-installment" type="button" role="tab" aria-controls="create-installment" aria-selected="false">
+                Рассрочка
+            </button>
+        </li>
+    </ul>
 
-            <!-- 2. Диаметр -->
-            <div class="form-group">
-                <label asp-for="Diameter" class="control-label">Диаметр</label>
-                <select asp-for="Diameter" class="form-control">
-                    <option value="">-- выберите диаметр --</option>
-                    <option value="32">32</option>
-                    <option value="90">90</option>
-                    <option value="125">125</option>
-                </select>
-                <span asp-validation-for="Diameter" class="text-danger"></span>
-            </div>
+    <div class="tab-content" id="orderCreateTabsContent">
+        <div class="tab-pane fade show active" id="create-main" role="tabpanel" aria-labelledby="create-main-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- 1. Адрес -->
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label">Адрес</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span class="form-text text-muted">Полный адрес объекта (улица, дом, населённый пункт).</span>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
 
-            <!-- 3. Цена за метр -->
-            <div class="form-group">
-                <label asp-for="PricePerMeter" class="control-label">Цена за метр</label>
-                <select asp-for="PricePerMeter" class="form-control">
-                    <option value="">-- выберите цену за метр --</option>
-                    <option value="70">70</option>
-                    <option value="75">75</option>
-                    <option value="80">80</option>
-                    <option value="85">85</option>
-                    <option value="90">85-90</option>
-                    <option value="95">90-95</option>
-                    <option value="100">95-100</option>
-                    <option value="105">100-105</option>
-                    <option value="120">120</option>
-                    <option value="140">140</option>
-                </select>
-                <span asp-validation-for="PricePerMeter" class="text-danger"></span>
-            </div>
+                    <!-- 2. Диаметр -->
+                    <div class="form-group">
+                        <label asp-for="Diameter" class="control-label">Диаметр</label>
+                        <select asp-for="Diameter" class="form-control">
+                            <option value="">-- выберите диаметр --</option>
+                            <option value="32">32</option>
+                            <option value="90">90</option>
+                            <option value="125">125</option>
+                        </select>
+                        <span asp-validation-for="Diameter" class="text-danger"></span>
+                    </div>
 
-            <!-- 4. Насос -->
-            <div class="form-group">
-                <label asp-for="Pump" class="control-label">Насос</label>
-                <select asp-for="Pump" class="form-control">
-                    <option value="0">не нужен</option>
-                    <option value="600">монтаж насоса заказчика от 600 руб</option>
-                    <option value="1100">насос от 1100 руб</option>
-                    <option value="1101">насос от 1100 - взять 4куб насос</option>
-                </select>
-                <span asp-validation-for="Pump" class="text-danger"></span>
-            </div>
+                    <!-- 3. Цена за метр -->
+                    <div class="form-group">
+                        <label asp-for="PricePerMeter" class="control-label">Цена за метр</label>
+                        <select asp-for="PricePerMeter" class="form-control">
+                            <option value="">-- выберите цену за метр --</option>
+                            <option value="70">70</option>
+                            <option value="75">75</option>
+                            <option value="80">80</option>
+                            <option value="85">85</option>
+                            <option value="90">85-90</option>
+                            <option value="95">90-95</option>
+                            <option value="100">95-100</option>
+                            <option value="105">100-105</option>
+                            <option value="120">120</option>
+                            <option value="140">140</option>
+                        </select>
+                        <span asp-validation-for="PricePerMeter" class="text-danger"></span>
+                    </div>
 
-            <!-- 5. Обустройство -->
-            <div class="form-group">
-                <label asp-for="Arrangement" class="control-label">Обустройство</label>
-                <select asp-for="Arrangement" class="form-control">
-                    <option value="Не нужно">не нужно</option>
-                    <option value="Врезать адаптер от 1000 руб">врезать адаптер от 1000руб</option>
-                    <option value="Врезка через адаптер от 1300 руб">врезка через адаптер от 1300руб</option>
-                    <option value="Адаптер от 2000 руб">адаптер от 2000руб</option>
-                    <option value="Кессон ж/б от 3500 руб">Кессон ж/б от 3500 руб</option>
-                    <option value="Пластиковый кессон от 6500 руб">платиковый кессон от 6500 руб</option>
-                </select>
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="Arrangement" class="text-danger"></span>
-            </div>
+                    <!-- 4. Насос -->
+                    <div class="form-group">
+                        <label asp-for="Pump" class="control-label">Насос</label>
+                        <select asp-for="Pump" class="form-control">
+                            <option value="0">не нужен</option>
+                            <option value="600">монтаж насоса заказчика от 600 руб</option>
+                            <option value="1100">насос от 1100 руб</option>
+                            <option value="1101">насос от 1100 - взять 4куб насос</option>
+                        </select>
+                        <span asp-validation-for="Pump" class="text-danger"></span>
+                    </div>
 
-            <!-- 6. Канализация -->
-            <div class="form-group">
-                <label asp-for="Sewer" class="control-label">Канализация</label>
-                <input asp-for="Sewer" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="Sewer" class="text-danger"></span>
-            </div>
+                    <!-- 5. Обустройство -->
+                    <div class="form-group">
+                        <label asp-for="Arrangement" class="control-label">Обустройство</label>
+                        <select asp-for="Arrangement" class="form-control">
+                            <option value="Не нужно">не нужно</option>
+                            <option value="Врезать адаптер от 1000 руб">врезать адаптер от 1000руб</option>
+                            <option value="Врезка через адаптер от 1300 руб">врезка через адаптер от 1300руб</option>
+                            <option value="Адаптер от 2000 руб">адаптер от 2000руб</option>
+                            <option value="Кессон ж/б от 3500 руб">Кессон ж/б от 3500 руб</option>
+                            <option value="Пластиковый кессон от 6500 руб">платиковый кессон от 6500 руб</option>
+                        </select>
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="Arrangement" class="text-danger"></span>
+                    </div>
 
-            <!-- 7. Информация -->
-            <div class="form-group">
-                <label asp-for="Info" class="control-label">Информация</label>
-                <input asp-for="Info" class="form-control" />
-                <span asp-validation-for="Info" class="text-danger"></span>
-            </div>
+                    <!-- 6. Канализация -->
+                    <div class="form-group">
+                        <label asp-for="Sewer" class="control-label">Канализация</label>
+                        <input asp-for="Sewer" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="Sewer" class="text-danger"></span>
+                    </div>
+                </div>
 
-            <!-- 8. Номер телефона -->
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label">Телефон</label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
+                <div class="col-md-6">
+                    <!-- 7. Информация -->
+                    <div class="form-group">
+                        <label asp-for="Info" class="control-label">Информация</label>
+                        <input asp-for="Info" class="form-control" />
+                        <span asp-validation-for="Info" class="text-danger"></span>
+                    </div>
 
-            <!-- 9. Имя клиента -->
-            <div class="form-group">
-                <label asp-for="NameClient" class="control-label">Имя клиента</label>
-                <input asp-for="NameClient" class="form-control" />
-                <span asp-validation-for="NameClient" class="text-danger"></span>
-            </div>
+                    <!-- 8. Номер телефона -->
+                    <div class="form-group">
+                        <label asp-for="Phone" class="control-label">Телефон</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
 
-            <!-- 10. Координаты -->
-            <div class="form-group">
-                <label asp-for="Coordinates" class="control-label">Координаты</label>
-                <input asp-for="Coordinates" class="form-control" placeholder="Широта, долгота (например, 53.9, 27.55)" />
-                <span class="form-text text-muted">Будет использоваться для отображения точки на карте.</span>
-                <span asp-validation-for="Coordinates" class="text-danger"></span>
+                    <!-- 9. Имя клиента -->
+                    <div class="form-group">
+                        <label asp-for="NameClient" class="control-label">Имя клиента</label>
+                        <input asp-for="NameClient" class="form-control" />
+                        <span asp-validation-for="NameClient" class="text-danger"></span>
+                    </div>
+
+                    <!-- 10. Координаты -->
+                    <div class="form-group">
+                        <label asp-for="Coordinates" class="control-label">Координаты</label>
+                        <input asp-for="Coordinates" class="form-control" placeholder="Широта, долгота (например, 53.9, 27.55)" />
+                        <span class="form-text text-muted">Будет использоваться для отображения точки на карте.</span>
+                        <span asp-validation-for="Coordinates" class="text-danger"></span>
+                    </div>
+
+                    <!-- 11. Статус -->
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Статус</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">Выберите статус</option>
+                            <option value="Ожидание">Ожидание</option>
+                            <option value="Бурение">Бурение</option>
+                            <option value="Обустройство">Обустройство</option>
+                            <option value="Ремонт">Ремонт</option>
+                            <option value="Отдали подрядчикам">Отдали подрядчикам</option>
+                            <option value="Завершен">Завершен</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <!-- 11.1. Чья бригада -->
+                    <div class="form-group">
+                        <label asp-for="BrigadeStatus" class="control-label">Чья бригада</label>
+                        <select asp-for="BrigadeStatus" class="form-control">
+                            <option value="">-- не выбрано --</option>
+                            <option value="приоритет нашей бригаде">приоритет нашей бригаде</option>
+                            <option value="Наша бригада">Наша бригада</option>
+                            <option value="Возможно подрядчики">Возможно подрядчики</option>
+                            <option value="подрядчик">подрядчик</option>
+                        </select>
+                        <span class="form-text text-muted">Используется для визуального выделения заявок в списке и календаре.</span>
+                        <span asp-validation-for="BrigadeStatus" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ПРАВАЯ КОЛОНКА -->
-        <div class="col-md-6">
-            <!-- 11. Статус -->
-            <div class="form-group">
-                <label asp-for="Status" class="control-label">Статус</label>
-                <select asp-for="Status" class="form-control">
-                    <option value="">Выберите статус</option>
-                    <option value="Ожидание">Ожидание</option>
-                    <option value="Бурение">Бурение</option>
-                    <option value="Обустройство">Обустройство</option>
-                    <option value="Ремонт">Ремонт</option>
-                    <option value="Отдали подрядчикам">Отдали подрядчикам</option>
-                    <option value="Завершен">Завершен</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-            <!-- 11.1. Чья бригада -->
-            <div class="form-group">
-                <label asp-for="BrigadeStatus" class="control-label">Чья бригада</label>
-                <select asp-for="BrigadeStatus" class="form-control">
-                    <option value="">-- не выбрано --</option>
-                    <option value="приоритет нашей бригаде">приоритет нашей бригаде</option>
-                    <option value="Наша бригада">Наша бригада</option>
-                    <option value="Возможно подрядчики">Возможно подрядчики</option>
-                    <option value="подрядчик">подрядчик</option>
-                </select>
-                <span class="form-text text-muted">Используется для визуального выделения заявок в списке и календаре.</span>
-                <span asp-validation-for="BrigadeStatus" class="text-danger"></span>
-            </div>
-
-            <!-- 12. Дата бурения -->
-            <div class="form-group">
-                <label asp-for="WorkDate" class="control-label">Дата бурения</label>
-                <input asp-for="WorkDate" type="date" class="form-control" />
-                <span asp-validation-for="WorkDate" class="text-danger"></span>
-            </div>
-
-            <!-- 13. Бригада бурения -->
-            <div class="form-group">
-                <label asp-for="DrillingBrigadeId" class="control-label">Бригада бурения</label>
-                <select asp-for="DrillingBrigadeId" class="form-control" asp-items="ViewBag.DrillingBrigades">
-                    <option value="">-- выберите бригаду бурения --</option>
-                </select>
-                <span asp-validation-for="DrillingBrigadeId" class="text-danger"></span>
-            </div>
-
-            <!-- 14. Количество метров -->
-            <div class="form-group">
-                <label asp-for="MetersCount" class="control-label">Количество метров</label>
-                <input asp-for="MetersCount" type="number" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="MetersCount" class="text-danger"></span>
-            </div>
-
-            <!-- 15. Глубина -->
-            <div class="form-group">
-                <label asp-for="Depth" class="control-label">Глубина</label>
-                <input asp-for="Depth" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="Depth" class="text-danger"></span>
-            </div>
-
-            <!-- 16. Динамика -->
-            <div class="form-group">
-                <label asp-for="DynamicLevel" class="control-label">Динамика</label>
-                <input asp-for="DynamicLevel" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="DynamicLevel" class="text-danger"></span>
-            </div>
-
-            <!-- 17. Статика -->
-            <div class="form-group">
-                <label asp-for="StaticLevel" class="control-label">Статика</label>
-                <input asp-for="StaticLevel" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="StaticLevel" class="text-danger"></span>
-            </div>
-
-            <!-- 18. Фильтр -->
-            <div class="form-group">
-                <label asp-for="Filter" class="control-label">Фильтр</label>
-                <input asp-for="Filter" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="Filter" class="text-danger"></span>
-            </div>
-
-            <!-- 19. Насос смонтирован -->
-            <div class="form-group">
-                <label asp-for="PumpInstalled" class="control-label">Насос смонтирован</label>
-                <input asp-for="PumpInstalled" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="PumpInstalled" class="text-danger"></span>
-            </div>
-
-            <!-- 19.1. Рассрочка на бурение -->
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" asp-for="IsDrillingInstallment" id="IsDrillingInstallment" />
-                <label class="form-check-label" for="IsDrillingInstallment">Рассрочка на бурение</label>
-            </div>
-            <div class="form-group mb-2">
-                <label asp-for="InstallmentEripNumber" class="control-label">Номер Е-РИП</label>
-                <input asp-for="InstallmentEripNumber" class="form-control" />
-                <span class="form-text text-muted">Если есть единый номер рассрочки, укажите его здесь.</span>
-                <span asp-validation-for="InstallmentEripNumber" class="text-danger"></span>
-            </div>
-            <div id="drilling-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
-                <div class="form-group">
-                    <label asp-for="DrillingFirstContribution" class="control-label">Первый взнос</label>
-                    <input asp-for="DrillingFirstContribution" type="number" min="0" class="form-control" />
-                    <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
-                    <span asp-validation-for="DrillingFirstContribution" class="text-danger"></span>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="DrillingFirstPayment" class="control-label">Первый платеж</label>
-                        <input asp-for="DrillingFirstPayment" type="number" min="0" class="form-control" />
-                        <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
-                        <span asp-validation-for="DrillingFirstPayment" class="text-danger"></span>
+        <div class="tab-pane fade" id="create-drilling" role="tabpanel" aria-labelledby="create-drilling-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- 12. Дата бурения -->
+                    <div class="form-group">
+                        <label asp-for="WorkDate" class="control-label">Дата бурения</label>
+                        <input asp-for="WorkDate" type="date" class="form-control" />
+                        <span asp-validation-for="WorkDate" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="DrillingFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="DrillingFirstPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="DrillingFirstPaymentDueDate" class="text-danger"></span>
+
+                    <!-- 13. Бригада бурения -->
+                    <div class="form-group">
+                        <label asp-for="DrillingBrigadeId" class="control-label">Бригада бурения</label>
+                        <select asp-for="DrillingBrigadeId" class="form-control" asp-items="ViewBag.DrillingBrigades">
+                            <option value="">-- выберите бригаду бурения --</option>
+                        </select>
+                        <span asp-validation-for="DrillingBrigadeId" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="DrillingSecondPayment" class="control-label">Второй платеж</label>
-                        <input asp-for="DrillingSecondPayment" type="number" min="0" class="form-control" />
+
+                <div class="col-md-6">
+                    <!-- 14. Количество метров -->
+                    <div class="form-group">
+                        <label asp-for="MetersCount" class="control-label">Количество метров</label>
+                        <input asp-for="MetersCount" type="number" class="form-control" />
                         <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="DrillingSecondPayment" class="text-danger"></span>
+                        <span asp-validation-for="MetersCount" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="DrillingSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="DrillingSecondPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="DrillingSecondPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="DrillingThirdPayment" class="control-label">Третий платеж</label>
-                        <input asp-for="DrillingThirdPayment" type="number" min="0" class="form-control" />
-                        <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="DrillingThirdPayment" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="DrillingThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="DrillingThirdPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="DrillingThirdPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="DrillingFourthPayment" class="control-label">Четвёртый платеж</label>
-                        <input asp-for="DrillingFourthPayment" type="number" min="0" class="form-control" />
-                        <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="DrillingFourthPayment" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="DrillingFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="DrillingFourthPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="DrillingFourthPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- 20. Дата обустройства -->
-            <div class="form-group">
-                <label asp-for="ArrangementDate" class="control-label">Дата обустройства</label>
-                <input asp-for="ArrangementDate" type="date" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="ArrangementDate" class="text-danger"></span>
-            </div>
-
-            <!-- 21. Бригада обустройства -->
-            <div class="form-group">
-                <label asp-for="ArrangementBrigadeId" class="control-label">Бригада обустройства</label>
-                <select asp-for="ArrangementBrigadeId" class="form-control" asp-items="ViewBag.ArrangementBrigades">
-                    <option value="">-- выберите бригаду обустройства --</option>
-                </select>
-                <span asp-validation-for="ArrangementBrigadeId" class="text-danger"></span>
-            </div>
-
-            <!-- 22. Обустройство выполнено -->
-            <div class="form-group">
-                <label asp-for="ArrangementDone" class="control-label">Обустройство выполнено</label>
-                <input asp-for="ArrangementDone" class="form-control" />
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="ArrangementDone" class="text-danger"></span>
-            </div>
-
-            <!-- 22.1. Рассрочка обустройства -->
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" asp-for="IsArrangementInstallment" id="IsArrangementInstallment" />
-                <label class="form-check-label" for="IsArrangementInstallment">Рассрочка обустройства</label>
-            </div>
-            <div id="arrangement-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
-                <div class="form-group">
-                    <label asp-for="ArrangementFirstContribution" class="control-label">Первый взнос</label>
-                    <input asp-for="ArrangementFirstContribution" type="number" min="0" class="form-control" />
-                    <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
-                    <span asp-validation-for="ArrangementFirstContribution" class="text-danger"></span>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementFirstPayment" class="control-label">Первый платеж</label>
-                        <input asp-for="ArrangementFirstPayment" type="number" min="0" class="form-control" />
-                        <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
-                        <span asp-validation-for="ArrangementFirstPayment" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="ArrangementFirstPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="ArrangementFirstPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementSecondPayment" class="control-label">Второй платеж</label>
-                        <input asp-for="ArrangementSecondPayment" type="number" min="0" class="form-control" />
+                    <!-- 15. Глубина -->
+                    <div class="form-group">
+                        <label asp-for="Depth" class="control-label">Глубина</label>
+                        <input asp-for="Depth" class="form-control" />
                         <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="ArrangementSecondPayment" class="text-danger"></span>
+                        <span asp-validation-for="Depth" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="ArrangementSecondPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="ArrangementSecondPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementThirdPayment" class="control-label">Третий платеж</label>
-                        <input asp-for="ArrangementThirdPayment" type="number" min="0" class="form-control" />
+
+                    <!-- 16. Динамика -->
+                    <div class="form-group">
+                        <label asp-for="DynamicLevel" class="control-label">Динамика</label>
+                        <input asp-for="DynamicLevel" class="form-control" />
                         <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="ArrangementThirdPayment" class="text-danger"></span>
+                        <span asp-validation-for="DynamicLevel" class="text-danger"></span>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="ArrangementThirdPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="ArrangementThirdPaymentDueDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementFourthPayment" class="control-label">Четвёртый платеж</label>
-                        <input asp-for="ArrangementFourthPayment" type="number" min="0" class="form-control" />
+
+                    <!-- 17. Статика -->
+                    <div class="form-group">
+                        <label asp-for="StaticLevel" class="control-label">Статика</label>
+                        <input asp-for="StaticLevel" class="form-control" />
                         <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="ArrangementFourthPayment" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="ArrangementFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
-                        <input asp-for="ArrangementFourthPaymentDueDate" type="date" class="form-control" />
-                        <span asp-validation-for="ArrangementFourthPaymentDueDate" class="text-danger"></span>
+                        <span asp-validation-for="StaticLevel" class="text-danger"></span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 23. Отдать подрядчикам -->
-            <div class="form-group">
-                <label asp-for="Contractor" class="control-label">Отдать подрядчикам</label>
-                <select asp-for="Contractor" class="form-control">
-                    <option value="">-- не выбрано --</option>
-                    <option value="Саша">Саша</option>
-                    <option value="Олег">Олег</option>
-                    <option value="Александр">Александр</option>
-                </select>
-                <span class="form-text text-muted">Необязательное поле.</span>
-                <span asp-validation-for="Contractor" class="text-danger"></span>
+        <div class="tab-pane fade" id="create-arrangement" role="tabpanel" aria-labelledby="create-arrangement-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- 20. Дата обустройства -->
+                    <div class="form-group">
+                        <label asp-for="ArrangementDate" class="control-label">Дата обустройства</label>
+                        <input asp-for="ArrangementDate" type="date" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="ArrangementDate" class="text-danger"></span>
+                    </div>
+
+                    <!-- 21. Бригада обустройства -->
+                    <div class="form-group">
+                        <label asp-for="ArrangementBrigadeId" class="control-label">Бригада обустройства</label>
+                        <select asp-for="ArrangementBrigadeId" class="form-control" asp-items="ViewBag.ArrangementBrigades">
+                            <option value="">-- выберите бригаду обустройства --</option>
+                        </select>
+                        <span asp-validation-for="ArrangementBrigadeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <!-- 22. Обустройство выполнено -->
+                    <div class="form-group">
+                        <label asp-for="ArrangementDone" class="control-label">Обустройство выполнено</label>
+                        <input asp-for="ArrangementDone" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="ArrangementDone" class="text-danger"></span>
+                    </div>
+
+                    <!-- 23. Отдать подрядчикам -->
+                    <div class="form-group">
+                        <label asp-for="Contractor" class="control-label">Отдать подрядчикам</label>
+                        <select asp-for="Contractor" class="form-control">
+                            <option value="">-- не выбрано --</option>
+                            <option value="Саша">Саша</option>
+                            <option value="Олег">Олег</option>
+                            <option value="Александр">Александр</option>
+                        </select>
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="Contractor" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="create-installment" role="tabpanel" aria-labelledby="create-installment-tab">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- 19.1. Рассрочка на бурение -->
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" asp-for="IsDrillingInstallment" id="IsDrillingInstallment" />
+                        <label class="form-check-label" for="IsDrillingInstallment">Рассрочка на бурение</label>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="InstallmentEripNumber" class="control-label">Номер Е-РИП</label>
+                        <input asp-for="InstallmentEripNumber" class="form-control" />
+                        <span class="form-text text-muted">Если есть единый номер рассрочки, укажите его здесь.</span>
+                        <span asp-validation-for="InstallmentEripNumber" class="text-danger"></span>
+                    </div>
+                    <div id="drilling-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="DrillingFirstContribution" class="control-label">Первый взнос</label>
+                            <input asp-for="DrillingFirstContribution" type="number" min="0" class="form-control" />
+                            <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                            <span asp-validation-for="DrillingFirstContribution" class="text-danger"></span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="DrillingFirstPayment" class="control-label">Первый платеж</label>
+                                <input asp-for="DrillingFirstPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                                <span asp-validation-for="DrillingFirstPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DrillingFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="DrillingFirstPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="DrillingFirstPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="DrillingSecondPayment" class="control-label">Второй платеж</label>
+                                <input asp-for="DrillingSecondPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="DrillingSecondPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DrillingSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="DrillingSecondPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="DrillingSecondPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="DrillingThirdPayment" class="control-label">Третий платеж</label>
+                                <input asp-for="DrillingThirdPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="DrillingThirdPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DrillingThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="DrillingThirdPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="DrillingThirdPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="DrillingFourthPayment" class="control-label">Четвёртый платеж</label>
+                                <input asp-for="DrillingFourthPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="DrillingFourthPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DrillingFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="DrillingFourthPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="DrillingFourthPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <!-- 22.1. Рассрочка обустройства -->
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" asp-for="IsArrangementInstallment" id="IsArrangementInstallment" />
+                        <label class="form-check-label" for="IsArrangementInstallment">Рассрочка обустройства</label>
+                    </div>
+                    <div id="arrangement-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
+                        <div class="form-group">
+                            <label asp-for="ArrangementFirstContribution" class="control-label">Первый взнос</label>
+                            <input asp-for="ArrangementFirstContribution" type="number" min="0" class="form-control" />
+                            <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                            <span asp-validation-for="ArrangementFirstContribution" class="text-danger"></span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementFirstPayment" class="control-label">Первый платеж</label>
+                                <input asp-for="ArrangementFirstPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                                <span asp-validation-for="ArrangementFirstPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="ArrangementFirstPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="ArrangementFirstPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementSecondPayment" class="control-label">Второй платеж</label>
+                                <input asp-for="ArrangementSecondPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="ArrangementSecondPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="ArrangementSecondPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="ArrangementSecondPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementThirdPayment" class="control-label">Третий платеж</label>
+                                <input asp-for="ArrangementThirdPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="ArrangementThirdPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="ArrangementThirdPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="ArrangementThirdPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementFourthPayment" class="control-label">Четвёртый платеж</label>
+                                <input asp-for="ArrangementFourthPayment" type="number" min="0" class="form-control" />
+                                <span class="form-text text-muted">Необязательное поле.</span>
+                                <span asp-validation-for="ArrangementFourthPayment" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ArrangementFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                                <input asp-for="ArrangementFourthPaymentDueDate" type="date" class="form-control" />
+                                <span asp-validation-for="ArrangementFourthPaymentDueDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

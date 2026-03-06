@@ -59,6 +59,44 @@ namespace DP_BurLida.Data.ModelsData
         [MaxLength(1000)]
         public string? ArrangementDone { get; set; }
         /// <summary>
+        /// Рассрочка на бурение (включена/нет).
+        /// </summary>
+        public bool IsDrillingInstallment { get; set; }
+        /// <summary>
+        /// Первый взнос по бурению.
+        /// </summary>
+        public int? DrillingFirstContribution { get; set; }
+        /// <summary>
+        /// Первый платеж по бурению.
+        /// </summary>
+        public int? DrillingFirstPayment { get; set; }
+        public DateTime? DrillingFirstPaymentDueDate { get; set; }
+        public int? DrillingSecondPayment { get; set; }
+        public DateTime? DrillingSecondPaymentDueDate { get; set; }
+        public int? DrillingThirdPayment { get; set; }
+        public DateTime? DrillingThirdPaymentDueDate { get; set; }
+        public int? DrillingFourthPayment { get; set; }
+        public DateTime? DrillingFourthPaymentDueDate { get; set; }
+        /// <summary>
+        /// Рассрочка на обустройство (включена/нет).
+        /// </summary>
+        public bool IsArrangementInstallment { get; set; }
+        /// <summary>
+        /// Первый взнос по обустройству.
+        /// </summary>
+        public int? ArrangementFirstContribution { get; set; }
+        /// <summary>
+        /// Первый платеж по обустройству.
+        /// </summary>
+        public int? ArrangementFirstPayment { get; set; }
+        public DateTime? ArrangementFirstPaymentDueDate { get; set; }
+        public int? ArrangementSecondPayment { get; set; }
+        public DateTime? ArrangementSecondPaymentDueDate { get; set; }
+        public int? ArrangementThirdPayment { get; set; }
+        public DateTime? ArrangementThirdPaymentDueDate { get; set; }
+        public int? ArrangementFourthPayment { get; set; }
+        public DateTime? ArrangementFourthPaymentDueDate { get; set; }
+        /// <summary>
         /// Итого за бурение скважины (необязательное поле, текстовое).
         /// </summary>
         [MaxLength(1000)]
@@ -68,6 +106,11 @@ namespace DP_BurLida.Data.ModelsData
         /// </summary>
         [MaxLength(1000)]
         public string? TotalArrangementAmount { get; set; }
+        /// <summary>
+        /// Номер Е-РИП для рассрочки.
+        /// </summary>
+        [MaxLength(100)]
+        public string? InstallmentEripNumber { get; set; }
         [MaxLength(1000)]
         public string Info { get; set; }
         public string Status { get; set; }

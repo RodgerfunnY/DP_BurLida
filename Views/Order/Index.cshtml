@@ -193,8 +193,22 @@
                 <td colspan="8">
                     <div class="card order-details-card mb-2">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
+                            <ul class="nav nav-tabs mb-2" id="order-tabs-@item.Id" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="order-main-tab-@item.Id" data-bs-toggle="tab" data-bs-target="#order-main-@item.Id" type="button" role="tab" aria-controls="order-main-@item.Id" aria-selected="true">Основная информация</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="order-drilling-tab-@item.Id" data-bs-toggle="tab" data-bs-target="#order-drilling-@item.Id" type="button" role="tab" aria-controls="order-drilling-@item.Id" aria-selected="false">Бурение</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="order-arrangement-tab-@item.Id" data-bs-toggle="tab" data-bs-target="#order-arrangement-@item.Id" type="button" role="tab" aria-controls="order-arrangement-@item.Id" aria-selected="false">Обустройство</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="order-installment-tab-@item.Id" data-bs-toggle="tab" data-bs-target="#order-installment-@item.Id" type="button" role="tab" aria-controls="order-installment-@item.Id" aria-selected="false">Рассрочка</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="order-tabs-content-@item.Id">
+                                <div class="tab-pane fade show active" id="order-main-@item.Id" role="tabpanel" aria-labelledby="order-main-tab-@item.Id">
                                     <p class="mb-1"><strong>Адрес:</strong> @item.City</p>
                                     <p class="mb-1"><strong>Диаметр:</strong> @item.Diameter мм</p>
                                     <p class="mb-1"><strong>Цена за метр:</strong> @item.PricePerMeter руб.</p>
@@ -206,7 +220,7 @@
                                     <p class="mb-1"><strong>Имя клиента:</strong> @item.NameClient</p>
                                     <p class="mb-1"><strong>Координаты:</strong> @(string.IsNullOrEmpty(item.Coordinates) ? "Не указаны" : item.Coordinates)</p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="tab-pane fade" id="order-drilling-@item.Id" role="tabpanel" aria-labelledby="order-drilling-tab-@item.Id">
                                     <p class="mb-1">
                                         <strong>Статус:</strong>
                                         @if (!string.IsNullOrEmpty(item.Status))
@@ -245,7 +259,8 @@
                                     <p class="mb-1"><strong>Статика:</strong> @(string.IsNullOrEmpty(item.StaticLevel) ? "Не указано" : item.StaticLevel)</p>
                                     <p class="mb-1"><strong>Фильтр:</strong> @(string.IsNullOrEmpty(item.Filter) ? "Не указано" : item.Filter)</p>
                                     <p class="mb-1"><strong>Насос смонтирован:</strong> @(string.IsNullOrEmpty(item.PumpInstalled) ? "Не указано" : item.PumpInstalled)</p>
-                                    <p class="mb-1"><strong>Итого за бурение скважины:</strong> @(string.IsNullOrEmpty(item.TotalDrillingAmount) ? "Не указано" : item.TotalDrillingAmount)</p>
+                                </div>
+                                <div class="tab-pane fade" id="order-arrangement-@item.Id" role="tabpanel" aria-labelledby="order-arrangement-tab-@item.Id">
                                     <p class="mb-1"><strong>Дата обустройства:</strong> @(item.ArrangementDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</p>
                                     <p class="mb-1">
                                         <strong>Бригада обустройства:</strong>
@@ -259,7 +274,12 @@
                                         }
                                     </p>
                                     <p class="mb-1"><strong>Обустройство выполнено:</strong> @(string.IsNullOrEmpty(item.ArrangementDone) ? "Не указано" : item.ArrangementDone)</p>
+                                </div>
+                                <div class="tab-pane fade" id="order-installment-@item.Id" role="tabpanel" aria-labelledby="order-installment-tab-@item.Id">
+                                    <p class="mb-1"><strong>Итого за бурение скважины:</strong> @(string.IsNullOrEmpty(item.TotalDrillingAmount) ? "Не указано" : item.TotalDrillingAmount)</p>
                                     <p class="mb-1"><strong>Итого за обустройство:</strong> @(string.IsNullOrEmpty(item.TotalArrangementAmount) ? "Не указано" : item.TotalArrangementAmount)</p>
+                                    <p class="mb-1"><strong>Номер Е-РИП:</strong> @(string.IsNullOrEmpty(item.InstallmentEripNumber) ? "Не указан" : item.InstallmentEripNumber)</p>
+                                    @* Здесь при необходимости можно позже вывести детальный график платежей *@
                                     <p class="mb-0"><strong>Отдать подрядчикам:</strong> @(string.IsNullOrEmpty(item.Contractor) ? "Не выбрано" : item.Contractor)</p>
                                 </div>
                             </div>

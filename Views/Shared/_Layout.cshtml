@@ -24,17 +24,39 @@
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
     </environment>
+    <style>
+        .main-navbar .navbar-brand-icon {
+            font-size: 1.2rem;
+        }
+
+        .main-navbar .navbar-brand-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @@media (max-width: 768px) {
+            .main-navbar .navbar-brand-text {
+                display: none;
+            }
+        }
+
+        .main-navbar .nav-link {
+            padding-left: 0.55rem;
+            padding-right: 0.55rem;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 
 <body>
     @{ var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
        var currentAction = ViewContext.RouteData.Values["action"]?.ToString(); }
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm main-navbar">
+            <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fa-solid fa-screwdriver-wrench"></i>
-                    <span>DP_BurLida</span>
+                    <i class="fa-solid fa-screwdriver-wrench navbar-brand-icon"></i>
+                    <span class="navbar-brand-text">DP_BurLida</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,6 +94,11 @@
                             <li class="nav-item">
                                 <a class="nav-link@(currentController=="Statistics" ? " active fw-semibold" : "")" asp-area="" asp-controller="Statistics" asp-action="Index">
                                     <i class="fa-solid fa-chart-column me-1"></i> Статистика
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link@(currentController=="Installment" ? " active fw-semibold" : "")" asp-area="" asp-controller="Installment" asp-action="Index">
+                                    <i class="fa-solid fa-credit-card me-1"></i> Рассрочки
                                 </a>
                             </li>
                         }

@@ -212,12 +212,76 @@
                 <span asp-validation-for="PumpInstalled" class="text-danger"></span>
             </div>
 
-            <!-- 19.1. Итого за бурение скважины -->
-            <div class="form-group">
-                <label asp-for="TotalDrillingAmount" class="control-label">Итого за бурение скважины</label>
-                <input asp-for="TotalDrillingAmount" class="form-control" />
-                <span class="form-text text-muted">Необязательное текстовое поле.</span>
-                <span asp-validation-for="TotalDrillingAmount" class="text-danger"></span>
+            <!-- 19.1. Рассрочка на бурение -->
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" asp-for="IsDrillingInstallment" id="IsDrillingInstallment" />
+                <label class="form-check-label" for="IsDrillingInstallment">Рассрочка на бурение</label>
+            </div>
+            <div class="form-group mb-2">
+                <label asp-for="InstallmentEripNumber" class="control-label">Номер Е-РИП</label>
+                <input asp-for="InstallmentEripNumber" class="form-control" />
+                <span class="form-text text-muted">Если есть единый номер рассрочки, укажите его здесь.</span>
+                <span asp-validation-for="InstallmentEripNumber" class="text-danger"></span>
+            </div>
+            <div id="drilling-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
+                <div class="form-group">
+                    <label asp-for="DrillingFirstContribution" class="control-label">Первый взнос</label>
+                    <input asp-for="DrillingFirstContribution" type="number" min="0" class="form-control" />
+                    <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                    <span asp-validation-for="DrillingFirstContribution" class="text-danger"></span>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="DrillingFirstPayment" class="control-label">Первый платеж</label>
+                        <input asp-for="DrillingFirstPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                        <span asp-validation-for="DrillingFirstPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DrillingFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="DrillingFirstPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="DrillingFirstPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="DrillingSecondPayment" class="control-label">Второй платеж</label>
+                        <input asp-for="DrillingSecondPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="DrillingSecondPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DrillingSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="DrillingSecondPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="DrillingSecondPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="DrillingThirdPayment" class="control-label">Третий платеж</label>
+                        <input asp-for="DrillingThirdPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="DrillingThirdPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DrillingThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="DrillingThirdPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="DrillingThirdPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="DrillingFourthPayment" class="control-label">Четвёртый платеж</label>
+                        <input asp-for="DrillingFourthPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="DrillingFourthPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="DrillingFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="DrillingFourthPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="DrillingFourthPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <!-- 20. Дата обустройства -->
@@ -244,12 +308,71 @@
                 <span class="form-text text-muted">Необязательное поле.</span>
                 <span asp-validation-for="ArrangementDone" class="text-danger"></span>
             </div>
-            <!-- 22.1. Итого за обустройство -->
-            <div class="form-group">
-                <label asp-for="TotalArrangementAmount" class="control-label">Итого за обустройство</label>
-                <input asp-for="TotalArrangementAmount" class="form-control" />
-                <span class="form-text text-muted">Необязательное текстовое поле.</span>
-                <span asp-validation-for="TotalArrangementAmount" class="text-danger"></span>
+
+            <!-- 22.1. Рассрочка обустройства -->
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" asp-for="IsArrangementInstallment" id="IsArrangementInstallment" />
+                <label class="form-check-label" for="IsArrangementInstallment">Рассрочка обустройства</label>
+            </div>
+            <div id="arrangement-installment-fields" class="border rounded p-2 mb-2 bg-light" style="display:none;">
+                <div class="form-group">
+                    <label asp-for="ArrangementFirstContribution" class="control-label">Первый взнос</label>
+                    <input asp-for="ArrangementFirstContribution" type="number" min="0" class="form-control" />
+                    <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                    <span asp-validation-for="ArrangementFirstContribution" class="text-danger"></span>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementFirstPayment" class="control-label">Первый платеж</label>
+                        <input asp-for="ArrangementFirstPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Обязательное поле при рассрочке.</span>
+                        <span asp-validation-for="ArrangementFirstPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementFirstPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="ArrangementFirstPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="ArrangementFirstPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementSecondPayment" class="control-label">Второй платеж</label>
+                        <input asp-for="ArrangementSecondPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="ArrangementSecondPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementSecondPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="ArrangementSecondPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="ArrangementSecondPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementThirdPayment" class="control-label">Третий платеж</label>
+                        <input asp-for="ArrangementThirdPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="ArrangementThirdPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementThirdPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="ArrangementThirdPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="ArrangementThirdPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementFourthPayment" class="control-label">Четвёртый платеж</label>
+                        <input asp-for="ArrangementFourthPayment" type="number" min="0" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="ArrangementFourthPayment" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ArrangementFourthPaymentDueDate" class="control-label">До какого числа оплатить</label>
+                        <input asp-for="ArrangementFourthPaymentDueDate" type="date" class="form-control" />
+                        <span asp-validation-for="ArrangementFourthPaymentDueDate" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <!-- 23. Отдать подрядчикам -->
@@ -279,4 +402,22 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        (function () {
+            function toggleSection(checkboxId, sectionId) {
+                var checkbox = document.getElementById(checkboxId);
+                var section = document.getElementById(sectionId);
+                if (!checkbox || !section) return;
+                section.style.display = checkbox.checked ? 'block' : 'none';
+                checkbox.addEventListener('change', function () {
+                    section.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                toggleSection('IsDrillingInstallment', 'drilling-installment-fields');
+                toggleSection('IsArrangementInstallment', 'arrangement-installment-fields');
+            });
+        })();
+    </script>
 }

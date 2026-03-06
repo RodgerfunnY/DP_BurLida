@@ -9,268 +9,328 @@
 <div>
     <h4>Информация о заказе</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            Имя клиента
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NameClient)
-        </dd>
-        <dt class = "col-sm-2">
-            Телефон
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            Диаметр
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Diameter)
-        </dd>
-        <dt class = "col-sm-2">
-            Цена за метр
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PricePerMeter)
-        </dd>
-        <dt class = "col-sm-2">
-            Насос
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pump)
-        </dd>
-        <dt class = "col-sm-2">
-            Модель насоса
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PumpModel)
-        </dd>
-        <dt class = "col-sm-2">
-            Количество метров
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.MetersCount.HasValue)
-            {
-                @Model.MetersCount
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Статика
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.StaticLevel))
-            {
-                @Model.StaticLevel
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Динамика
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.DynamicLevel))
-            {
-                @Model.DynamicLevel
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Фильтр
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Filter))
-            {
-                @Model.Filter
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Обустройство
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Arrangement))
-            {
-                @Model.Arrangement
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Информация
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Info)
-        </dd>
-        <dt class = "col-sm-2">
-            Статус
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Status))
-            {
-                <span class="badge @(Model.Status switch {
-                    "Ожидание" => "bg-warning",
-                    "Бурение" => "bg-primary", 
-                    "Обустройство" => "bg-info",
-                    "Ремонт" => "bg-danger",
-                    "Завершен" => "bg-success",
-                    _ => "bg-secondary"
-                }) fs-6">@Model.Status</span>
-            }
-            else
-            {
-                <span class="text-muted">Не указан</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Чья бригада
-        </dt>
-        <dd class = "col-sm-10">
-            @(string.IsNullOrEmpty(Model.BrigadeStatus) ? "Не указано" : Model.BrigadeStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            Дата создания
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationTimeData)
-        </dd>
-        <dt class = "col-sm-2">
-            Кто создал
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.CreatedBy))
-            {
-                @Model.CreatedBy
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Дата бурения
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.WorkDate.HasValue)
-            {
-                @Model.WorkDate.Value.ToString("dd.MM.yyyy")
-            }
-            else
-            {
-                <span class="text-muted">Не назначена</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Дата обустройства
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.ArrangementDate.HasValue)
-            {
-                @Model.ArrangementDate.Value.ToString("dd.MM.yyyy")
-            }
-            else
-            {
-                <span class="text-muted">Не назначена</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Отдать подрядчикам
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Contractor))
-            {
-                @Model.Contractor
-            }
-            else
-            {
-                <span class="text-muted">Не выбрано</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Итого за бурение скважины
-        </dt>
-        <dd class = "col-sm-10">
-            @(string.IsNullOrEmpty(Model.TotalDrillingAmount) ? "Не указано" : Model.TotalDrillingAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            Итого за обустройство
-        </dt>
-        <dd class = "col-sm-10">
-            @(string.IsNullOrEmpty(Model.TotalArrangementAmount) ? "Не указано" : Model.TotalArrangementAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            Координаты
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Coordinates))
-            {
-                @Model.Coordinates
-            }
-            else
-            {
-                <span class="text-muted">Не указаны</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            Канализация
-        </dt>
-        <dd class = "col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Sewer))
-            {
-                @Model.Sewer
-            }
-            else
-            {
-                <span class="text-muted">Не указано</span>
-            }
-        </dd>
-        
-        <!-- Информация о бригадах -->
-        <dt class = "col-sm-2">
-            Бригада бурения
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.DrillingBrigade != null)
-            {
-                @($"{Model.DrillingBrigade.NameBrigade} (Ответственный: {Model.DrillingBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
-            }
-            else
-            {
-                <span class="text-muted">Не назначена</span>
-            }
-        </dd>
-        
-        <dt class = "col-sm-2">
-            Бригада обустройства
-        </dt>
-        <dd class = "col-sm-10">
-            @if (Model.ArrangementBrigade != null)
-            {
-                @($"{Model.ArrangementBrigade.NameBrigade} (Ответственный: {Model.ArrangementBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
-            }
-            else
-            {
-                <span class="text-muted">Не назначена</span>
-            }
-        </dd>
-    </dl>
+
+    <ul class="nav nav-tabs mb-3" id="orderDetailsTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="details-main-tab" data-bs-toggle="tab" data-bs-target="#details-main" type="button" role="tab" aria-controls="details-main" aria-selected="true">
+                Основная информация
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="details-drilling-tab" data-bs-toggle="tab" data-bs-target="#details-drilling" type="button" role="tab" aria-controls="details-drilling" aria-selected="false">
+                Бурение
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="details-arrangement-tab" data-bs-toggle="tab" data-bs-target="#details-arrangement" type="button" role="tab" aria-controls="details-arrangement" aria-selected="false">
+                Обустройство
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="details-installment-tab" data-bs-toggle="tab" data-bs-target="#details-installment" type="button" role="tab" aria-controls="details-installment" aria-selected="false">
+                Рассрочка
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="orderDetailsTabsContent">
+        <div class="tab-pane fade show active" id="details-main" role="tabpanel" aria-labelledby="details-main-tab">
+            <dl class="row">
+                <dt class = "col-sm-2">Имя клиента</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.NameClient)</dd>
+
+                <dt class = "col-sm-2">Телефон</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.Phone)</dd>
+
+                <dt class = "col-sm-2">Диаметр</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.Diameter)</dd>
+
+                <dt class = "col-sm-2">Цена за метр</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.PricePerMeter)</dd>
+
+                <dt class = "col-sm-2">Насос</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.Pump)</dd>
+
+                <dt class = "col-sm-2">Модель насоса</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.PumpModel)</dd>
+
+                <dt class = "col-sm-2">Обустройство</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Arrangement))
+                    {
+                        @Model.Arrangement
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Информация</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.Info)</dd>
+
+                <dt class = "col-sm-2">Дата создания</dt>
+                <dd class = "col-sm-10">@Html.DisplayFor(model => model.CreationTimeData)</dd>
+
+                <dt class = "col-sm-2">Кто создал</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.CreatedBy))
+                    {
+                        @Model.CreatedBy
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Координаты</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Coordinates))
+                    {
+                        @Model.Coordinates
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указаны</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Канализация</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Sewer))
+                    {
+                        @Model.Sewer
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+
+        <div class="tab-pane fade" id="details-drilling" role="tabpanel" aria-labelledby="details-drilling-tab">
+            <dl class="row">
+                <dt class = "col-sm-2">Статус</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Status))
+                    {
+                        <span class="badge @(Model.Status switch {
+                            "Ожидание" => "bg-warning",
+                            "Бурение" => "bg-primary", 
+                            "Обустройство" => "bg-info",
+                            "Ремонт" => "bg-danger",
+                            "Завершен" => "bg-success",
+                            _ => "bg-secondary"
+                        }) fs-6">@Model.Status</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указан</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Чья бригада</dt>
+                <dd class = "col-sm-10">@(string.IsNullOrEmpty(Model.BrigadeStatus) ? "Не указано" : Model.BrigadeStatus)</dd>
+
+                <dt class = "col-sm-2">Дата бурения</dt>
+                <dd class = "col-sm-10">
+                    @if (Model.WorkDate.HasValue)
+                    {
+                        @Model.WorkDate.Value.ToString("dd.MM.yyyy")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не назначена</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Количество метров</dt>
+                <dd class = "col-sm-10">
+                    @if (Model.MetersCount.HasValue)
+                    {
+                        @Model.MetersCount
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Статика</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.StaticLevel))
+                    {
+                        @Model.StaticLevel
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Динамика</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.DynamicLevel))
+                    {
+                        @Model.DynamicLevel
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Фильтр</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Filter))
+                    {
+                        @Model.Filter
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Бригада бурения</dt>
+                <dd class = "col-sm-10">
+                    @if (Model.DrillingBrigade != null)
+                    {
+                        @($"{Model.DrillingBrigade.NameBrigade} (Ответственный: {Model.DrillingBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не назначена</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+
+        <div class="tab-pane fade" id="details-arrangement" role="tabpanel" aria-labelledby="details-arrangement-tab">
+            <dl class="row">
+                <dt class = "col-sm-2">Дата обустройства</dt>
+                <dd class = "col-sm-10">
+                    @if (Model.ArrangementDate.HasValue)
+                    {
+                        @Model.ArrangementDate.Value.ToString("dd.MM.yyyy")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не назначена</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Бригада обустройства</dt>
+                <dd class = "col-sm-10">
+                    @if (Model.ArrangementBrigade != null)
+                    {
+                        @($"{Model.ArrangementBrigade.NameBrigade} (Ответственный: {Model.ArrangementBrigade.ResponsibleUser?.FullName ?? "Не назначен"})")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не назначена</span>
+                    }
+                </dd>
+
+                <dt class = "col-sm-2">Обустройство выполнено</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.ArrangementDone))
+                    {
+                        @Model.ArrangementDone
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+
+        <div class="tab-pane fade" id="details-installment" role="tabpanel" aria-labelledby="details-installment-tab">
+            <dl class="row">
+                <dt class = "col-sm-2">Итого за бурение скважины</dt>
+                <dd class = "col-sm-10">
+                    @(string.IsNullOrEmpty(Model.TotalDrillingAmount) ? "Не указано" : Model.TotalDrillingAmount)
+                </dd>
+
+                <dt class = "col-sm-2">Итого за обустройство</dt>
+                <dd class = "col-sm-10">
+                    @(string.IsNullOrEmpty(Model.TotalArrangementAmount) ? "Не указано" : Model.TotalArrangementAmount)
+                </dd>
+
+                <dt class = "col-sm-2">Номер Е-РИП</dt>
+                <dd class = "col-sm-10">
+                    @(string.IsNullOrEmpty(Model.InstallmentEripNumber) ? "Не указан" : Model.InstallmentEripNumber)
+                </dd>
+
+                <dt class = "col-sm-2">Первый взнос (бурение)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.DrillingFirstContribution?.ToString() ?? "Не указано")
+                </dd>
+
+                <dt class = "col-sm-2">Первый платеж (бурение)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.DrillingFirstPayment?.ToString() ?? "Не указано") /
+                    @(Model.DrillingFirstPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Второй платеж (бурение)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.DrillingSecondPayment?.ToString() ?? "Не указано") /
+                    @(Model.DrillingSecondPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Третий платеж (бурение)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.DrillingThirdPayment?.ToString() ?? "Не указано") /
+                    @(Model.DrillingThirdPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Четвёртый платеж (бурение)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.DrillingFourthPayment?.ToString() ?? "Не указано") /
+                    @(Model.DrillingFourthPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Первый взнос (обустройство)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.ArrangementFirstContribution?.ToString() ?? "Не указано")
+                </dd>
+
+                <dt class = "col-sm-2">Первый платеж (обустройство)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.ArrangementFirstPayment?.ToString() ?? "Не указано") /
+                    @(Model.ArrangementFirstPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Второй платеж (обустройство)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.ArrangementSecondPayment?.ToString() ?? "Не указано") /
+                    @(Model.ArrangementSecondPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Третий платеж (обустройство)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.ArrangementThirdPayment?.ToString() ?? "Не указано") /
+                    @(Model.ArrangementThirdPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+
+                <dt class = "col-sm-2">Четвёртый платеж (обустройство)</dt>
+                <dd class = "col-sm-10">
+                    @(Model.ArrangementFourthPayment?.ToString() ?? "Не указано") /
+                    @(Model.ArrangementFourthPaymentDueDate?.ToString("dd.MM.yyyy") ?? "дата не назначена")
+                </dd>
+            </dl>
+        </div>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning">Редактировать</a>
-    <a asp-action="Index" class="btn btn-primary">Вернуться к списку</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning me-2">
+        <i class="fas fa-pen me-1"></i> Редактировать
+    </a>
+    <a asp-action="Index" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-left me-1"></i> Вернуться к списку
+    </a>
 </div>

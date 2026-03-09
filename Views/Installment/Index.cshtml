@@ -38,12 +38,32 @@
                             <td>@item.Phone</td>
                             <td>@item.ClientName</td>
                             <td class="text-end fw-semibold">@item.TotalRemainingAmount</td>
-                            <td class="text-end">@item.CurrentPaymentAmount</td>
+                            <td class="text-end">
+                                @if (item.CurrentPaymentAmount > 0)
+                                {
+                                    @item.CurrentPaymentAmount
+                                }
+                                else
+                                {
+                                    @:—
+                                }
+                            </td>
                             <td>
                                 @(item.CurrentPaymentDueDate?.ToString("dd.MM.yyyy") ?? "Не назначена")
                             </td>
                             <td>@(string.IsNullOrEmpty(item.InstallmentEripNumber) ? "Не указан" : item.InstallmentEripNumber)</td>
                             <td class="text-nowrap installment-actions">
+                                @if (item.CurrentPaymentAmount > 0 && item.CurrentPaymentSlotKey != null)
+                                {
+                                    <form asp-action="MarkCurrentPaid" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="orderId" value="@item.OrderId" />
+                                        <input type="hidden" name="slotKey" value="@item.CurrentPaymentSlotKey" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success me-1" title="Отметить текущий платёж как оплаченный">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                }
                                 <a asp-controller="Order" asp-action="Edit" asp-route-id="@item.OrderId"
                                    class="btn btn-sm btn-outline-warning me-1" title="Редактировать">
                                     <i class="fas fa-pen"></i>

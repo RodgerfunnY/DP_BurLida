@@ -10,6 +10,7 @@ namespace DP_BurLida.Data
         public DbSet<UserModelData> UserModelData { get; set; }
         public DbSet<SkladModelData> SkladModelData { get; set; }
         public DbSet<OrderCommentModelData> OrderCommentModelData { get; set; }
+        public DbSet<OrderInstallmentPaymentStatus> OrderInstallmentPaymentStatus { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -111,6 +112,17 @@ namespace DP_BurLida.Data
                     .WithMany()
                     .HasForeignKey(e => e.OrderId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<OrderInstallmentPaymentStatus>(entity =>
+            {
+                entity.ToTable("OrderInstallmentPaymentStatus");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.SlotKey)
+                    .IsRequired()
+                    .HasMaxLength(50);
+                entity.HasIndex(e => new { e.OrderId, e.SlotKey })
+                    .IsUnique();
             });
 
         }

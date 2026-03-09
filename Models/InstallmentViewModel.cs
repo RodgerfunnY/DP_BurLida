@@ -12,6 +12,7 @@ namespace DP_BurLida.Models
         public decimal CurrentPaymentAmount { get; set; }
         public DateTime? CurrentPaymentDueDate { get; set; }
         public string? InstallmentEripNumber { get; set; }
+        public string? CurrentPaymentSlotKey { get; set; }
         public OrderModelData Order { get; set; }
     }
 

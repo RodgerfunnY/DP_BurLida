@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Детали заказа";
+    var comments = ViewBag.OrderComments as List<DP_BurLida.Data.ModelsData.OrderCommentModelData> ?? new List<DP_BurLida.Data.ModelsData.OrderCommentModelData>();
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}#details-comments";
 }
 
 <h1>Детали заказа</h1>
@@ -29,6 +31,11 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="details-installment-tab" data-bs-toggle="tab" data-bs-target="#details-installment" type="button" role="tab" aria-controls="details-installment" aria-selected="false">
                 Рассрочка
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="details-comments-tab" data-bs-toggle="tab" data-bs-target="#details-comments" type="button" role="tab" aria-controls="details-comments" aria-selected="false">
+                Комментарии
             </button>
         </li>
     </ul>
@@ -324,8 +331,88 @@
                 </dd>
             </dl>
         </div>
+
+        <div class="tab-pane fade" id="details-comments" role="tabpanel" aria-labelledby="details-comments-tab">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form asp-controller="OrderComment" asp-action="Create" method="post" class="mb-3">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="orderId" value="@Model.Id" />
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                        <div class="input-group">
+                            <input name="text" class="form-control" placeholder="Например: Набери заказчику уточни..." />
+                            <button class="btn btn-outline-primary" type="submit" title="Добавить">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="form-text text-muted mt-1">
+                            Можно добавлять неограниченное количество комментариев — они сохраняются отдельной таблицей.
+                        </div>
+                    </form>
+
+                    @if (comments.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var c in comments)
+                            {
+                                <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (c.IsDone)
+                                            {
+                                                <span class="badge bg-success">Выполнено</span>
+                                            }
+                                            <span class="small text-muted">
+                                                @(string.IsNullOrEmpty(c.CreatedBy) ? "—" : c.CreatedBy)
+                                                • @c.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                                            </span>
+                                        </div>
+                                        <div class="mt-1 @(c.IsDone ? "text-decoration-line-through text-muted" : "")">
+                                            @c.Text
+                                        </div>
+                                        @if (c.IsDone && c.DoneAt.HasValue)
+                                        {
+                                            <div class="small text-muted mt-1">Закрыто: @c.DoneAt.Value.ToString("dd.MM.yyyy HH:mm")</div>
+                                        }
+                                    </div>
+
+                                    <form asp-controller="OrderComment" asp-action="ToggleDone" method="post" class="ms-auto">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@c.Id" />
+                                        <input type="hidden" name="orderId" value="@Model.Id" />
+                                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                        <button class="btn btn-sm btn-outline-success" type="submit" title="Отметить выполнено / снять отметку">
+                                            <i class="fa-solid @(c.IsDone ? "fa-rotate-left" : "fa-check")"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">Комментариев пока нет.</div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hash = window.location.hash;
+            if (!hash) return;
+
+            const tabTrigger = document.querySelector('[data-bs-toggle="tab"][data-bs-target="' + hash + '"]');
+            if (!tabTrigger || !window.bootstrap) return;
+
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+        });
+    </script>
+}
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning me-2" title="Редактировать">
         <i class="fas fa-pen"></i>

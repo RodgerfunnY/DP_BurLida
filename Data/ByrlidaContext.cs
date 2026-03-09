@@ -9,6 +9,7 @@ namespace DP_BurLida.Data
         public DbSet<BrigadeModelData> BrigadeModelData { get; set; }
         public DbSet<UserModelData> UserModelData { get; set; }
         public DbSet<SkladModelData> SkladModelData { get; set; }
+        public DbSet<OrderCommentModelData> OrderCommentModelData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -91,6 +92,25 @@ namespace DP_BurLida.Data
                 .WithMany()
                 .HasForeignKey(e => e.ResponsibleUserId)
                 .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<OrderCommentModelData>(entity =>
+            {
+                entity.ToTable("OrderComment");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(255);
+                entity.HasIndex(e => e.OrderId);
+                entity.HasOne<OrderModelData>()
+                    .WithMany()
+                    .HasForeignKey(e => e.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
         }

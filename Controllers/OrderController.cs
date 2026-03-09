@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Linq;
+using DP_BurLida.Data;
 
 namespace DP_BurLida.Controllers
 {
@@ -15,12 +17,14 @@ namespace DP_BurLida.Controllers
         private readonly IOrderServices _orderService;
         private readonly IBrigadeServices _brigadeService;
         private readonly IUserServices _userService;
+        private readonly ByrlidaContext _context;
 
-        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService, IUserServices userService)
+        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService, IUserServices userService, ByrlidaContext context)
         {
             _orderService = orderService;
             _brigadeService = brigadeService;
             _userService = userService;
+            _context = context;
         }
 
         private async Task LoadBrigadesForView(int? drillingBrigadeId = null, int? arrangementBrigadeId = null)
@@ -62,7 +66,25 @@ namespace DP_BurLida.Controllers
             if (!await CanAccessOrder(order))
                 return Forbid();
 
+            ViewBag.OrderComments = await _context.OrderCommentModelData
+                .Where(c => c.OrderId == id)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+
             return View(order);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> QuickDetailsPartial(int id)
+        {
+            var order = await _orderService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+
+            if (!await CanAccessOrder(order))
+                return Forbid();
+
+            return PartialView("_OrderQuickDetailsPartial", order);
         }
 
         // GET: OrderController/Create

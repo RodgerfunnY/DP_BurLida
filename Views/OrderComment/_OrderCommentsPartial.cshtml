@@ -1,0 +1,58 @@
+@model DP_BurLida.Models.OrderCommentsPartialViewModel
+
+<form asp-controller="OrderComment" asp-action="Create" method="post" class="mb-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <div class="input-group">
+        <input name="text" class="form-control" placeholder="Например: Набери заказчику уточни..." />
+        <button class="btn btn-outline-primary" type="submit" title="Добавить">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+</form>
+
+@if (Model.Comments.Any())
+{
+    <div class="list-group">
+        @foreach (var c in Model.Comments)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2">
+                        @if (c.IsDone)
+                        {
+                            <span class="badge bg-success">Выполнено</span>
+                        }
+                        <span class="small text-muted">
+                            @(string.IsNullOrEmpty(c.CreatedBy) ? "—" : c.CreatedBy)
+                            • @c.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </span>
+                    </div>
+                    <div class="mt-1 @(c.IsDone ? "text-decoration-line-through text-muted" : "")">
+                        @c.Text
+                    </div>
+                    @if (c.IsDone && c.DoneAt.HasValue)
+                    {
+                        <div class="small text-muted mt-1">Закрыто: @c.DoneAt.Value.ToString("dd.MM.yyyy HH:mm")</div>
+                    }
+                </div>
+
+                <form asp-controller="OrderComment" asp-action="ToggleDone" method="post" class="ms-auto">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@c.Id" />
+                    <input type="hidden" name="orderId" value="@Model.OrderId" />
+                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                    <button class="btn btn-sm btn-outline-success" type="submit" title="Отметить выполнено / снять отметку">
+                        <i class="fas @(c.IsDone ? "fa-rotate-left" : "fa-check")"></i>
+                    </button>
+                </form>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-muted">Комментариев пока нет.</div>
+}
+

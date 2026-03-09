@@ -1,7 +1,9 @@
 using DP_BurLida.Data.ModelsData;
+using DP_BurLida.Data;
 using DP_BurLida.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
 
@@ -13,12 +15,14 @@ namespace DP_BurLida.Controllers
         private readonly IOrderServices _orderService;
         private readonly IUserServices _userService;
         private readonly IBrigadeServices _brigadeService;
+        private readonly ByrlidaContext _context;
 
-        public ArchiveController(IOrderServices orderService, IUserServices userService, IBrigadeServices brigadeService)
+        public ArchiveController(IOrderServices orderService, IUserServices userService, IBrigadeServices brigadeService, ByrlidaContext context)
         {
             _orderService = orderService;
             _userService = userService;
             _brigadeService = brigadeService;
+            _context = context;
         }
 
         public async Task<ActionResult> Index(string searchTerm)
@@ -57,6 +61,11 @@ namespace DP_BurLida.Controllers
             {
                 return Forbid();
             }
+
+            ViewBag.OrderComments = await _context.OrderCommentModelData
+                .Where(c => c.OrderId == id)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
 
             return View(order);
         }

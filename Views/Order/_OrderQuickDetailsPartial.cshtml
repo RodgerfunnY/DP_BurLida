@@ -1,0 +1,86 @@
+@model DP_BurLida.Data.ModelsData.OrderModelData
+
+<div class="row g-2">
+    <div class="col-12">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            @if (!string.IsNullOrEmpty(Model.Status))
+            {
+                <span class="badge @(Model.Status switch {
+                    "Ожидание" => "bg-warning",
+                    "Бурение" => "bg-primary",
+                    "Обустройство" => "bg-info",
+                    "Ремонт" => "bg-danger",
+                    "Завершен" => "bg-success",
+                    "Отдали подрядчикам" => "bg-dark",
+                    _ => "bg-secondary"
+                })">@Model.Status</span>
+            }
+            <span class="text-muted small">№ @Model.Id</span>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="fw-semibold">@Model.City</div>
+        @if (!string.IsNullOrWhiteSpace(Model.Info))
+        {
+            <div class="text-muted small">@Model.Info</div>
+        }
+    </div>
+
+    <div class="col-12">
+        <div class="d-flex flex-wrap gap-3 small">
+            <div><strong>Телефон:</strong> @Model.Phone</div>
+            <div><strong>Клиент:</strong> @Model.NameClient</div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="d-flex flex-wrap gap-3 small">
+            <div>
+                <strong>Насос:</strong>
+                @if (Model.Pump == 0)
+                {
+                    @:не нужен
+                }
+                else
+                {
+                    @($"{Model.Pump} руб")
+                }
+            </div>
+            <div>
+                <strong>Обустройство:</strong>
+                @(string.IsNullOrEmpty(Model.Arrangement) ? "Не указано" : Model.Arrangement)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="d-flex flex-wrap gap-3 small">
+            <div><strong>Дата бурения:</strong> @(Model.WorkDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</div>
+            <div><strong>Дата обустройства:</strong> @(Model.ArrangementDate?.ToString("dd.MM.yyyy") ?? "Не назначена")</div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="d-flex flex-wrap gap-3 small">
+            <div>
+                <strong>Бригада бурения:</strong>
+                @(Model.DrillingBrigade?.NameBrigade ?? "Не назначена")
+            </div>
+            <div>
+                <strong>Бригада обустройства:</strong>
+                @(Model.ArrangementBrigade?.NameBrigade ?? "Не назначена")
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Order" asp-action="Edit" asp-route-id="@Model.Id" title="Редактировать">
+            <i class="fas fa-pen"></i>
+        </a>
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="Order" asp-action="Details" asp-route-id="@Model.Id" title="Открыть карточку заявки">
+            <i class="fas fa-up-right-from-square"></i>
+        </a>
+    </div>
+</div>
+

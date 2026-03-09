@@ -150,6 +150,12 @@
                         <i class="fas fa-pen"></i>
                     </a>
                     <button type="button"
+                            class="btn btn-sm btn-outline-secondary me-1 order-toggle-comments"
+                            data-order-id="@item.Id"
+                            title="Комментарии">
+                        <i class="fas fa-comments"></i>
+                    </button>
+                    <button type="button"
                             class="btn btn-sm btn-outline-info me-1 order-toggle-details"
                             data-target="#order-details-@item.Id"
                             title="Показать подробности">
@@ -234,6 +240,18 @@
                     </div>
                 </td>
             </tr>
+
+            <tr class="order-comments-row collapse" id="order-comments-@item.Id">
+                <td colspan="8">
+                    <div class="card order-details-card mb-2">
+                        <div class="card-body">
+                            <div id="order-comments-content-@item.Id" data-loaded="0" class="small">
+                                <div class="text-muted">Загрузка...</div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -253,14 +271,62 @@
         document.addEventListener('DOMContentLoaded', function () {
             // Клик по иконке глаза
             document.querySelectorAll('.order-toggle-details').forEach(function (btn) {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function (e) {
                     // Не даём событию всплыть до строки, чтобы не было двойного переключения
-                    event.stopPropagation();
+                    e.stopPropagation();
                     var targetSelector = this.getAttribute('data-target');
                     var row = document.querySelector(targetSelector);
                     if (!row) return;
 
                     row.classList.toggle('show');
+                });
+            });
+
+            function loadComments(orderId) {
+                var content = document.getElementById('order-comments-content-' + orderId);
+                if (!content) return;
+                if (content.dataset.loaded === '1') return;
+
+                content.innerHTML = '<div class="text-muted">Загрузка...</div>';
+                var hash = '#archive-order-' + orderId + '-comments';
+                var returnUrl = window.location.pathname + window.location.search + hash;
+
+                fetch('@Url.Action("ListPartial", "OrderComment")' + '?orderId=' + orderId + '&returnUrl=' + encodeURIComponent(returnUrl), {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                    .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+                    .then(function (html) {
+                        content.innerHTML = html;
+                        content.dataset.loaded = '1';
+                        var input = content.querySelector('input[name="text"]');
+                        if (input) input.focus();
+                    })
+                    .catch(function () {
+                        content.innerHTML = '<div class="text-danger">Не удалось загрузить комментарии.</div>';
+                    });
+            }
+
+            function toggleComments(orderId, forceShow) {
+                var row = document.getElementById('order-comments-' + orderId);
+                if (!row) return;
+
+                var willShow = (typeof forceShow === 'boolean') ? forceShow : !row.classList.contains('show');
+                if (willShow) {
+                    row.classList.add('show');
+                    window.location.hash = 'archive-order-' + orderId + '-comments';
+                    loadComments(orderId);
+                } else {
+                    row.classList.remove('show');
+                }
+            }
+
+            // Клик по иконке комментариев
+            document.querySelectorAll('.order-toggle-comments').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var orderId = this.getAttribute('data-order-id');
+                    if (!orderId) return;
+                    toggleComments(orderId);
                 });
             });
 
@@ -280,6 +346,13 @@
                     detailsRow.classList.toggle('show');
                 });
             });
+
+            if (window.location.hash) {
+                var m = window.location.hash.match(/^#archive-order-(\d+)-comments$/);
+                if (m) {
+                    toggleComments(m[1], true);
+                }
+            }
         });
     </script>
 }

@@ -61,6 +61,28 @@
             max-width: 110px;          /* показываем часть адреса, даже если ячейка шире */
             box-sizing: border-box;
         }
+
+        .unscheduled-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .unscheduled-card-actions {
+            display: inline-flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .unscheduled-card-actions .btn {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
     <div class="row">
         <div class="col-md-9">
@@ -194,7 +216,27 @@
                              draggable="true"
                              data-order-id="@order.Id"
                              title="@order.Info @(string.IsNullOrEmpty(order.City) ? "" : " - " + order.City)">
-                            <div class="fw-semibold">@order.Info</div>
+                            <div class="unscheduled-card-header">
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">@order.Info</div>
+                                </div>
+                                <div class="unscheduled-card-actions" draggable="false">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary unscheduled-open-details"
+                                            data-order-id="@order.Id"
+                                            title="Подробности"
+                                            draggable="false">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary unscheduled-open-comments"
+                                            data-order-id="@order.Id"
+                                            title="Комментарии"
+                                            draggable="false">
+                                        <i class="fas fa-comments"></i>
+                                    </button>
+                                </div>
+                            </div>
                             @if (!string.IsNullOrEmpty(order.City))
                             {
                                 <div class="text-muted small">@order.City</div>
@@ -213,6 +255,45 @@
                                     })">@order.Status</span>
                                 </div>
                             }
+                        </div>
+
+                        <div class="collapse mb-2" id="unscheduled-collapse-@order.Id" data-order-id="@order.Id">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-2">
+                                    <ul class="nav nav-pills mb-2" id="unscheduled-tabs-@order.Id" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active py-1 px-2"
+                                                    id="unscheduled-details-tab-@order.Id"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#unscheduled-details-@order.Id"
+                                                    type="button" role="tab"
+                                                    aria-controls="unscheduled-details-@order.Id"
+                                                    aria-selected="true">
+                                                Подробности
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link py-1 px-2"
+                                                    id="unscheduled-comments-tab-@order.Id"
+                                                    data-bs-toggle="tab"
+                                                    data-bs-target="#unscheduled-comments-@order.Id"
+                                                    type="button" role="tab"
+                                                    aria-controls="unscheduled-comments-@order.Id"
+                                                    aria-selected="false">
+                                                Комментарии
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="unscheduled-details-@order.Id" role="tabpanel" aria-labelledby="unscheduled-details-tab-@order.Id">
+                                            <div class="text-muted small">Нажми “Подробности” чтобы загрузить.</div>
+                                        </div>
+                                        <div class="tab-pane fade" id="unscheduled-comments-@order.Id" role="tabpanel" aria-labelledby="unscheduled-comments-tab-@order.Id">
+                                            <div class="text-muted small">Нажми “Комментарии” чтобы загрузить.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -248,9 +329,14 @@
 
             // Drag & Drop заявок на календарь
             var draggedOrderId = null;
+            var draggedFromCard = false;
 
             $('.order-card-draggable').on('dragstart', function (e) {
                 draggedOrderId = $(this).data('order-id');
+                draggedFromCard = true;
+            });
+            $('.order-card-draggable').on('dragend', function () {
+                setTimeout(function () { draggedFromCard = false; }, 0);
             });
 
             $('.calendar-day').on('dragover', function (e) {
@@ -282,6 +368,92 @@
                         alert('Не удалось сохранить дату.');
                     });
             });
+
+            function ensureCollapseShown(orderId) {
+                var el = document.getElementById('unscheduled-collapse-' + orderId);
+                if (!el || !window.bootstrap) return null;
+                var c = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+                c.show();
+                return el;
+            }
+
+            function showTab(orderId, tabName) {
+                if (!window.bootstrap) return;
+                var targetId = (tabName === 'comments')
+                    ? '#unscheduled-comments-' + orderId
+                    : '#unscheduled-details-' + orderId;
+                var trigger = document.querySelector('[data-bs-toggle="tab"][data-bs-target="' + targetId + '"]');
+                if (!trigger) return;
+                var tab = new bootstrap.Tab(trigger);
+                tab.show();
+            }
+
+            function loadDetails(orderId) {
+                var container = document.getElementById('unscheduled-details-' + orderId);
+                if (!container) return;
+                if (container.dataset.loaded === '1') return;
+                container.innerHTML = '<div class="text-muted small">Загрузка...</div>';
+                fetch('@Url.Action("QuickDetailsPartial", "Order")' + '?id=' + orderId, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+                    .then(function (html) { container.innerHTML = html; container.dataset.loaded = '1'; })
+                    .catch(function () { container.innerHTML = '<div class="text-danger small">Не удалось загрузить подробности.</div>'; });
+            }
+
+            function loadComments(orderId, returnHash) {
+                var container = document.getElementById('unscheduled-comments-' + orderId);
+                if (!container) return;
+                if (container.dataset.loaded === '1') return;
+                container.innerHTML = '<div class="text-muted small">Загрузка...</div>';
+                var returnUrl = window.location.pathname + window.location.search + returnHash;
+                fetch('@Url.Action("ListPartial", "OrderComment")' + '?orderId=' + orderId + '&returnUrl=' + encodeURIComponent(returnUrl), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+                    .then(function (html) { container.innerHTML = html; container.dataset.loaded = '1'; })
+                    .catch(function () { container.innerHTML = '<div class="text-danger small">Не удалось загрузить комментарии.</div>'; });
+            }
+
+            function openUnscheduled(orderId, tabName) {
+                ensureCollapseShown(orderId);
+                showTab(orderId, tabName);
+                if (tabName === 'comments') {
+                    var hash = '#unscheduled-' + orderId + '-comments';
+                    loadComments(orderId, hash);
+                    window.location.hash = hash;
+                } else {
+                    var hash2 = '#unscheduled-' + orderId + '-details';
+                    loadDetails(orderId);
+                    window.location.hash = hash2;
+                }
+            }
+
+            $('.unscheduled-open-details').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var orderId = $(this).data('order-id');
+                openUnscheduled(orderId, 'details');
+            });
+
+            $('.unscheduled-open-comments').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var orderId = $(this).data('order-id');
+                openUnscheduled(orderId, 'comments');
+            });
+
+            $('.order-card-draggable').on('click', function (e) {
+                if (draggedFromCard) return;
+                if ($(e.target).closest('.unscheduled-card-actions').length) return;
+                var orderId = $(this).data('order-id');
+                openUnscheduled(orderId, 'details');
+            });
+
+            if (window.location.hash && window.location.hash.startsWith('#unscheduled-')) {
+                var m = window.location.hash.match(/^#unscheduled-(\d+)-(details|comments)$/);
+                if (m) {
+                    var orderId = parseInt(m[1]);
+                    var tab = m[2];
+                    openUnscheduled(orderId, tab);
+                }
+            }
         });
     </script>
 }

@@ -16,6 +16,8 @@
         <tr>
             <th>Название бригады</th>
             <th>Техника бригады</th>
+            <th>Водитель</th>
+            <th>Помощник бурового мастера</th>
             <th>Ответственный</th>
             <th>Доп. информация</th>
             <th></th>
@@ -26,6 +28,8 @@
         <tr>
             <td>@Html.DisplayFor(modelItem => item.NameBrigade)</td>
             <td>@Html.DisplayFor(modelItem => item.Technic)</td>
+            <td>@(string.IsNullOrEmpty(item.Driver) ? "-" : item.Driver)</td>
+            <td>@(string.IsNullOrEmpty(item.DrillingMasterAssistant) ? "-" : item.DrillingMasterAssistant)</td>
             <td>
                 @if (item.ResponsibleUser != null)
                 {

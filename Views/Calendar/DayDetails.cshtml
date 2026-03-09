@@ -15,8 +15,8 @@
                     <h2>Работы на @selectedDate?.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU"))</h2>
                     <p class="text-muted">Заказы с назначенной датой выполнения работ</p>
                 </div>
-                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-1"></i> Назад к календарю
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary" title="Назад к календарю">
+                    <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
 
@@ -122,8 +122,8 @@
                                     </p>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-outline-info btn-sm">
-                                        <i class="fas fa-eye me-1"></i> Подробнее
+                                    <a href="@Url.Action("Details", "Order", new { id = order.Id })" class="btn btn-outline-info btn-sm" title="Подробнее">
+                                        <i class="fas fa-eye"></i>
                                     </a>
                                 </div>
                             </div>

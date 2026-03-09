@@ -8,8 +8,8 @@
 <h1>Сотрудники</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-success">
-        <i class="fas fa-user-plus me-1"></i> Добавить нового
+    <a asp-action="Create" class="btn btn-outline-success" title="Добавить сотрудника">
+        <i class="fas fa-user-plus"></i>
     </a>
 </p>
 <table class="table table-striped">
@@ -58,14 +58,14 @@
                 @(item.IsApproved ? "Да" : "Нет")
             </td>
             <td class="text-nowrap">
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1">
-                    <i class="fas fa-pen me-1"></i> Редактировать
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1" title="Редактировать">
+                    <i class="fas fa-pen"></i>
                 </a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
-                    <i class="fas fa-eye me-1"></i> Подробности
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1" title="Подробности">
+                    <i class="fas fa-eye"></i>
                 </a>
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
-                    <i class="fas fa-trash me-1"></i> Удалить
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Удалить">
+                    <i class="fas fa-trash"></i>
                 </a>
             </td>
         </tr>

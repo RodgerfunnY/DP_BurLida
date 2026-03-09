@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace DP_BurLida.Data.ModelsData
 {
@@ -12,6 +12,14 @@ namespace DP_BurLida.Data.ModelsData
         public string Technic { get; set; }
         
         public string Info { get; set; }
+
+        /// <summary>Водитель (необязательное поле).</summary>
+        [MaxLength(200)]
+        public string? Driver { get; set; }
+
+        /// <summary>Помощник бурового мастера (необязательное поле).</summary>
+        [MaxLength(200)]
+        public string? DrillingMasterAssistant { get; set; }
         
         public int? ResponsibleUserId { get; set; }
         

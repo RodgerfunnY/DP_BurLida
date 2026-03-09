@@ -29,6 +29,18 @@
             @Html.DisplayFor(model => model.Info)
         </dd>
         <dt class="col-sm-2">
+            Водитель
+        </dt>
+        <dd class="col-sm-10">
+            @(string.IsNullOrEmpty(Model.Driver) ? "Не указан" : Model.Driver)
+        </dd>
+        <dt class="col-sm-2">
+            Помощник бурового мастера
+        </dt>
+        <dd class="col-sm-10">
+            @(string.IsNullOrEmpty(Model.DrillingMasterAssistant) ? "Не указан" : Model.DrillingMasterAssistant)
+        </dd>
+        <dt class="col-sm-2">
             Ответственный сотрудник
         </dt>
         <dd class="col-sm-10">

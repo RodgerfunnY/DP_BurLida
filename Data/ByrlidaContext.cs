@@ -83,6 +83,10 @@ namespace DP_BurLida.Data
                 .HasMaxLength(200);
                 entity.Property(e => e.Info)
                 .HasMaxLength(500);
+                entity.Property(e => e.Driver)
+                .HasMaxLength(200);
+                entity.Property(e => e.DrillingMasterAssistant)
+                .HasMaxLength(200);
                 entity.HasOne(e => e.ResponsibleUser)
                 .WithMany()
                 .HasForeignKey(e => e.ResponsibleUserId)

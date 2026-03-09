@@ -160,7 +160,7 @@ namespace DP_BurLida.Data.ModelsData
 
         public int? DrillingBrigadeId { get; set; }
         public int? ArrangementBrigadeId { get; set; }
-        
+
         [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         [System.ComponentModel.DataAnnotations.ScaffoldColumn(false)]
         public BrigadeModelData DrillingBrigade { get; set; }

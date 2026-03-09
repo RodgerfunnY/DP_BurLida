@@ -45,16 +45,16 @@
                             <td>@(string.IsNullOrEmpty(item.InstallmentEripNumber) ? "Не указан" : item.InstallmentEripNumber)</td>
                             <td class="text-nowrap installment-actions">
                                 <a asp-controller="Order" asp-action="Edit" asp-route-id="@item.OrderId"
-                                   class="btn btn-sm btn-outline-warning me-1">
-                                    <i class="fas fa-pen me-1"></i> Редактировать
+                                   class="btn btn-sm btn-outline-warning me-1" title="Редактировать">
+                                    <i class="fas fa-pen"></i>
                                 </a>
                                 <a asp-controller="Order" asp-action="Details" asp-route-id="@item.OrderId"
-                                   class="btn btn-sm btn-outline-info me-1">
-                                    <i class="fas fa-eye me-1"></i> Подробности
+                                   class="btn btn-sm btn-outline-info me-1" title="Подробности">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                                 <a asp-controller="Order" asp-action="Delete" asp-route-id="@item.OrderId"
-                                   class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash me-1"></i> Удалить
+                                   class="btn btn-sm btn-outline-danger" title="Удалить">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>

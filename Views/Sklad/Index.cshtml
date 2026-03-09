@@ -9,8 +9,8 @@
 
 <div class="row mb-3">
     <div class="col-md-6">
-        <a asp-action="Create" class="btn btn-outline-success">
-            <i class="fas fa-plus me-1"></i> Добавить предмет
+        <a asp-action="Create" class="btn btn-outline-success" title="Добавить предмет">
+            <i class="fas fa-plus"></i>
         </a>
     </div>
     <div class="col-md-6">
@@ -23,13 +23,13 @@
                         <option value="@category" selected="@(ViewBag.SelectedCategory == category)">@category</option>
                     }
                 </select>
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="fas fa-filter me-1"></i> Фильтр
+                <button type="submit" class="btn btn-outline-primary" title="Фильтр">
+                    <i class="fas fa-filter"></i>
                 </button>
                 @if (!string.IsNullOrEmpty(ViewBag.SelectedCategory as string))
                 {
-                    <a asp-action="Index" class="btn btn-outline-secondary">
-                        <i class="fas fa-times me-1"></i> Очистить
+                    <a asp-action="Index" class="btn btn-outline-secondary" title="Очистить">
+                        <i class="fas fa-times"></i>
                     </a>
                 }
             </div>
@@ -101,14 +101,14 @@
                     @Html.DisplayFor(modelItem => item.Info)
                 </td>
                 <td class="text-nowrap">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1">
-                        <i class="fas fa-pen me-1"></i> Редактировать
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1" title="Редактировать">
+                        <i class="fas fa-pen"></i>
                     </a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
-                        <i class="fas fa-eye me-1"></i> Подробности
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1" title="Подробности">
+                        <i class="fas fa-eye"></i>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
-                        <i class="fas fa-trash me-1"></i> Удалить
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Удалить">
+                        <i class="fas fa-trash"></i>
                     </a>
                 </td>
             </tr>

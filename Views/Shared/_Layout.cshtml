@@ -217,6 +217,12 @@
                         <span>Календарь</span>
                     </a>
                 </li>
+                <li>
+                    <a class="nav-link@(currentController=="Notification" ? " active" : "")" asp-area="" asp-controller="Notification" asp-action="Index">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Уведомления</span>
+                    </a>
+                </li>
                 @if (User.IsInRole("Admin") || User.IsInRole("Director"))
                 {
                     <li>

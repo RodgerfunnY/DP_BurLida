@@ -1,0 +1,61 @@
+@model List<DP_BurLida.Data.ModelsData.NotificationModelData>
+
+@{
+    ViewData["Title"] = "Уведомления";
+}
+
+<div class="content-card">
+    <h1>Уведомления</h1>
+    <p class="text-muted">Здесь показываются уведомления для вашего аккаунта (новые заявки и другие события).</p>
+
+    @if (Model.Any())
+    {
+        <form asp-action="MarkAllAsRead" method="post" class="mb-3">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-check-double"></i> Отметить всё прочитанным
+            </button>
+        </form>
+
+        <div class="list-group">
+            @foreach (var n in Model)
+            {
+                <div class="list-group-item d-flex justify-content-between align-items-start @(n.IsRead ? "" : "bg-light")">
+                    <div class="me-3">
+                        <div class="fw-semibold">
+                            @n.Message
+                        </div>
+                        <div class="small text-muted">
+                            @n.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                            @if (n.OrderId.HasValue)
+                            {
+                                <span class="ms-2">
+                                    <a asp-controller="Order" asp-action="Details" asp-route-id="@n.OrderId.Value" class="link-secondary">
+                                        открыть заявку
+                                    </a>
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    @if (!n.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" method="post" class="ms-auto">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@n.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-success" title="Отметить прочитанным">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </form>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Новых уведомлений нет.
+        </div>
+    }
+</div>
+

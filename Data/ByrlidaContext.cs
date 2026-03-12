@@ -11,6 +11,7 @@ namespace DP_BurLida.Data
         public DbSet<SkladModelData> SkladModelData { get; set; }
         public DbSet<OrderCommentModelData> OrderCommentModelData { get; set; }
         public DbSet<OrderInstallmentPaymentStatus> OrderInstallmentPaymentStatus { get; set; }
+        public DbSet<NotificationModelData> NotificationModelData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -123,6 +124,23 @@ namespace DP_BurLida.Data
                     .HasMaxLength(50);
                 entity.HasIndex(e => new { e.OrderId, e.SlotKey })
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<NotificationModelData>(entity =>
+            {
+                entity.ToTable("Notification");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Message)
+                    .IsRequired()
+                    .HasMaxLength(500);
+                entity.Property(e => e.RecipientEmail)
+                    .IsRequired()
+                    .HasMaxLength(255);
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("GETDATE()");
+                entity.HasIndex(e => new { e.RecipientEmail, e.IsRead });
+                entity.HasIndex(e => e.OrderId);
             });
 
         }

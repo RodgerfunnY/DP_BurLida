@@ -4,8 +4,11 @@ using DP_BurLida.Services.Implementations;
 using DP_BurLida.Services.Interfaces;
 using DP_BurLida.Services.InterfacesServics;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace DP_BurLida
 {
@@ -33,8 +36,15 @@ namespace DP_BurLida
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
             
-            // Настройка Cookie Authentication
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            // Auth:
+            // - Cookies остаются для MVC (ПК/браузер).
+            // - JWT используется для /api (мобильное приложение).
+            builder.Services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                })
                 .AddCookie(options =>
                 {
                     options.LoginPath = "/Account/Login";
@@ -42,7 +52,36 @@ namespace DP_BurLida
                     options.AccessDeniedPath = "/Account/Login";
                     options.ExpireTimeSpan = TimeSpan.FromDays(7);
                     options.SlidingExpiration = true;
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    var jwtKey = builder.Configuration["Jwt:Key"];
+                    var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+                    var jwtAudience = builder.Configuration["Jwt:Audience"];
+
+                    if (string.IsNullOrWhiteSpace(jwtKey))
+                    {
+                        throw new InvalidOperationException("JWT key is not configured. Set configuration value 'Jwt:Key'.");
+                    }
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                        ValidateIssuer = !string.IsNullOrWhiteSpace(jwtIssuer),
+                        ValidIssuer = jwtIssuer,
+                        ValidateAudience = !string.IsNullOrWhiteSpace(jwtAudience),
+                        ValidAudience = jwtAudience,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(2)
+                    };
                 });
+
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddScoped<Services.Interfaces.ITokenService, Services.Implementations.TokenService>();
+            builder.Services.AddScoped<Services.Interfaces.IPushNotificationService, Services.Implementations.FcmPushNotificationService>();
+            builder.Services.AddScoped<Services.Interfaces.INotificationService, Services.Implementations.NotificationService>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<IBrigadeServices, BrigadeServices>();

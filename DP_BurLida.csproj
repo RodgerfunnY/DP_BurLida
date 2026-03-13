@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="GMap.NET.Core" Version="2.1.7" />
+    <PackageReference Include="FirebaseAdmin" Version="3.2.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.7" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />

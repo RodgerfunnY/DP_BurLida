@@ -273,3 +273,23 @@ table.table tbody tr:hover {
     font-size: 12px;
   }
 }
+
+/* Общая мобильная адаптация */
+@media (max-width: 576px) {
+  .content-card {
+    padding: 0.75rem;
+    box-shadow: 0 2px 8px rgba(18, 38, 63, 0.06);
+  }
+
+  .page-section {
+    padding: 0.75rem;
+  }
+
+  table.table {
+    font-size: 0.85rem;
+  }
+
+  .card-body {
+    padding: 0.9rem;
+  }
+}

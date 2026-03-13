@@ -17,13 +17,20 @@ namespace DP_BurLida.Controllers
         private readonly IOrderServices _orderService;
         private readonly IBrigadeServices _brigadeService;
         private readonly IUserServices _userService;
+        private readonly INotificationService _notificationService;
         private readonly ByrlidaContext _context;
 
-        public OrderController(IOrderServices orderService, IBrigadeServices brigadeService, IUserServices userService, ByrlidaContext context)
+        public OrderController(
+            IOrderServices orderService,
+            IBrigadeServices brigadeService,
+            IUserServices userService,
+            INotificationService notificationService,
+            ByrlidaContext context)
         {
             _orderService = orderService;
             _brigadeService = brigadeService;
             _userService = userService;
+            _notificationService = notificationService;
             _context = context;
         }
 
@@ -121,46 +128,9 @@ namespace DP_BurLida.Controllers
             var createdOrder = await _orderService.CreateAsync(model);
 
             // Создаём уведомления о новой заявке для администратора и директора
-            await CreateNewOrderNotifications(createdOrder);
+            await _notificationService.CreateNewOrderNotificationsAsync(createdOrder);
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private async Task CreateNewOrderNotifications(OrderModelData order)
-        {
-            try
-            {
-                var allUsers = await _userService.GetAllAsync();
-                var recipients = allUsers
-                    .Where(u => u.IsApproved &&
-                                (u.Role == "Admin" || u.Role == "Director" || u.Role == "Manager"))
-                    .Where(u => !string.IsNullOrWhiteSpace(u.Email))
-                    .ToList();
-
-                if (!recipients.Any())
-                    return;
-
-                var list = new List<NotificationModelData>();
-                foreach (var user in recipients)
-                {
-                    var msg = $"Создана новая заявка: {order.City} — {order.NameClient}, телефон {order.Phone}";
-                    list.Add(new NotificationModelData
-                    {
-                        OrderId = order.Id,
-                        Message = msg,
-                        RecipientEmail = user.Email,
-                        IsRead = false,
-                        CreatedAt = DateTime.Now
-                    });
-                }
-
-                _context.NotificationModelData.AddRange(list);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                // Уведомления не должны ломать создание заявки
-            }
         }
         
         /// <summary>

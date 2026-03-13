@@ -12,6 +12,7 @@ namespace DP_BurLida.Data
         public DbSet<OrderCommentModelData> OrderCommentModelData { get; set; }
         public DbSet<OrderInstallmentPaymentStatus> OrderInstallmentPaymentStatus { get; set; }
         public DbSet<NotificationModelData> NotificationModelData { get; set; }
+        public DbSet<DeviceTokenModelData> DeviceTokenModelData { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderModelData>(entity =>
@@ -141,6 +142,29 @@ namespace DP_BurLida.Data
                     .HasDefaultValueSql("GETDATE()");
                 entity.HasIndex(e => new { e.RecipientEmail, e.IsRead });
                 entity.HasIndex(e => e.OrderId);
+            });
+
+            modelBuilder.Entity<DeviceTokenModelData>(entity =>
+            {
+                entity.ToTable("DeviceToken");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.UserEmail)
+                    .IsRequired()
+                    .HasMaxLength(255);
+                entity.Property(e => e.Token)
+                    .IsRequired()
+                    .HasMaxLength(2048);
+                entity.Property(e => e.Platform)
+                    .IsRequired()
+                    .HasMaxLength(50);
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.UpdatedAt)
+                    .IsRequired()
+                    .HasDefaultValueSql("GETDATE()");
+                entity.HasIndex(e => new { e.UserEmail, e.Platform });
+                entity.HasIndex(e => e.Token).IsUnique();
             });
 
         }

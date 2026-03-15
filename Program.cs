@@ -90,6 +90,38 @@ namespace DP_BurLida
             builder.Services.AddScoped(typeof(ICrudServices<>), typeof(CrudServices<>));
             var app = builder.Build();
 
+            // Применение миграций при старте с повторами (Supabase pooler может быть недоступен первые секунды)
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                const int maxAttempts = 5;
+                const int delaySeconds = 5;
+                for (int attempt = 1; attempt <= maxAttempts; attempt++)
+                {
+                    try
+                    {
+                        if (attempt > 1)
+                        {
+                            logger.LogInformation("Повтор подключения к БД (попытка {Attempt}/{Max})...", attempt, maxAttempts);
+                            Thread.Sleep(TimeSpan.FromSeconds(delaySeconds));
+                        }
+                        var byrlidaContext = services.GetRequiredService<ByrlidaContext>();
+                        byrlidaContext.Database.Migrate();
+                        var appDbContext = services.GetRequiredService<ApplicationDbContext>();
+                        appDbContext.Database.Migrate();
+                        logger.LogInformation("Миграции к базе данных применены успешно.");
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogWarning(ex, "Ошибка при применении миграций (попытка {Attempt}/{Max}).", attempt, maxAttempts);
+                        if (attempt == maxAttempts)
+                            logger.LogError("Не удалось подключиться к БД после {Max} попыток.", maxAttempts);
+                    }
+                }
+            }
+
             // Автоматическое создание администратора при первом запуске
             using (var scope = app.Services.CreateScope())
             {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 
 namespace DP_BurLida
@@ -20,10 +21,10 @@ namespace DP_BurLida
 
             builder.Services.AddControllersWithViews();
 
-            // Одна база данных для доменной модели и Identity
+            // Одна база данных для доменной модели и Identity (PostgreSQL / Supabase)
             var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ByrlidaContext>(options => options.UseSqlServer(defaultConnection));
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));
+            builder.Services.AddDbContext<ByrlidaContext>(options => options.UseNpgsql(defaultConnection));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(defaultConnection));
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;

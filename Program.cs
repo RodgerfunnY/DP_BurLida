@@ -28,6 +28,19 @@ namespace DP_BurLida
             {
                 throw new InvalidOperationException("ConnectionStrings:DefaultConnection is empty or not configured.");
             }
+
+            // Cloud Run env values / UI forms sometimes wrap the whole value in quotes
+            // or leave a trailing comma. Strip only the outer noise to keep it valid.
+            defaultConnection = defaultConnection.Trim();
+            if (defaultConnection.Length >= 2)
+            {
+                var first = defaultConnection[0];
+                var last = defaultConnection[^1];
+                if ((first == '"' && last == '"') || (first == '\'' && last == '\''))
+                    defaultConnection = defaultConnection.Substring(1, defaultConnection.Length - 2).Trim();
+            }
+            defaultConnection = defaultConnection.TrimEnd().TrimEnd(',');
+
             try
             {
                 // Validate connection string format early.
@@ -41,7 +54,24 @@ namespace DP_BurLida
                     @"(?i)(Password\s*=\s*)[^;]*",
                     "$1***"
                 );
-                throw new InvalidOperationException($"Invalid SQL connection string format. Sanitized='{sanitized}'", ex);
+                // Help debug formatting issues (quotes/commas/newlines) without leaking the password.
+                var escaped = sanitized
+                    .Replace("\r", "\\r")
+                    .Replace("\n", "\\n")
+                    .Replace("\t", "\\t");
+
+                var startsWithQuote = defaultConnection.TrimStart().StartsWith("\"", StringComparison.Ordinal);
+                var endsWithQuote = defaultConnection.TrimEnd().EndsWith("\"", StringComparison.Ordinal);
+                var endsWithComma = defaultConnection.TrimEnd().EndsWith(",", StringComparison.Ordinal);
+
+                var lastChunk = escaped.Length > 60 ? escaped.Substring(escaped.Length - 60) : escaped;
+
+                throw new InvalidOperationException(
+                    "Invalid SQL connection string format. " +
+                    $"StartsWithQuote={startsWithQuote};EndsWithQuote={endsWithQuote};EndsWithComma={endsWithComma};" +
+                    $"SanitizedLast60='{lastChunk}'",
+                    ex
+                );
             }
             builder.Services.AddDbContext<ByrlidaContext>(options => options.UseSqlServer(defaultConnection));
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));

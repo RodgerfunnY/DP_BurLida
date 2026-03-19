@@ -22,7 +22,7 @@ images:
         --region $_REGION \
         --allow-unauthenticated \
         --port 8080 \
-        --set-env-vars ASPNETCORE_ENVIRONMENT=Production,ConnectionStrings__DefaultConnection="$_DB_MAIN",ConnectionStrings__DefaultConnections="$_DB_AUTH"
+        --set-env-vars "ASPNETCORE_ENVIRONMENT=Production,ConnectionStrings__DefaultConnection=$_DB_MAIN"
 
 substitutions:
   _REGION: europe-central2

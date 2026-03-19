@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 using System.Text;
 
 namespace DP_BurLida
@@ -22,6 +24,25 @@ namespace DP_BurLida
 
             // Одна база данных для доменной модели и Identity
             var defaultConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrWhiteSpace(defaultConnection))
+            {
+                throw new InvalidOperationException("ConnectionStrings:DefaultConnection is empty or not configured.");
+            }
+            try
+            {
+                // Validate connection string format early.
+                _ = new SqlConnectionStringBuilder(defaultConnection);
+            }
+            catch (Exception ex)
+            {
+                // Do not leak password to logs.
+                var sanitized = Regex.Replace(
+                    defaultConnection,
+                    @"(?i)(Password\s*=\s*)[^;]*",
+                    "$1***"
+                );
+                throw new InvalidOperationException($"Invalid SQL connection string format. Sanitized='{sanitized}'", ex);
+            }
             builder.Services.AddDbContext<ByrlidaContext>(options => options.UseSqlServer(defaultConnection));
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>

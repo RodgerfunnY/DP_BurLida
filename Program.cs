@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 
@@ -29,49 +31,86 @@ namespace DP_BurLida
                 throw new InvalidOperationException("ConnectionStrings:DefaultConnection is empty or not configured.");
             }
 
-            // Cloud Run env values / UI forms sometimes wrap the whole value in quotes
-            // or leave a trailing comma. Strip only the outer noise to keep it valid.
-            defaultConnection = defaultConnection.Trim();
-            if (defaultConnection.Length >= 2)
+            // Cloud Run env values / UI sometimes wrap the whole value in quotes,
+            // or leave a trailing comma, or both: "\"Data Source=...;True\","
+            // That breaks SqlConnectionStringBuilder. Normalize before parsing.
+            static string NormalizeSqlConnectionString(string? value)
             {
-                var first = defaultConnection[0];
-                var last = defaultConnection[^1];
-                if ((first == '"' && last == '"') || (first == '\'' && last == '\''))
-                    defaultConnection = defaultConnection.Substring(1, defaultConnection.Length - 2).Trim();
-            }
-            defaultConnection = defaultConnection.TrimEnd().TrimEnd(',');
+                if (string.IsNullOrWhiteSpace(value)) return value ?? string.Empty;
+                var s = value.Trim();
 
+                // Remove trailing commas (common when a JSON/env editor appends ",").
+                s = s.TrimEnd();
+                while (s.EndsWith(",")) s = s.TrimEnd().TrimEnd(',');
+
+                s = s.Trim();
+
+                // Remove outer quotes repeatedly (e.g. "\"...\"" or "'...').
+                while (s.Length >= 2)
+                {
+                    var first = s[0];
+                    var last = s[^1];
+                    var isOuterDouble = first == '"' && last == '"';
+                    var isOuterSingle = first == '\'' && last == '\'';
+                    if (!isOuterDouble && !isOuterSingle) break;
+                    s = s.Substring(1, s.Length - 2).Trim();
+                }
+
+                // Final cleanup.
+                s = s.TrimEnd();
+                while (s.EndsWith(",")) s = s.TrimEnd().TrimEnd(',');
+                return s.Trim();
+            }
+
+            defaultConnection = NormalizeSqlConnectionString(defaultConnection);
+
+            // Validate connection string format early.
+            bool isValid = true;
             try
             {
-                // Validate connection string format early.
                 _ = new SqlConnectionStringBuilder(defaultConnection);
             }
             catch (Exception ex)
             {
-                // Do not leak password to logs.
-                var sanitized = Regex.Replace(
-                    defaultConnection,
-                    @"(?i)(Password\s*=\s*)[^;]*",
-                    "$1***"
-                );
-                // Help debug formatting issues (quotes/commas/newlines) without leaking the password.
-                var escaped = sanitized
-                    .Replace("\r", "\\r")
-                    .Replace("\n", "\\n")
-                    .Replace("\t", "\\t");
+                isValid = false;
 
-                var startsWithQuote = defaultConnection.TrimStart().StartsWith("\"", StringComparison.Ordinal);
-                var endsWithQuote = defaultConnection.TrimEnd().EndsWith("\"", StringComparison.Ordinal);
-                var endsWithComma = defaultConnection.TrimEnd().EndsWith(",", StringComparison.Ordinal);
+                // If env-var is broken, try fallback to appsettings.json inside the container.
+                try
+                {
+                    var jsonPath = Path.Combine(builder.Environment.ContentRootPath, "appsettings.json");
+                    if (File.Exists(jsonPath))
+                    {
+                        var jsonConfig = new ConfigurationBuilder()
+                            .SetBasePath(builder.Environment.ContentRootPath)
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                            .Build();
 
-                var lastChunk = escaped.Length > 60 ? escaped.Substring(escaped.Length - 60) : escaped;
+                        var fallback = jsonConfig.GetConnectionString("DefaultConnection");
+                        fallback = NormalizeSqlConnectionString(fallback);
+                        if (!string.IsNullOrWhiteSpace(fallback))
+                        {
+                            _ = new SqlConnectionStringBuilder(fallback);
+                            defaultConnection = fallback;
+                            isValid = true;
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore fallback errors; we'll throw original below.
+                }
 
-                throw new InvalidOperationException(
-                    "Invalid SQL connection string format. " +
-                    $"StartsWithQuote={startsWithQuote};EndsWithQuote={endsWithQuote};EndsWithComma={endsWithComma};" +
-                    $"SanitizedLast60='{lastChunk}'",
-                    ex
-                );
+                if (!isValid)
+                {
+                    // Do not leak password to logs.
+                    var sanitized = Regex.Replace(defaultConnection, @"(?i)(Password\s*=\s*)[^;]*", "$1***");
+                    var startsWithQuote = defaultConnection.TrimStart().StartsWith("\"", StringComparison.Ordinal);
+                    var endsWithComma = defaultConnection.TrimEnd().EndsWith(",", StringComparison.Ordinal);
+                    throw new InvalidOperationException(
+                        $"Invalid SQL connection string format. StartsWithQuote={startsWithQuote};EndsWithComma={endsWithComma};Sanitized='{sanitized}'",
+                        ex
+                    );
+                }
             }
             builder.Services.AddDbContext<ByrlidaContext>(options => options.UseSqlServer(defaultConnection));
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(defaultConnection));

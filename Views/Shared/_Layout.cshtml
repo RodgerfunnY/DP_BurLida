@@ -34,6 +34,9 @@
             min-height: 100vh;
             display: flex;
             flex-direction: row;
+            min-width: 0;
+            max-width: 100%;
+            width: 100%;
         }
 
         .app-sidebar {
@@ -132,6 +135,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-width: 0;
         }
 
         .app-main-header {
@@ -147,180 +151,93 @@
             padding: 1.5rem;
         }
 
-        @@media (max-width: 992px) {
-            .app-shell {
-                flex-direction: column;
-            }
+        .app-mobile-topbar {
+            flex-shrink: 0;
+            background: linear-gradient(90deg, #0b3c7d 0%, #021633 100%);
+            color: #fff;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(2, 22, 51, 0.35);
+        }
 
-            .app-sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 0.5rem 0.75rem;
-            }
+        .app-mobile-topbar .menu-toggle {
+            color: #fff;
+            padding: 0.35rem 0.5rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 0.5rem;
+            line-height: 1;
+        }
 
-            .app-sidebar-brand {
-                margin-bottom: 0;
-                margin-right: 1rem;
-            }
+        .app-mobile-topbar .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
 
-            .app-sidebar-nav {
-                display: flex;
-                flex-direction: row;
-                gap: 0.25rem;
-            }
+        .app-offcanvas-sidebar {
+            background: linear-gradient(180deg, #0b3c7d 0%, #021633 100%);
+            color: #fff;
+            width: min(300px, 88vw) !important;
+        }
 
-            .app-sidebar-nav .nav-link {
-                margin-bottom: 0;
-                white-space: nowrap;
-            }
+        .app-offcanvas-sidebar .offcanvas-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
 
+        .app-offcanvas-sidebar .offcanvas-body {
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem 0.75rem 1rem;
+            overflow-y: auto;
+        }
+
+        .app-offcanvas-sidebar .app-sidebar-nav {
+            flex: 1;
+        }
+
+        @@media (max-width: 991.98px) {
             .app-main-header {
-                padding-inline: 1rem;
+                display: none;
             }
 
             .app-main-content {
-                padding: 1rem;
+                padding: 1rem 0.75rem 1.25rem;
             }
         }
 
         @@media (max-width: 576px) {
-            .app-sidebar {
-                padding-inline: 0.5rem;
-            }
-
-            .app-sidebar-brand-text {
-                display: none;
-            }
-
-            .app-sidebar-nav .nav-link {
-                padding: 0.35rem 0.45rem;
-                font-size: 0.8rem;
-                gap: 0.4rem;
-            }
-
-            .app-sidebar-nav .nav-link span {
-                font-size: 0.8rem;
-            }
-
             .app-main-content {
-                padding: 0.75rem 0.75rem 1rem;
+                padding: 0.75rem 0.65rem 1rem;
             }
         }
     </style>
 </head>
 
 <body>
-    @{
-        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-    }
-
     <div class="app-shell">
-        <aside class="app-sidebar">
-            <a class="app-sidebar-brand text-decoration-none text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                <i class="fa-solid fa-screwdriver-wrench app-sidebar-brand-icon"></i>
-                <span class="app-sidebar-brand-text">DP_BurLida</span>
-            </a>
-            <ul class="app-sidebar-nav">
-                <li>
-                    <a class="nav-link@(currentController=="Home" ? " active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Главная</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link@(currentController=="Order" ? " active" : "")" asp-area="" asp-controller="Order" asp-action="Index">
-                        <i class="fa-solid fa-file-lines"></i>
-                        <span>Заявки</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link@(currentController=="Calendar" ? " active" : "")" asp-area="" asp-controller="Calendar" asp-action="Index">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <span>Календарь</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link@(currentController=="Notification" ? " active" : "")" asp-area="" asp-controller="Notification" asp-action="Index">
-                        <i class="fa-solid fa-bell"></i>
-                        <span>Уведомления</span>
-                    </a>
-                </li>
-                @if (User.IsInRole("Admin") || User.IsInRole("Director"))
-                {
-                    <li>
-                        <a class="nav-link@(currentController=="User" ? " active" : "")" asp-area="" asp-controller="User" asp-action="Index">
-                            <i class="fa-solid fa-users"></i>
-                            <span>Сотрудники</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link@(currentController=="Brigade" ? " active" : "")" asp-area="" asp-controller="Brigade" asp-action="Index">
-                            <i class="fa-solid fa-people-group"></i>
-                            <span>Бригады</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link@(currentController=="Statistics" ? " active" : "")" asp-area="" asp-controller="Statistics" asp-action="Index">
-                            <i class="fa-solid fa-chart-column"></i>
-                            <span>Статистика</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link@(currentController=="Installment" ? " active" : "")" asp-area="" asp-controller="Installment" asp-action="Index">
-                            <i class="fa-solid fa-credit-card"></i>
-                            <span>Рассрочки</span>
-                        </a>
-                    </li>
-                }
-                <li>
-                    <a class="nav-link@(currentController=="Archive" ? " active" : "")" asp-area="" asp-controller="Archive" asp-action="Index">
-                        <i class="fa-solid fa-box-archive"></i>
-                        <span>Архив</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link@(currentController=="Sklad" ? " active" : "")" asp-area="" asp-controller="Sklad" asp-action="Index">
-                        <i class="fa-solid fa-warehouse"></i>
-                        <span>Склад</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="app-sidebar-footer">
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <div class="app-sidebar-user">
-                        <a asp-controller="Account" asp-action="Profile"
-                           class="text-decoration-none text-white-50 d-flex flex-column align-items-center"
-                           title="Личный кабинет">
-                            <i class="fa-solid fa-user-circle fa-lg mb-1"></i>
-                            <span class="app-sidebar-user-name">@User.Identity.Name</span>
-                        </a>
-                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                            <button type="submit"
-                                    class="btn btn-sm btn-outline-light logout-btn d-flex align-items-center justify-content-center px-3 py-1"
-                                    title="Выйти">
-                                <i class="fa-solid fa-door-open"></i>
-                            </button>
-                        </form>
-                    </div>
-                }
-                else
-                {
-                    <div class="app-sidebar-user">
-                        <a asp-controller="Account" asp-action="Login"
-                           class="btn btn-sm btn-outline-light d-flex align-items-center gap-2 px-3 py-1"
-                           title="Войти">
-                            <i class="fa-solid fa-door-open"></i>
-                            <span class="small">Вход</span>
-                        </a>
-                    </div>
-                }
-            </div>
+        <aside class="app-sidebar d-none d-lg-flex flex-column">
+            @await Html.PartialAsync("_AppSidebarInner")
         </aside>
 
+        <div class="offcanvas offcanvas-start app-offcanvas-sidebar d-lg-none" tabindex="-1" id="appSidebarOffcanvas" aria-labelledby="appSidebarOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title text-white" id="appSidebarOffcanvasLabel">Меню</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+            </div>
+            <div class="offcanvas-body">
+                @await Html.PartialAsync("_AppSidebarInner")
+            </div>
+        </div>
+
         <div class="app-main">
+            <div class="app-mobile-topbar d-lg-none">
+                <button class="menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#appSidebarOffcanvas" aria-controls="appSidebarOffcanvas" aria-label="Открыть меню">
+                    <i class="fa-solid fa-bars fa-lg"></i>
+                </button>
+                <span class="fw-semibold small">DP_BurLida</span>
+            </div>
             <header class="app-main-header">
             </header>
             <main role="main" class="app-main-content">
@@ -328,7 +245,7 @@
             </main>
             <footer class="border-top footer text-muted bg-light mt-auto">
                 <div class="container-fluid py-2 px-3">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-center text-sm-start">
                         <span class="small">&copy; 2025 - DP_BurLida</span>
                         <a asp-area="" asp-controller="Home" asp-action="Privacy" class="btn btn-outline-secondary btn-sm">
                             Политика конфиденциальности

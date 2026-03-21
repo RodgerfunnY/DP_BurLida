@@ -57,6 +57,15 @@ main {
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(18, 38, 63, 0.08);
   padding: 1.25rem;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Horizontal scroll for wide tables without clipping the page */
+.table-responsive {
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Table beautification */

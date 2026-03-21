@@ -1,0 +1,104 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+<a class="app-sidebar-brand text-decoration-none text-white" asp-area="" asp-controller="Home" asp-action="Index" data-bs-dismiss="offcanvas">
+    <i class="fa-solid fa-screwdriver-wrench app-sidebar-brand-icon"></i>
+    <span class="app-sidebar-brand-text">DP_BurLida</span>
+</a>
+<ul class="app-sidebar-nav">
+    <li>
+        <a class="nav-link@(currentController=="Home" ? " active" : "")" asp-area="" asp-controller="Home" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-house"></i>
+            <span>Главная</span>
+        </a>
+    </li>
+    <li>
+        <a class="nav-link@(currentController=="Order" ? " active" : "")" asp-area="" asp-controller="Order" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-file-lines"></i>
+            <span>Заявки</span>
+        </a>
+    </li>
+    <li>
+        <a class="nav-link@(currentController=="Calendar" ? " active" : "")" asp-area="" asp-controller="Calendar" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Календарь</span>
+        </a>
+    </li>
+    <li>
+        <a class="nav-link@(currentController=="Notification" ? " active" : "")" asp-area="" asp-controller="Notification" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-bell"></i>
+            <span>Уведомления</span>
+        </a>
+    </li>
+    @if (User.IsInRole("Admin") || User.IsInRole("Director"))
+    {
+        <li>
+            <a class="nav-link@(currentController=="User" ? " active" : "")" asp-area="" asp-controller="User" asp-action="Index" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-users"></i>
+                <span>Сотрудники</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link@(currentController=="Brigade" ? " active" : "")" asp-area="" asp-controller="Brigade" asp-action="Index" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-people-group"></i>
+                <span>Бригады</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link@(currentController=="Statistics" ? " active" : "")" asp-area="" asp-controller="Statistics" asp-action="Index" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Статистика</span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link@(currentController=="Installment" ? " active" : "")" asp-area="" asp-controller="Installment" asp-action="Index" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Рассрочки</span>
+            </a>
+        </li>
+    }
+    <li>
+        <a class="nav-link@(currentController=="Archive" ? " active" : "")" asp-area="" asp-controller="Archive" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Архив</span>
+        </a>
+    </li>
+    <li>
+        <a class="nav-link@(currentController=="Sklad" ? " active" : "")" asp-area="" asp-controller="Sklad" asp-action="Index" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-warehouse"></i>
+            <span>Склад</span>
+        </a>
+    </li>
+</ul>
+<div class="app-sidebar-footer">
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="app-sidebar-user">
+            <a asp-controller="Account" asp-action="Profile"
+               class="text-decoration-none text-white-50 d-flex flex-column align-items-center"
+               title="Личный кабинет" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-user-circle fa-lg mb-1"></i>
+                <span class="app-sidebar-user-name">@User.Identity.Name</span>
+            </a>
+            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                <button type="submit"
+                        class="btn btn-sm btn-outline-light logout-btn d-flex align-items-center justify-content-center px-3 py-1"
+                        title="Выйти">
+                    <i class="fa-solid fa-door-open"></i>
+                </button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="app-sidebar-user">
+            <a asp-controller="Account" asp-action="Login"
+               class="btn btn-sm btn-outline-light d-flex align-items-center gap-2 px-3 py-1"
+               title="Войти" data-bs-dismiss="offcanvas">
+                <i class="fa-solid fa-door-open"></i>
+                <span class="small">Вход</span>
+            </a>
+        </div>
+    }
+</div>

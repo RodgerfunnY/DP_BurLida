@@ -1,32 +1,32 @@
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var closeOffcanvas = ViewData["SidebarCloseOffcanvas"] as bool? == true;
 }
-<a class="app-sidebar-brand text-decoration-none text-white" asp-area="" asp-controller="Home" asp-action="Index" data-bs-dismiss="offcanvas">
+<a class="app-sidebar-brand text-decoration-none text-white" href="@Url.Action("Index", "Home")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
     <i class="fa-solid fa-screwdriver-wrench app-sidebar-brand-icon"></i>
     <span class="app-sidebar-brand-text">DP_BurLida</span>
 </a>
 <ul class="app-sidebar-nav">
     <li>
-        <a class="nav-link@(currentController=="Home" ? " active" : "")" asp-area="" asp-controller="Home" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Home" ? " active" : "")" href="@Url.Action("Index", "Home")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-house"></i>
             <span>Главная</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Order" ? " active" : "")" asp-area="" asp-controller="Order" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Order" ? " active" : "")" href="@Url.Action("Index", "Order")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-file-lines"></i>
             <span>Заявки</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Calendar" ? " active" : "")" asp-area="" asp-controller="Calendar" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Calendar" ? " active" : "")" href="@Url.Action("Index", "Calendar")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-calendar-days"></i>
             <span>Календарь</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Notification" ? " active" : "")" asp-area="" asp-controller="Notification" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Notification" ? " active" : "")" href="@Url.Action("Index", "Notification")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-bell"></i>
             <span>Уведомления</span>
         </a>
@@ -34,38 +34,38 @@
     @if (User.IsInRole("Admin") || User.IsInRole("Director"))
     {
         <li>
-            <a class="nav-link@(currentController=="User" ? " active" : "")" asp-area="" asp-controller="User" asp-action="Index" data-bs-dismiss="offcanvas">
+            <a class="nav-link@(currentController=="User" ? " active" : "")" href="@Url.Action("Index", "User")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-users"></i>
                 <span>Сотрудники</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Brigade" ? " active" : "")" asp-area="" asp-controller="Brigade" asp-action="Index" data-bs-dismiss="offcanvas">
+            <a class="nav-link@(currentController=="Brigade" ? " active" : "")" href="@Url.Action("Index", "Brigade")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-people-group"></i>
                 <span>Бригады</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Statistics" ? " active" : "")" asp-area="" asp-controller="Statistics" asp-action="Index" data-bs-dismiss="offcanvas">
+            <a class="nav-link@(currentController=="Statistics" ? " active" : "")" href="@Url.Action("Index", "Statistics")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-chart-column"></i>
                 <span>Статистика</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Installment" ? " active" : "")" asp-area="" asp-controller="Installment" asp-action="Index" data-bs-dismiss="offcanvas">
+            <a class="nav-link@(currentController=="Installment" ? " active" : "")" href="@Url.Action("Index", "Installment")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-credit-card"></i>
                 <span>Рассрочки</span>
             </a>
         </li>
     }
     <li>
-        <a class="nav-link@(currentController=="Archive" ? " active" : "")" asp-area="" asp-controller="Archive" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Archive" ? " active" : "")" href="@Url.Action("Index", "Archive")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-box-archive"></i>
             <span>Архив</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Sklad" ? " active" : "")" asp-area="" asp-controller="Sklad" asp-action="Index" data-bs-dismiss="offcanvas">
+        <a class="nav-link@(currentController=="Sklad" ? " active" : "")" href="@Url.Action("Index", "Sklad")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
             <i class="fa-solid fa-warehouse"></i>
             <span>Склад</span>
         </a>
@@ -75,9 +75,9 @@
     @if (User.Identity?.IsAuthenticated == true)
     {
         <div class="app-sidebar-user">
-            <a asp-controller="Account" asp-action="Profile"
+            <a href="@Url.Action("Profile", "Account")"
                class="text-decoration-none text-white-50 d-flex flex-column align-items-center"
-               title="Личный кабинет" data-bs-dismiss="offcanvas">
+               title="Личный кабинет" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-user-circle fa-lg mb-1"></i>
                 <span class="app-sidebar-user-name">@User.Identity.Name</span>
             </a>
@@ -93,9 +93,9 @@
     else
     {
         <div class="app-sidebar-user">
-            <a asp-controller="Account" asp-action="Login"
+            <a href="@Url.Action("Login", "Account")"
                class="btn btn-sm btn-outline-light d-flex align-items-center gap-2 px-3 py-1"
-               title="Войти" data-bs-dismiss="offcanvas">
+               title="Войти" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
                 <i class="fa-solid fa-door-open"></i>
                 <span class="small">Вход</span>
             </a>

@@ -218,9 +218,6 @@
 <body>
     <div class="app-shell">
         <aside class="app-sidebar d-none d-lg-flex flex-column">
-            @{
-                ViewData["SidebarCloseOffcanvas"] = false;
-            }
             @await Html.PartialAsync("_AppSidebarInner")
         </aside>
 
@@ -230,9 +227,6 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
             </div>
             <div class="offcanvas-body">
-                @{
-                    ViewData["SidebarCloseOffcanvas"] = true;
-                }
                 @await Html.PartialAsync("_AppSidebarInner")
             </div>
         </div>

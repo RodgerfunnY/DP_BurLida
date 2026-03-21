@@ -1,32 +1,31 @@
 @{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-    var closeOffcanvas = ViewData["SidebarCloseOffcanvas"] as bool? == true;
 }
-<a class="app-sidebar-brand text-decoration-none text-white" href="@Url.Action("Index", "Home")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+<a class="app-sidebar-brand text-decoration-none text-white" href="@Url.Action("Index", "Home")">
     <i class="fa-solid fa-screwdriver-wrench app-sidebar-brand-icon"></i>
     <span class="app-sidebar-brand-text">DP_BurLida</span>
 </a>
 <ul class="app-sidebar-nav">
     <li>
-        <a class="nav-link@(currentController=="Home" ? " active" : "")" href="@Url.Action("Index", "Home")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Home" ? " active" : "")" href="@Url.Action("Index", "Home")">
             <i class="fa-solid fa-house"></i>
             <span>Главная</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Order" ? " active" : "")" href="@Url.Action("Index", "Order")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Order" ? " active" : "")" href="@Url.Action("Index", "Order")">
             <i class="fa-solid fa-file-lines"></i>
             <span>Заявки</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Calendar" ? " active" : "")" href="@Url.Action("Index", "Calendar")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Calendar" ? " active" : "")" href="@Url.Action("Index", "Calendar")">
             <i class="fa-solid fa-calendar-days"></i>
             <span>Календарь</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Notification" ? " active" : "")" href="@Url.Action("Index", "Notification")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Notification" ? " active" : "")" href="@Url.Action("Index", "Notification")">
             <i class="fa-solid fa-bell"></i>
             <span>Уведомления</span>
         </a>
@@ -34,38 +33,38 @@
     @if (User.IsInRole("Admin") || User.IsInRole("Director"))
     {
         <li>
-            <a class="nav-link@(currentController=="User" ? " active" : "")" href="@Url.Action("Index", "User")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+            <a class="nav-link@(currentController=="User" ? " active" : "")" href="@Url.Action("Index", "User")">
                 <i class="fa-solid fa-users"></i>
                 <span>Сотрудники</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Brigade" ? " active" : "")" href="@Url.Action("Index", "Brigade")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+            <a class="nav-link@(currentController=="Brigade" ? " active" : "")" href="@Url.Action("Index", "Brigade")">
                 <i class="fa-solid fa-people-group"></i>
                 <span>Бригады</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Statistics" ? " active" : "")" href="@Url.Action("Index", "Statistics")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+            <a class="nav-link@(currentController=="Statistics" ? " active" : "")" href="@Url.Action("Index", "Statistics")">
                 <i class="fa-solid fa-chart-column"></i>
                 <span>Статистика</span>
             </a>
         </li>
         <li>
-            <a class="nav-link@(currentController=="Installment" ? " active" : "")" href="@Url.Action("Index", "Installment")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+            <a class="nav-link@(currentController=="Installment" ? " active" : "")" href="@Url.Action("Index", "Installment")">
                 <i class="fa-solid fa-credit-card"></i>
                 <span>Рассрочки</span>
             </a>
         </li>
     }
     <li>
-        <a class="nav-link@(currentController=="Archive" ? " active" : "")" href="@Url.Action("Index", "Archive")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Archive" ? " active" : "")" href="@Url.Action("Index", "Archive")">
             <i class="fa-solid fa-box-archive"></i>
             <span>Архив</span>
         </a>
     </li>
     <li>
-        <a class="nav-link@(currentController=="Sklad" ? " active" : "")" href="@Url.Action("Index", "Sklad")" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+        <a class="nav-link@(currentController=="Sklad" ? " active" : "")" href="@Url.Action("Index", "Sklad")">
             <i class="fa-solid fa-warehouse"></i>
             <span>Склад</span>
         </a>
@@ -77,7 +76,7 @@
         <div class="app-sidebar-user">
             <a href="@Url.Action("Profile", "Account")"
                class="text-decoration-none text-white-50 d-flex flex-column align-items-center"
-               title="Личный кабинет" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+               title="Личный кабинет">
                 <i class="fa-solid fa-user-circle fa-lg mb-1"></i>
                 <span class="app-sidebar-user-name">@User.Identity.Name</span>
             </a>
@@ -95,7 +94,7 @@
         <div class="app-sidebar-user">
             <a href="@Url.Action("Login", "Account")"
                class="btn btn-sm btn-outline-light d-flex align-items-center gap-2 px-3 py-1"
-               title="Войти" @if (closeOffcanvas) { <text>data-bs-dismiss="offcanvas"</text> }>
+               title="Войти">
                 <i class="fa-solid fa-door-open"></i>
                 <span class="small">Вход</span>
             </a>

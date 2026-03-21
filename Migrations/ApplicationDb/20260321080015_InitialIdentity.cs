@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DP_BurLida.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class InitIdentity : Migration
+    public partial class InitialIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

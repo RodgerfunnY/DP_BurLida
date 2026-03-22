@@ -18,6 +18,8 @@ namespace DP_BurLida.Services.Implementations
             return await _context.Set<OrderModelData>()
                 .Include(o => o.DrillingBrigade)
                 .Include(o => o.ArrangementBrigade)
+                .OrderByDescending(o => o.CreationTimeData)
+                .ThenByDescending(o => o.Id)
                 .ToListAsync();
         }
 
@@ -68,6 +70,8 @@ namespace DP_BurLida.Services.Implementations
                     (!string.IsNullOrEmpty(order.PumpInstalled) && order.PumpInstalled.ToLower().Contains(searchLower)) ||
                     (!string.IsNullOrEmpty(order.ArrangementDone) && order.ArrangementDone.ToLower().Contains(searchLower))
                 )
+                .OrderByDescending(o => o.CreationTimeData)
+                .ThenByDescending(o => o.Id)
                 .ToList();
         }
     }

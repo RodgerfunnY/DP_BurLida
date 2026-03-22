@@ -203,7 +203,7 @@
             {
                 <p class="text-muted small">Перетащи карточку на нужный день календаря.</p>
                 <div class="list-group small">
-                    @foreach (var order in Model.UnscheduledOrders.OrderBy(o => o.CreationTimeData))
+                    @foreach (var order in Model.UnscheduledOrders.OrderByDescending(o => o.CreationTimeData).ThenByDescending(o => o.Id))
                     {
                         var brigadeClass = order.BrigadeStatus switch
                         {

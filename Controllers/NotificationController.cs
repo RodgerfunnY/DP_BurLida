@@ -37,6 +37,33 @@ namespace DP_BurLida.Controllers
             return View(notifications);
         }
 
+        /// <summary>
+        /// Непрочитанные уведомления для всплывающих toast (опрос с клиента).
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> ToastUnread()
+        {
+            var email = GetCurrentUserEmail();
+            if (string.IsNullOrWhiteSpace(email))
+                return Json(new { items = Array.Empty<object>() });
+
+            var items = await _context.NotificationModelData
+                .AsNoTracking()
+                .Where(n => n.RecipientEmail == email && !n.IsRead)
+                .OrderByDescending(n => n.CreatedAt)
+                .Take(30)
+                .Select(n => new
+                {
+                    id = n.Id,
+                    message = n.Message,
+                    orderId = n.OrderId,
+                    createdAt = n.CreatedAt
+                })
+                .ToListAsync();
+
+            return Json(new { items });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarkAsRead(int id)

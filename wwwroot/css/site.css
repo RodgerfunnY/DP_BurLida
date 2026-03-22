@@ -285,6 +285,18 @@ table.table tbody tr:hover {
 
 /* Общая мобильная адаптация */
 @media (max-width: 576px) {
+  #notification-toast-container {
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    max-width: none;
+  }
+
+  #notification-toast-container .toast {
+    width: 100%;
+    max-width: none;
+  }
+
   .content-card {
     padding: 0.75rem;
     box-shadow: 0 2px 8px rgba(18, 38, 63, 0.06);

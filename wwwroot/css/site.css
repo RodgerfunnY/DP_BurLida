@@ -197,7 +197,12 @@ table.table tbody tr:hover {
 
 .calendar-day:hover {
   background-color: #f8f9fa;
-  transform: scale(1.02);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .calendar-day:hover {
+    transform: scale(1.02);
+  }
 }
 
 .calendar-day.other-month {
@@ -257,7 +262,95 @@ table.table tbody tr:hover {
   margin-top: auto;
 }
 
-/* Адаптивность для мобильных устройств */
+/* Календарь: телефоны и узкие экраны */
+@media (max-width: 991.98px) {
+  .calendar-page .calendar-scroll-outer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -0.35rem;
+    margin-right: -0.35rem;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    padding-bottom: 0.4rem;
+    scrollbar-width: thin;
+  }
+
+  .calendar-page .calendar-scroll-inner {
+    min-width: 33rem;
+  }
+
+  .calendar-page .calendar-container {
+    overflow: visible;
+  }
+
+  .calendar-page .calendar-week {
+    min-height: 6.75rem;
+  }
+
+  .calendar-page .calendar-day {
+    min-height: 6.75rem;
+    min-width: 4.5rem;
+    padding: 6px;
+  }
+
+  .calendar-page .calendar-day:hover {
+    transform: none;
+  }
+
+  .calendar-page .day-number {
+    font-size: 0.8rem;
+  }
+
+  .calendar-page .orders-container .order-item {
+    max-width: none !important;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 0.65rem;
+    line-height: 1.25;
+    word-break: break-word;
+    padding: 3px 5px;
+  }
+
+  .calendar-page .calendar-day-header {
+    padding: 8px 4px;
+    font-size: 0.7rem;
+  }
+
+  .calendar-page .more-orders {
+    font-size: 0.65rem;
+    padding: 2px 4px;
+  }
+
+  .calendar-nav-tabs {
+    scrollbar-width: thin;
+  }
+
+  .calendar-mobile-agenda .mobile-order-priority {
+    background-color: #ffebee;
+    border-left: 4px solid #d32f2f;
+    color: #b71c1c;
+  }
+
+  .calendar-mobile-agenda .mobile-order-ours {
+    background-color: #e8f5e9;
+    border-left: 4px solid #2e7d32;
+    color: #1b5e20;
+  }
+
+  .calendar-mobile-agenda .mobile-order-maybe {
+    background-color: #fffde7;
+    border-left: 4px solid #f9a825;
+    color: #5d4037;
+  }
+
+  .calendar-mobile-agenda .mobile-order-default {
+    background-color: #f8f9fa;
+    border-left: 4px solid #90a4ae;
+  }
+}
+
+/* Адаптивность календаря (legacy breakpoints) */
 @media (max-width: 768px) {
   .calendar-week {
     min-height: 80px;

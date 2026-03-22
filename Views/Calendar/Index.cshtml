@@ -1,10 +1,12 @@
 @model DP_BurLida.Models.CalendarViewModel
+@using System.Globalization
 
 @{
     ViewData["Title"] = "Календарь заказов";
+    var ru = CultureInfo.GetCultureInfo("ru-RU");
 }
 
-<div class="container-fluid">
+<div class="container-fluid calendar-page">
     <style>
         /* Цветовая схема для пометки "Чья бригада" с хорошей читаемостью текста */
         .order-item-priority {
@@ -49,17 +51,35 @@
             color: #5d4037;
         }
 
-        /* Компактное отображение заявок в ячейках календаря — адрес в одну строку */
-        .orders-container .order-item {
+        /* В ячейках сетки на десктопе — одна строка; на телефоне стили в site.css + горизонтальный скролл */
+        @@media (min-width: 992px) {
+            .orders-container .order-item {
+                display: block;
+                padding: 2px 4px;
+                margin-bottom: 2px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 110px;
+                box-sizing: border-box;
+            }
+        }
+
+        .calendar-mobile-agenda .calendar-mobile-order:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .calendar-mobile-order {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
             display: block;
-            padding: 2px 4px;
-            margin-bottom: 2px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 110px;          /* показываем часть адреса, даже если ячейка шире */
-            box-sizing: border-box;
+            transition: filter 0.15s ease;
+        }
+
+        .calendar-mobile-order:active {
+            filter: brightness(0.97);
         }
 
         .unscheduled-card-header {
@@ -83,52 +103,61 @@
             align-items: center;
             justify-content: center;
         }
+
+        .calendar-main-title {
+            font-size: clamp(1.15rem, 4.2vw, 1.65rem);
+            line-height: 1.25;
+        }
     </style>
     <div class="row">
-        <div class="col-md-9">
-            <ul class="nav nav-tabs mb-3">
-                <li class="nav-item">
+        <div class="col-lg-9">
+            <ul class="nav nav-tabs mb-3 flex-nowrap overflow-x-auto pb-1 calendar-nav-tabs">
+                <li class="nav-item text-nowrap">
                     <a class="nav-link @(Model.CalendarType == "drilling" ? "active" : "")"
                        href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "drilling" })">
                         График бурения
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item text-nowrap">
                     <a class="nav-link @(Model.CalendarType == "montage" ? "active" : "")"
                        href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "montage" })">
                         Монтажный график
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item text-nowrap">
                     <a class="nav-link @(Model.CalendarType == "contractors" ? "active" : "")"
                        href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "contractors" })">
-                        Календарь подрядчиков
+                        <span class="d-md-none">Подрядчики</span>
+                        <span class="d-none d-md-inline">Календарь подрядчиков</span>
                     </a>
                 </li>
             </ul>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2>@Model.CalendarTitle - @Model.MonthName @Model.Year</h2>
-                    <p class="text-muted mb-0">Заказы отображаются по дате выполнения работ</p>
+            <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-start gap-3 mb-3">
+                <div class="flex-grow-1 min-w-0">
+                    <h2 class="calendar-main-title mb-1 fw-semibold">@Model.CalendarTitle — @Model.MonthName @Model.Year</h2>
+                    <p class="text-muted small mb-0">По дате выполнения работ. На телефоне сетку можно листать вбок; ниже — список по дням.</p>
                 </div>
-                <div class="btn-group" role="group">
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1, type = Model.CalendarType })" 
-                       class="btn btn-primary @(Model.Month == 1 ? "disabled" : "")">
-                        Предыдущий месяц
+                <div class="btn-group calendar-month-nav w-100 w-lg-auto flex-wrap" role="group">
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1, type = Model.CalendarType })"
+                       class="btn btn-primary btn-sm @(Model.Month == 1 ? "disabled" : "")">
+                        ← Месяц
                     </a>
-                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month, type = Model.CalendarType })" 
-                       class="btn btn-secondary">
-                        Текущий месяц
+                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month, type = Model.CalendarType })"
+                       class="btn btn-secondary btn-sm">
+                        Сейчас
                     </a>
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1, type = Model.CalendarType })" 
-                       class="btn btn-primary @(Model.Month == 12 ? "disabled" : "")">
-                        Следующий месяц
+                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1, type = Model.CalendarType })"
+                       class="btn btn-primary btn-sm @(Model.Month == 12 ? "disabled" : "")">
+                        Месяц →
                     </a>
                 </div>
             </div>
 
-            <div class="calendar-container">
+            <p class="d-lg-none small text-muted mb-2"><i class="fa-solid fa-arrows-left-right me-1"></i>Листайте календарь горизонтально</p>
+
+            <div class="calendar-scroll-outer mb-2 mb-lg-0">
+            <div class="calendar-container calendar-scroll-inner">
                 <div class="calendar-header">
                     <div class="calendar-day-header">Пн</div>
                     <div class="calendar-day-header">Вт</div>
@@ -195,9 +224,77 @@
                     }
                 </div>
             </div>
+            </div>
+
+            <div class="d-lg-none calendar-mobile-agenda mt-4">
+                <h3 class="h6 fw-semibold mb-3">Заявки по дням</h3>
+                @{
+                    var mobileDays = Model.Days
+                        .Where(d => d.HasOrders && d.Orders != null && d.Orders.Any())
+                        .OrderBy(d => d.Date)
+                        .ToList();
+                }
+                @if (mobileDays.Any())
+                {
+                    @foreach (var day in mobileDays)
+                    {
+                        <div class="card border-0 shadow-sm mb-3 calendar-mobile-day-card">
+                            <div class="card-header bg-light py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <span class="fw-semibold small">@day.Date.ToString("dddd, d MMMM", ru)</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    @if (day.IsToday)
+                                    {
+                                        <span class="badge bg-primary">Сегодня</span>
+                                    }
+                                    <a class="btn btn-sm btn-outline-primary py-0"
+                                       href="@Url.Action("DayDetails", new { date = day.Date, type = Model.CalendarType })">День</a>
+                                </div>
+                            </div>
+                            <div class="card-body py-2 px-2">
+                                @foreach (var order in day.Orders)
+                                {
+                                    var brigadeClass = order.BrigadeStatus switch
+                                    {
+                                        "приоритет нашей бригаде" => "mobile-order-priority",
+                                        "Наша бригада" => "mobile-order-ours",
+                                        "Возможно подрядчики" => "mobile-order-maybe",
+                                        _ => "mobile-order-default"
+                                    };
+                                    <a class="calendar-mobile-order @brigadeClass rounded-3 p-2 mb-2"
+                                       href="@Url.Action("Details", "Order", new { id = order.Id })">
+                                        <div class="fw-semibold small">@(string.IsNullOrEmpty(order.City) ? "Без адреса" : order.City)</div>
+                                        @if (!string.IsNullOrEmpty(order.Info))
+                                        {
+                                            <div class="small text-muted mt-1">@order.Info</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(order.Status))
+                                        {
+                                            <div class="mt-2">
+                                                <span class="badge @(order.Status switch {
+                                                    "Ожидание" => "bg-warning text-dark",
+                                                    "Бурение" => "bg-primary",
+                                                    "Обустройство" => "bg-info",
+                                                    "Ремонт" => "bg-danger",
+                                                    "Завершен" => "bg-success",
+                                                    "Отдали подрядчикам" => "bg-dark",
+                                                    _ => "bg-secondary"
+                                                })">@order.Status</span>
+                                            </div>
+                                        }
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted small mb-0">В этой сетке месяца нет дней с заявками (или все без даты — см. блок ниже).</p>
+                }
+            </div>
         </div>
 
-        <div class="col-md-3 mt-4 mt-md-0">
+        <div class="col-lg-3 mt-4 mt-lg-0">
             <h5 class="mb-3">Заявки без даты</h5>
             @if (Model.UnscheduledOrders != null && Model.UnscheduledOrders.Any())
             {

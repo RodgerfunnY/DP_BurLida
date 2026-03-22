@@ -17,6 +17,17 @@ namespace DP_BurLida.Models
         /// Заголовок календаря для отображения в UI.
         /// </summary>
         public string CalendarTitle { get; set; } = "График бурения";
+
+        /// <summary>
+        /// Индекс недели (0-based) в сетке месяца для мобильного вертикального вида.
+        /// </summary>
+        public int MobileWeekIndex { get; set; }
+
+        /// <summary>
+        /// Число недель в текущей сетке.
+        /// </summary>
+        public int WeekCount { get; set; }
+
         public string MonthName => GetMonthName(Month);
         
         private string GetMonthName(int month)

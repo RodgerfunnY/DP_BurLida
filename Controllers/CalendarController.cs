@@ -22,7 +22,7 @@ namespace DP_BurLida.Controllers
             _brigadeService = brigadeService;
         }
 
-        public async Task<IActionResult> Index(int? year, int? month, string? type)
+        public async Task<IActionResult> Index(int? year, int? month, string? type, int? mw)
         {
             var currentDate = DateTime.Now;
             var targetYear = year ?? currentDate.Year;
@@ -36,7 +36,54 @@ namespace DP_BurLida.Controllers
                 targetMonth = currentDate.Month;
 
             var calendar = await BuildCalendar(targetYear, targetMonth, calendarType);
+            ApplyMobileWeekIndex(calendar, mw);
             return View(calendar);
+        }
+
+        private static void ApplyMobileWeekIndex(CalendarViewModel calendar, int? mwFromQuery)
+        {
+            var days = calendar.Days;
+            var weekCount = days.Count / 7;
+            if (weekCount < 1)
+                weekCount = 1;
+
+            var today = DateTime.Today;
+            var defaultWeek = 0;
+            var foundToday = false;
+            for (var w = 0; w < weekCount; w++)
+            {
+                for (var d = 0; d < 7; d++)
+                {
+                    var idx = w * 7 + d;
+                    if (idx >= days.Count)
+                        break;
+                    if (days[idx].Date.Date == today)
+                    {
+                        defaultWeek = w;
+                        foundToday = true;
+                        break;
+                    }
+                }
+
+                if (foundToday)
+                    break;
+            }
+
+            if (!foundToday)
+            {
+                var firstCurrent = days.FindIndex(x => x.IsCurrentMonth);
+                if (firstCurrent >= 0)
+                    defaultWeek = firstCurrent / 7;
+            }
+
+            var mobileWeek = mwFromQuery ?? defaultWeek;
+            if (mobileWeek < 0)
+                mobileWeek = 0;
+            if (mobileWeek >= weekCount)
+                mobileWeek = weekCount - 1;
+
+            calendar.WeekCount = weekCount;
+            calendar.MobileWeekIndex = mobileWeek;
         }
 
         private async Task<CalendarViewModel> BuildCalendar(int year, int month, string calendarType)

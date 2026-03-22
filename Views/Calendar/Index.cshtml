@@ -66,22 +66,6 @@
             }
         }
 
-        .calendar-mobile-agenda .calendar-mobile-order:last-child {
-            margin-bottom: 0 !important;
-        }
-
-        .calendar-mobile-order {
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            transition: filter 0.15s ease;
-        }
-
-        .calendar-mobile-order:active {
-            filter: brightness(0.97);
-        }
-
         .unscheduled-card-header {
             display: flex;
             align-items: flex-start;
@@ -108,10 +92,55 @@
             font-size: clamp(1.15rem, 4.2vw, 1.65rem);
             line-height: 1.25;
         }
+
+        .calendar-mobile-week-day {
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .calendar-mobile-week-day.other-month {
+            opacity: 0.72;
+        }
+
+        .calendar-mobile-week-order {
+            display: block;
+            font-size: 0.78rem;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        .calendar-mobile-week-order.mobile-order-priority {
+            background-color: #ffebee;
+            border-left: 4px solid #d32f2f;
+            color: #b71c1c;
+        }
+
+        .calendar-mobile-week-order.mobile-order-ours {
+            background-color: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            color: #1b5e20;
+        }
+
+        .calendar-mobile-week-order.mobile-order-maybe {
+            background-color: #fffde7;
+            border-left: 4px solid #f9a825;
+            color: #5d4037;
+        }
+
+        .calendar-mobile-week-order.mobile-order-default {
+            background-color: #f1f3f5;
+            border-left: 4px solid #90a4ae;
+            color: #212529;
+        }
+
+        .calendar-day-drop-hover {
+            outline: 2px dashed #0d6efd !important;
+            outline-offset: -3px;
+            background-color: #e7f1ff !important;
+        }
     </style>
-    <div class="row">
-        <div class="col-lg-9">
-            <ul class="nav nav-tabs mb-3 flex-nowrap overflow-x-auto pb-1 calendar-nav-tabs">
+
+    <ul class="nav nav-tabs mb-3 flex-nowrap overflow-x-auto pb-1 calendar-nav-tabs">
                 <li class="nav-item text-nowrap">
                     <a class="nav-link @(Model.CalendarType == "drilling" ? "active" : "")"
                        href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = "drilling" })">
@@ -131,31 +160,118 @@
                         <span class="d-none d-md-inline">Календарь подрядчиков</span>
                     </a>
                 </li>
-            </ul>
+    </ul>
 
-            <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-start gap-3 mb-3">
-                <div class="flex-grow-1 min-w-0">
-                    <h2 class="calendar-main-title mb-1 fw-semibold">@Model.CalendarTitle — @Model.MonthName @Model.Year</h2>
-                    <p class="text-muted small mb-0">По дате выполнения работ. На телефоне сетку можно листать вбок; ниже — список по дням.</p>
+    <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-start gap-3 mb-3">
+        <div class="flex-grow-1 min-w-0">
+            <h2 class="calendar-main-title mb-1 fw-semibold">@Model.CalendarTitle — @Model.MonthName @Model.Year</h2>
+            <p class="text-muted small mb-0 d-none d-lg-block">Заказы по дате выполнения работ.</p>
+            <p class="text-muted small mb-0 d-lg-none">Неделя — дни столбиком; справа — заявки без даты. Листайте недели стрелками.</p>
+        </div>
+        <div class="btn-group calendar-month-nav w-100 w-lg-auto flex-wrap" role="group">
+            <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1, type = Model.CalendarType })"
+               class="btn btn-primary btn-sm @(Model.Month == 1 ? "disabled" : "")">
+                ← Месяц
+            </a>
+            <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month, type = Model.CalendarType })"
+               class="btn btn-secondary btn-sm">
+                Сейчас
+            </a>
+            <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1, type = Model.CalendarType })"
+               class="btn btn-primary btn-sm @(Model.Month == 12 ? "disabled" : "")">
+                Месяц →
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-2 calendar-layout-row">
+        <div class="col-12 col-lg-9 calendar-main-column">
+            @{
+                var wkIdx = Model.MobileWeekIndex;
+                var wkCount = Math.Max(1, Model.WeekCount);
+                var weekDays = Model.Days.Skip(wkIdx * 7).Take(7).ToList();
+            }
+            <div class="d-lg-none calendar-mobile-week-wrap mb-1">
+                <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
+                    @if (wkIdx > 0)
+                    {
+                        <a class="btn btn-sm btn-outline-primary"
+                           href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = Model.CalendarType, mw = wkIdx - 1 })">← нед</a>
+                    }
+                    else
+                    {
+                        <span class="btn btn-sm btn-outline-secondary disabled opacity-50">← нед</span>
+                    }
+                    <span class="small fw-semibold text-center px-1 flex-grow-1 text-truncate">
+                        @if (weekDays.Count > 0)
+                        {
+                            @weekDays[0].Date.ToString("dd.MM", ru)<text> — </text>@weekDays[^1].Date.ToString("dd.MM", ru)
+                        }
+                    </span>
+                    @if (wkIdx < wkCount - 1)
+                    {
+                        <a class="btn btn-sm btn-outline-primary"
+                           href="@Url.Action("Index", new { year = Model.Year, month = Model.Month, type = Model.CalendarType, mw = wkIdx + 1 })">нед →</a>
+                    }
+                    else
+                    {
+                        <span class="btn btn-sm btn-outline-secondary disabled opacity-50">нед →</span>
+                    }
                 </div>
-                <div class="btn-group calendar-month-nav w-100 w-lg-auto flex-wrap" role="group">
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month - 1, type = Model.CalendarType })"
-                       class="btn btn-primary btn-sm @(Model.Month == 1 ? "disabled" : "")">
-                        ← Месяц
-                    </a>
-                    <a href="@Url.Action("Index", new { year = DateTime.Now.Year, month = DateTime.Now.Month, type = Model.CalendarType })"
-                       class="btn btn-secondary btn-sm">
-                        Сейчас
-                    </a>
-                    <a href="@Url.Action("Index", new { year = Model.Year, month = Model.Month + 1, type = Model.CalendarType })"
-                       class="btn btn-primary btn-sm @(Model.Month == 12 ? "disabled" : "")">
-                        Месяц →
-                    </a>
+                <div class="calendar-mobile-week-column">
+                    @foreach (var day in weekDays)
+                    {
+                        <div class="calendar-day calendar-mobile-week-day @(day.IsCurrentMonth ? "current-month" : "other-month") @(day.IsToday ? "today" : "") @(day.HasOrders ? "has-orders" : "")"
+                             data-date="@day.Date.ToString("yyyy-MM-dd")">
+                            <div class="d-flex justify-content-between align-items-baseline gap-1 mb-1">
+                                <span class="fw-bold text-capitalize" style="font-size:0.82rem;">@ru.DateTimeFormat.GetAbbreviatedDayName(day.Date.DayOfWeek)</span>
+                                <span class="text-muted" style="font-size:0.75rem;">@day.Date.ToString("d MMM", ru)</span>
+                            </div>
+                            @if (day.HasOrders)
+                            {
+                                <div class="d-flex flex-column gap-1 mt-1">
+                                    @foreach (var order in day.Orders)
+                                    {
+                                        var oClass = order.BrigadeStatus switch
+                                        {
+                                            "приоритет нашей бригаде" => "mobile-order-priority",
+                                            "Наша бригада" => "mobile-order-ours",
+                                            "Возможно подрядчики" => "mobile-order-maybe",
+                                            _ => "mobile-order-default"
+                                        };
+                                        <a href="@Url.Action("Details", "Order", new { id = order.Id })"
+                                           class="calendar-mobile-week-order @oClass rounded-2 p-2 text-decoration-none">
+                                            <span class="fw-semibold">@(string.IsNullOrEmpty(order.City) ? "Заявка" : order.City)</span>
+                                            @if (!string.IsNullOrEmpty(order.Info))
+                                            {
+                                                <span class="d-block text-muted mt-1" style="font-size:0.72rem;">@order.Info</span>
+                                            }
+                                            @if (!string.IsNullOrEmpty(order.Status))
+                                            {
+                                                <span class="badge mt-1 @(order.Status switch {
+                                                    "Ожидание" => "bg-warning text-dark",
+                                                    "Бурение" => "bg-primary",
+                                                    "Обустройство" => "bg-info",
+                                                    "Ремонт" => "bg-danger",
+                                                    "Завершен" => "bg-success",
+                                                    "Отдали подрядчикам" => "bg-dark",
+                                                    _ => "bg-secondary"
+                                                })" style="font-size:0.65rem;">@order.Status</span>
+                                            }
+                                        </a>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-muted" style="font-size:0.72rem;">Нет заявок</div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
 
-            <p class="d-lg-none small text-muted mb-2"><i class="fa-solid fa-arrows-left-right me-1"></i>Листайте календарь горизонтально</p>
-
+            <div class="d-none d-lg-block calendar-desktop-grid-wrap">
             <div class="calendar-scroll-outer mb-2 mb-lg-0">
             <div class="calendar-container calendar-scroll-inner">
                 <div class="calendar-header">
@@ -225,77 +341,12 @@
                 </div>
             </div>
             </div>
-
-            <div class="d-lg-none calendar-mobile-agenda mt-4">
-                <h3 class="h6 fw-semibold mb-3">Заявки по дням</h3>
-                @{
-                    var mobileDays = Model.Days
-                        .Where(d => d.HasOrders && d.Orders != null && d.Orders.Any())
-                        .OrderBy(d => d.Date)
-                        .ToList();
-                }
-                @if (mobileDays.Any())
-                {
-                    @foreach (var day in mobileDays)
-                    {
-                        <div class="card border-0 shadow-sm mb-3 calendar-mobile-day-card">
-                            <div class="card-header bg-light py-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
-                                <span class="fw-semibold small">@day.Date.ToString("dddd, d MMMM", ru)</span>
-                                <div class="d-flex align-items-center gap-2">
-                                    @if (day.IsToday)
-                                    {
-                                        <span class="badge bg-primary">Сегодня</span>
-                                    }
-                                    <a class="btn btn-sm btn-outline-primary py-0"
-                                       href="@Url.Action("DayDetails", new { date = day.Date, type = Model.CalendarType })">День</a>
-                                </div>
-                            </div>
-                            <div class="card-body py-2 px-2">
-                                @foreach (var order in day.Orders)
-                                {
-                                    var brigadeClass = order.BrigadeStatus switch
-                                    {
-                                        "приоритет нашей бригаде" => "mobile-order-priority",
-                                        "Наша бригада" => "mobile-order-ours",
-                                        "Возможно подрядчики" => "mobile-order-maybe",
-                                        _ => "mobile-order-default"
-                                    };
-                                    <a class="calendar-mobile-order @brigadeClass rounded-3 p-2 mb-2"
-                                       href="@Url.Action("Details", "Order", new { id = order.Id })">
-                                        <div class="fw-semibold small">@(string.IsNullOrEmpty(order.City) ? "Без адреса" : order.City)</div>
-                                        @if (!string.IsNullOrEmpty(order.Info))
-                                        {
-                                            <div class="small text-muted mt-1">@order.Info</div>
-                                        }
-                                        @if (!string.IsNullOrEmpty(order.Status))
-                                        {
-                                            <div class="mt-2">
-                                                <span class="badge @(order.Status switch {
-                                                    "Ожидание" => "bg-warning text-dark",
-                                                    "Бурение" => "bg-primary",
-                                                    "Обустройство" => "bg-info",
-                                                    "Ремонт" => "bg-danger",
-                                                    "Завершен" => "bg-success",
-                                                    "Отдали подрядчикам" => "bg-dark",
-                                                    _ => "bg-secondary"
-                                                })">@order.Status</span>
-                                            </div>
-                                        }
-                                    </a>
-                                }
-                            </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <p class="text-muted small mb-0">В этой сетке месяца нет дней с заявками (или все без даты — см. блок ниже).</p>
-                }
             </div>
+
         </div>
 
-        <div class="col-lg-3 mt-4 mt-lg-0">
-            <h5 class="mb-3">Заявки без даты</h5>
+        <div class="col-12 col-lg-3 calendar-unscheduled-column">
+            <h5 class="mb-2 mb-lg-3 calendar-unscheduled-heading">Без даты</h5>
             @if (Model.UnscheduledOrders != null && Model.UnscheduledOrders.Any())
             {
                 <p class="text-muted small">Перетащи карточку на нужный день календаря.</p>
@@ -416,7 +467,10 @@
     <script>
         $(document).ready(function () {
             // Переход к списку заказов за день по клику
-            $('.calendar-day').click(function () {
+            $('.calendar-day').click(function (e) {
+                if ($(e.target).closest('a[href]').length) {
+                    return;
+                }
                 var date = $(this).data('date');
                 if (date) {
                     var type = '@Model.CalendarType';

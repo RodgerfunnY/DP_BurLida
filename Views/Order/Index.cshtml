@@ -83,6 +83,29 @@
         line-height: 1.35;
     }
 
+    .week-plan-card {
+        border: 1px solid #d0d7e2;
+        border-radius: 0.9rem;
+        background: #f8fafc;
+    }
+
+    .week-plan-day-title {
+        font-weight: 700;
+        margin-top: 0.6rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .week-plan-item {
+        margin-bottom: 0.15rem;
+        word-break: break-word;
+    }
+
+    .week-plan-subtitle {
+        font-weight: 700;
+        margin-top: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
     @@media (max-width: 576px) {
         .orders-table {
             font-size: 0.85rem;
@@ -147,6 +170,143 @@
         }
     </div>
 }
+@{
+    var allOrders = Model?.ToList() ?? new List<DP_BurLida.Data.ModelsData.OrderModelData>();
+    var monday = DateTime.Today.AddDays(-(((int)DateTime.Today.DayOfWeek + 6) % 7));
+    var weekDates = Enumerable.Range(0, 7).Select(i => monday.AddDays(i)).ToList();
+    var dayNames = new[] { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
+
+    var regularOrders = allOrders.Where(o => o.Status != "Отдали подрядчикам").ToList();
+    var contractorOrders = allOrders.Where(o => o.Status == "Отдали подрядчикам").ToList();
+}
+
+<div class="row g-3 mb-3">
+    <div class="col-12 col-xl-6">
+        <div class="week-plan-card p-3">
+            <h5 class="mb-1">Буровой график — текущая неделя</h5>
+            <div class="text-muted small mb-2">@monday.ToString("dd.MM") - @monday.AddDays(6).ToString("dd.MM")</div>
+            @for (var i = 0; i < weekDates.Count; i++)
+            {
+                var d = weekDates[i].Date;
+                var dayOrders = regularOrders
+                    .Where(o => o.WorkDate.HasValue && o.WorkDate.Value.Date == d)
+                    .OrderBy(o => o.Id)
+                    .ToList();
+
+                <div class="week-plan-day-title">@dayNames[i]</div>
+                @if (dayOrders.Any())
+                {
+                    var n = 1;
+                    foreach (var o in dayOrders)
+                    {
+                        var comment = string.IsNullOrWhiteSpace(o.Info) ? "без комментария" : o.Info.Trim();
+                        var address = string.IsNullOrWhiteSpace(o.City) ? "без адреса" : o.City.Trim();
+                        var hasPump = o.Pump > 0;
+                        var hasArrangement = !string.IsNullOrWhiteSpace(o.Arrangement) && !string.Equals(o.Arrangement.Trim(), "Не нужно", StringComparison.OrdinalIgnoreCase);
+                        var marks = (hasPump ? "Н" : "") + (hasArrangement ? (hasPump ? ", А" : "А") : "");
+
+                        <div class="week-plan-item">@n) @comment, @address @if (!string.IsNullOrEmpty(marks))
+                            { <strong>@marks</strong> }</div>
+                        n++;
+                    }
+                }
+                else
+                {
+                    <div class="week-plan-item text-muted">-</div>
+                }
+            }
+
+            <div class="week-plan-subtitle">Без даты бурения</div>
+            @{
+                var unscheduled = regularOrders
+                    .Where(o => !o.WorkDate.HasValue)
+                    .OrderByDescending(o => o.CreationTimeData)
+                    .ThenByDescending(o => o.Id)
+                    .ToList();
+            }
+            @if (unscheduled.Any())
+            {
+                foreach (var o in unscheduled)
+                {
+                    var comment = string.IsNullOrWhiteSpace(o.Info) ? "без комментария" : o.Info.Trim();
+                    var address = string.IsNullOrWhiteSpace(o.City) ? "без адреса" : o.City.Trim();
+                    var hasPump = o.Pump > 0;
+                    var hasArrangement = !string.IsNullOrWhiteSpace(o.Arrangement) && !string.Equals(o.Arrangement.Trim(), "Не нужно", StringComparison.OrdinalIgnoreCase);
+                    var marks = (hasPump ? "Н" : "") + (hasArrangement ? (hasPump ? ", А" : "А") : "");
+                    <div class="week-plan-item">+ @comment, @address @if (!string.IsNullOrEmpty(marks))
+                        { <strong>@marks</strong> }</div>
+                }
+            }
+            else
+            {
+                <div class="week-plan-item text-muted">Нет заявок без даты.</div>
+            }
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <div class="week-plan-card p-3">
+            <h5 class="mb-1">Подрядчики</h5>
+            <div class="text-muted small mb-2">Статус: Отдали подрядчикам</div>
+            @for (var i = 0; i < weekDates.Count; i++)
+            {
+                var d = weekDates[i].Date;
+                var dayOrders = contractorOrders
+                    .Where(o => o.WorkDate.HasValue && o.WorkDate.Value.Date == d)
+                    .OrderBy(o => o.Id)
+                    .ToList();
+
+                <div class="week-plan-day-title">@dayNames[i]</div>
+                @if (dayOrders.Any())
+                {
+                    var n = 1;
+                    foreach (var o in dayOrders)
+                    {
+                        var comment = string.IsNullOrWhiteSpace(o.Info) ? "без комментария" : o.Info.Trim();
+                        var address = string.IsNullOrWhiteSpace(o.City) ? "без адреса" : o.City.Trim();
+                        var hasPump = o.Pump > 0;
+                        var hasArrangement = !string.IsNullOrWhiteSpace(o.Arrangement) && !string.Equals(o.Arrangement.Trim(), "Не нужно", StringComparison.OrdinalIgnoreCase);
+                        var marks = (hasPump ? "Н" : "") + (hasArrangement ? (hasPump ? ", А" : "А") : "");
+                        <div class="week-plan-item">@n) @comment, @address @if (!string.IsNullOrEmpty(marks))
+                            { <strong>@marks</strong> }</div>
+                        n++;
+                    }
+                }
+                else
+                {
+                    <div class="week-plan-item text-muted">-</div>
+                }
+            }
+
+            <div class="week-plan-subtitle">Подрядчики без даты бурения</div>
+            @{
+                var contractorUnscheduled = contractorOrders
+                    .Where(o => !o.WorkDate.HasValue)
+                    .OrderByDescending(o => o.CreationTimeData)
+                    .ThenByDescending(o => o.Id)
+                    .ToList();
+            }
+            @if (contractorUnscheduled.Any())
+            {
+                foreach (var o in contractorUnscheduled)
+                {
+                    var comment = string.IsNullOrWhiteSpace(o.Info) ? "без комментария" : o.Info.Trim();
+                    var address = string.IsNullOrWhiteSpace(o.City) ? "без адреса" : o.City.Trim();
+                    var hasPump = o.Pump > 0;
+                    var hasArrangement = !string.IsNullOrWhiteSpace(o.Arrangement) && !string.Equals(o.Arrangement.Trim(), "Не нужно", StringComparison.OrdinalIgnoreCase);
+                    var marks = (hasPump ? "Н" : "") + (hasArrangement ? (hasPump ? ", А" : "А") : "");
+                    <div class="week-plan-item">+ @comment, @address @if (!string.IsNullOrEmpty(marks))
+                        { <strong>@marks</strong> }</div>
+                }
+            }
+            else
+            {
+                <div class="week-plan-item text-muted">Нет заявок без даты.</div>
+            }
+        </div>
+    </div>
+</div>
+
 <div class="table-responsive">
 <table class="table align-middle orders-table">
     <thead>

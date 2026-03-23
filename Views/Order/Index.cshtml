@@ -178,6 +178,8 @@
     var allOrders = Model?.ToList() ?? new List<DP_BurLida.Data.ModelsData.OrderModelData>();
     var monday = DateTime.Today.AddDays(-(((int)DateTime.Today.DayOfWeek + 6) % 7));
     var weekDates = Enumerable.Range(0, 7).Select(i => monday.AddDays(i)).ToList();
+    var nextMonday = monday.AddDays(7);
+    var nextWeekDates = Enumerable.Range(0, 7).Select(i => nextMonday.AddDays(i)).ToList();
     var dayNames = new[] { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
 
     bool IsContractorOrder(DP_BurLida.Data.ModelsData.OrderModelData o)
@@ -265,32 +267,29 @@
             {
                 <div class="week-plan-item text-muted">Нет заявок без даты.</div>
             }
-        </div>
-    </div>
 
-    <div class="col-12 col-xl-6">
-        <div class="week-plan-card p-3">
-            <h5 class="mb-1">Подрядчики</h5>
-            <div class="text-muted small mb-2">Статус «Отдали подрядчикам» и «Чья бригада: подрядчик(и)»</div>
-            @for (var i = 0; i < weekDates.Count; i++)
+            <div class="week-plan-subtitle">Следующая неделя</div>
+            <div class="text-muted small mb-2">@nextMonday.ToString("dd.MM") - @nextMonday.AddDays(6).ToString("dd.MM")</div>
+            @for (var i = 0; i < nextWeekDates.Count; i++)
             {
-                var d = weekDates[i].Date;
-                var dayOrders = contractorOrders
+                var d = nextWeekDates[i].Date;
+                var dayOrdersNext = regularOrders
                     .Where(o => o.WorkDate.HasValue && o.WorkDate.Value.Date == d)
                     .OrderBy(o => o.Id)
                     .ToList();
 
                 <div class="week-plan-day-title">@dayNames[i]</div>
-                @if (dayOrders.Any())
+                @if (dayOrdersNext.Any())
                 {
                     var n = 1;
-                    foreach (var o in dayOrders)
+                    foreach (var o in dayOrdersNext)
                     {
                         var comment = string.IsNullOrWhiteSpace(o.Info) ? "без комментария" : o.Info.Trim();
                         var address = ShortAddress(o.City);
                         var hasPump = o.Pump > 0;
                         var hasArrangement = !string.IsNullOrWhiteSpace(o.Arrangement) && !string.Equals(o.Arrangement.Trim(), "Не нужно", StringComparison.OrdinalIgnoreCase);
                         var marks = (hasPump ? "Н" : "") + (hasArrangement ? (hasPump ? ", А" : "А") : "");
+
                         <div class="week-plan-item">@n) @comment, @address @if (!string.IsNullOrEmpty(marks))
                             { <strong>@marks</strong> }</div>
                         n++;
@@ -301,8 +300,13 @@
                     <div class="week-plan-item text-muted">-</div>
                 }
             }
+        </div>
+    </div>
 
-            <div class="week-plan-subtitle">Подрядчики без даты бурения</div>
+    <div class="col-12 col-xl-6">
+        <div class="week-plan-card p-3">
+            <h5 class="mb-1">Подрядчики</h5>
+            <div class="text-muted small mb-2">Статус «Отдали подрядчикам» и «Чья бригада: подрядчик(и)» — только без даты бурения</div>
             @{
                 var contractorUnscheduled = contractorOrders
                     .Where(o => !o.WorkDate.HasValue)

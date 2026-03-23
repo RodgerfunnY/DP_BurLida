@@ -14,12 +14,18 @@ namespace DP_BurLida.Controllers
         private readonly IOrderServices _orderService;
         private readonly IUserServices _userService;
         private readonly IBrigadeServices _brigadeService;
+        private readonly INotificationService _notificationService;
 
-        public CalendarController(IOrderServices orderService, IUserServices userService, IBrigadeServices brigadeService)
+        public CalendarController(
+            IOrderServices orderService,
+            IUserServices userService,
+            IBrigadeServices brigadeService,
+            INotificationService notificationService)
         {
             _orderService = orderService;
             _userService = userService;
             _brigadeService = brigadeService;
+            _notificationService = notificationService;
         }
 
         public async Task<IActionResult> Index(int? year, int? month, string? type, int? mw)
@@ -231,6 +237,10 @@ namespace DP_BurLida.Controllers
             }
             await _orderService.UpdateAsync(order);
 
+            var actor = await GetActorDisplayNameAsync();
+            var isMontage = string.Equals(calendarType, "montage", StringComparison.OrdinalIgnoreCase);
+            await _notificationService.NotifyOrderScheduleDateChangedAsync(order, parsedDate, isMontage, actor);
+
             return Ok(new { success = true });
         }
 
@@ -304,6 +314,12 @@ namespace DP_BurLida.Controllers
 
             var allUsers = await _userService.GetAllAsync();
             return allUsers.FirstOrDefault(u => u.Email == email);
+        }
+
+        private async Task<string?> GetActorDisplayNameAsync()
+        {
+            var profile = await GetCurrentUserProfile();
+            return profile?.FullName ?? User.Identity?.Name;
         }
     }
 }

@@ -16,13 +16,20 @@ namespace DP_BurLida.Controllers
         private readonly IOrderServices _orderService;
         private readonly IBrigadeServices _brigadeService;
         private readonly IUserServices _userService;
+        private readonly INotificationService _notificationService;
 
-        public OrderCommentController(ByrlidaContext context, IOrderServices orderService, IBrigadeServices brigadeService, IUserServices userService)
+        public OrderCommentController(
+            ByrlidaContext context,
+            IOrderServices orderService,
+            IBrigadeServices brigadeService,
+            IUserServices userService,
+            INotificationService notificationService)
         {
             _context = context;
             _orderService = orderService;
             _brigadeService = brigadeService;
             _userService = userService;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
@@ -76,6 +83,11 @@ namespace DP_BurLida.Controllers
             _context.OrderCommentModelData.Add(comment);
             await _context.SaveChangesAsync();
 
+            var orderAddress = string.IsNullOrWhiteSpace(order.City)
+                ? $"заявка №{orderId}"
+                : order.City.Trim();
+            await _notificationService.NotifyOrderCommentAddedAsync(orderId, orderAddress, createdBy, text.Trim());
+
             return RedirectBackOrDefault(returnUrl, orderId);
         }
 
@@ -94,6 +106,13 @@ namespace DP_BurLida.Controllers
             comment.IsDone = !comment.IsDone;
             comment.DoneAt = comment.IsDone ? DateTime.Now : null;
             await _context.SaveChangesAsync();
+
+            var orderForAddr = await _orderService.GetByIdAsync(orderId);
+            var orderAddress = orderForAddr == null || string.IsNullOrWhiteSpace(orderForAddr.City)
+                ? $"заявка №{orderId}"
+                : orderForAddr.City.Trim();
+            var actor = await GetCurrentUserDisplayName();
+            await _notificationService.NotifyOrderCommentToggleDoneAsync(orderId, orderAddress, actor, comment.IsDone);
 
             return RedirectBackOrDefault(returnUrl, orderId);
         }

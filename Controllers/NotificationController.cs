@@ -51,7 +51,7 @@ namespace DP_BurLida.Controllers
                 .AsNoTracking()
                 .Where(n => n.RecipientEmail == email && !n.IsRead)
                 .OrderByDescending(n => n.CreatedAt)
-                .Take(30)
+                .Take(8)
                 .Select(n => new
                 {
                     id = n.Id,
@@ -62,6 +62,29 @@ namespace DP_BurLida.Controllers
                 .ToListAsync();
 
             return Json(new { items });
+        }
+
+        /// <summary>
+        /// Отметить прочитанным после показа toast (AJAX).
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsReadAjax(int id)
+        {
+            var email = GetCurrentUserEmail();
+            if (string.IsNullOrWhiteSpace(email))
+                return Json(new { ok = false });
+
+            var notification = await _context.NotificationModelData
+                .FirstOrDefaultAsync(n => n.Id == id && n.RecipientEmail == email);
+
+            if (notification != null && !notification.IsRead)
+            {
+                notification.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
+
+            return Json(new { ok = true });
         }
 
         [HttpPost]

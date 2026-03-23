@@ -186,6 +186,8 @@ namespace DP_BurLida.Controllers
                 order.Arrangement ??= "Не нужно";
 
                 await _orderService.UpdateAsync(order);
+                var editorName = await GetCurrentUserDisplayName();
+                await _notificationService.NotifyOrderUpdatedAsync(order, editorName);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -221,6 +223,8 @@ namespace DP_BurLida.Controllers
             if (!await CanAccessOrder(order))
                 return Forbid();
 
+            var actor = await GetCurrentUserDisplayName();
+            await _notificationService.NotifyOrderDeletedAsync(order, actor);
             await _orderService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

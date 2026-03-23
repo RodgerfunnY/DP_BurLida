@@ -1,3 +1,4 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -257,10 +258,13 @@
     </div>
     @if (User.Identity?.IsAuthenticated == true)
     {
+        var notificationAf = Antiforgery.GetAndStoreTokens(Context);
         <div id="notification-toast-container"
              class="toast-container position-fixed top-0 end-0 p-3"
              style="z-index: 1090;"
-             data-notification-toast-url="@Url.Action("ToastUnread", "Notification")">
+             data-notification-toast-url="@Url.Action("ToastUnread", "Notification")"
+             data-notification-mark-read-url="@Url.Action("MarkAsReadAjax", "Notification")"
+             data-notification-af-token="@notificationAf.RequestToken">
         </div>
     }
     <environment include="Development">

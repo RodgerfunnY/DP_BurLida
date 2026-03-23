@@ -223,6 +223,8 @@ namespace DP_BurLida.Api.Controllers
             existing.ArrangementBrigadeId = request.ArrangementBrigadeId;
 
             var updated = await _orderServices.UpdateAsync(existing);
+            var editor = (await GetCurrentUserProfile())?.FullName;
+            await _notificationService.NotifyOrderUpdatedAsync(updated, editor);
             return Ok(ToDetails(updated));
         }
 
@@ -240,6 +242,8 @@ namespace DP_BurLida.Api.Controllers
                 return Forbid();
             }
 
+            var actor = (await GetCurrentUserProfile())?.FullName;
+            await _notificationService.NotifyOrderDeletedAsync(existing, actor);
             await _orderServices.DeleteAsync(id);
             return NoContent();
         }

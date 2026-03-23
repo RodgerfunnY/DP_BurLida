@@ -347,6 +347,7 @@
 
         <div class="col-12 col-lg-3 calendar-unscheduled-column">
             <h5 class="mb-2 mb-lg-3 calendar-unscheduled-heading">Без даты</h5>
+            <div class="calendar-unscheduled-scroll">
             @if (Model.UnscheduledOrders != null && Model.UnscheduledOrders.Any())
             {
                 <p class="text-muted small">Перетащи карточку на нужный день календаря.</p>
@@ -459,6 +460,7 @@
                     }
                 </p>
             }
+            </div>
         </div>
     </div>
 </div>

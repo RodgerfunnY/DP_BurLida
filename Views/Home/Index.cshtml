@@ -190,7 +190,7 @@
                     }
                 );
 
-                placemark.orderStatus = o.status;
+                placemark.orderStatus = o.status != null ? String(o.status).trim() : "";
 
                 ymapsMap.geoObjects.add(placemark);
                 allPlacemarks.push(placemark);
@@ -205,16 +205,12 @@
             const statusFilter = document.getElementById("statusFilter");
             if (statusFilter) {
                 statusFilter.addEventListener("change", () => {
-                    const value = statusFilter.value;
+                    const value = (statusFilter.value || "").trim();
                     allPlacemarks.forEach(p => {
-                        if (!value || p.orderStatus === value) {
-                            if (!ymapsMap.geoObjects.contains(p)) {
-                                ymapsMap.geoObjects.add(p);
-                            }
-                        } else {
-                            if (ymapsMap.geoObjects.contains(p)) {
-                                ymapsMap.geoObjects.remove(p);
-                            }
+                        ymapsMap.geoObjects.remove(p);
+                        const st = (p.orderStatus || "").trim();
+                        if (!value || st === value) {
+                            ymapsMap.geoObjects.add(p);
                         }
                     });
                 });

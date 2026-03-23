@@ -68,9 +68,28 @@
         background-color: #fff8e1 !important;
     }
 
+    .order-manager-comment {
+        max-width: 12rem;
+        vertical-align: middle;
+    }
+
+    .order-manager-comment-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
     @@media (max-width: 576px) {
         .orders-table {
             font-size: 0.85rem;
+        }
+
+        .order-manager-comment {
+            max-width: 8rem;
         }
 
         .order-actions {
@@ -136,6 +155,7 @@
             <th>Скважина (диаметр)</th>
             <th>Насос</th>
             <th>Обустройство</th>
+            <th title="Текст из поля «Информация» при создании заявки">Комментарий</th>
             <th>Телефон</th>
             <th>Имя клиента</th>
             <th>Создал</th>
@@ -173,6 +193,16 @@
                     else
                     {
                         <span class="text-muted">Не указано</span>
+                    }
+                </td>
+                <td class="order-manager-comment">
+                    @if (!string.IsNullOrWhiteSpace(item.Info))
+                    {
+                        <span class="order-manager-comment-text" title="@item.Info">@item.Info</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">—</span>
                     }
                 </td>
                 <td>@item.Phone</td>
@@ -213,7 +243,7 @@
                 </td>
             </tr>
             <tr class="order-details-row collapse @brigadeClass" id="order-details-@item.Id">
-                <td colspan="8">
+                <td colspan="9">
                     <div class="card order-details-card mb-2">
                         <div class="card-body">
                             <ul class="nav nav-tabs mb-2" id="order-tabs-@item.Id" role="tablist">
@@ -312,7 +342,7 @@
             </tr>
 
             <tr class="order-comments-row collapse @brigadeClass" id="order-comments-@item.Id">
-                <td colspan="8">
+                <td colspan="9">
                     <div class="card order-details-card mb-2">
                         <div class="card-body">
                             <div id="order-comments-content-@item.Id" data-loaded="0" class="small">

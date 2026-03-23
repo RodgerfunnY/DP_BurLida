@@ -303,11 +303,31 @@ table.table tbody tr:hover {
 }
 
 @media (min-width: 992px) {
+  .calendar-layout-row {
+    align-items: flex-start;
+  }
+
   .calendar-unscheduled-column {
     border-left: none !important;
-    max-height: none !important;
-    overflow: visible !important;
     padding-left: 0 !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: calc(100vh - 10.5rem);
+    max-height: calc(100dvh - 10.5rem);
+    overflow: hidden;
+  }
+
+  .calendar-unscheduled-heading {
+    flex-shrink: 0;
+  }
+
+  .calendar-unscheduled-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 

@@ -165,6 +165,18 @@
                     }
                 </dd>
 
+                <dt class = "col-sm-2">Стоимость бурения</dt>
+                <dd class = "col-sm-10">
+                    @if (!string.IsNullOrEmpty(Model.Depth))
+                    {
+                        @Model.Depth
+                    }
+                    else
+                    {
+                        <span class="text-muted">Не указано</span>
+                    }
+                </dd>
+
                 <dt class = "col-sm-2">Статика</dt>
                 <dd class = "col-sm-10">
                     @if (!string.IsNullOrEmpty(Model.StaticLevel))

@@ -17,13 +17,14 @@ namespace DP_BurLida.Data.ModelsData
         public int PricePerMeter { get; set; }
         public int Pump { get; set; }
         /// <summary>
-        /// Количество метров (необязательное поле).
+        /// Пробуренные метры (необязательное). Используется в статистике по бригадам (сумма MetersCount).
         /// </summary>
         public int? MetersCount { get; set; }
         /// <summary>
-        /// Глубина (необязательное поле).
+        /// Стоимость бурения (текст, необязательное поле). В статистику по метрам не входит.
         /// </summary>
         [MaxLength(1000)]
+        [Display(Name = "Стоимость бурения")]
         public string? Depth { get; set; }
         /// <summary>
         /// Статика (необязательное поле).

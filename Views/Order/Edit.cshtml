@@ -216,33 +216,33 @@
                     <div class="form-group">
                         <label asp-for="MetersCount" class="control-label">Количество метров</label>
                         <input asp-for="MetersCount" type="number" class="form-control" />
-                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span class="form-text text-muted">Необязательное поле. Учитывается в статистике по метрам.</span>
                         <span asp-validation-for="MetersCount" class="text-danger"></span>
                     </div>
 
-                    <!-- 16. Глубина -->
+                    <!-- 16. Стоимость бурения (поле Depth в БД) -->
                     <div class="form-group">
-                        <label asp-for="Depth" class="control-label">Глубина</label>
+                        <label asp-for="Depth" class="control-label">Стоимость бурения</label>
                         <input asp-for="Depth" class="form-control" />
-                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span class="form-text text-muted">Необязательное поле. Не участвует в сумме метров по статистике.</span>
                         <span asp-validation-for="Depth" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <!-- 17. Динамика -->
-                    <div class="form-group">
-                        <label asp-for="DynamicLevel" class="control-label">Динамика</label>
-                        <input asp-for="DynamicLevel" class="form-control" />
-                        <span class="form-text text-muted">Необязательное поле.</span>
-                        <span asp-validation-for="DynamicLevel" class="text-danger"></span>
-                    </div>
-
-                    <!-- 18. Статика -->
+                    <!-- 17. Статика -->
                     <div class="form-group">
                         <label asp-for="StaticLevel" class="control-label">Статика</label>
                         <input asp-for="StaticLevel" class="form-control" />
                         <span class="form-text text-muted">Необязательное поле.</span>
                         <span asp-validation-for="StaticLevel" class="text-danger"></span>
+                    </div>
+
+                    <!-- 18. Динамика -->
+                    <div class="form-group">
+                        <label asp-for="DynamicLevel" class="control-label">Динамика</label>
+                        <input asp-for="DynamicLevel" class="form-control" />
+                        <span class="form-text text-muted">Необязательное поле.</span>
+                        <span asp-validation-for="DynamicLevel" class="text-danger"></span>
                     </div>
 
                     <!-- 19. Фильтр -->
